@@ -35,7 +35,7 @@ public class Acceuil extends javax.swing.JFrame {
         setMaximizedBounds(new java.awt.Rectangle(0, 0, 634, 310));
         setMinimumSize(new java.awt.Dimension(634, 272));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\guillaume\\Pictures\\loiseau.jpg")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loiseau/ihm/loiseau.jpg"))); // NOI18N
 
         jButton1.setBackground(new java.awt.Color(87, 164, 94));
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
