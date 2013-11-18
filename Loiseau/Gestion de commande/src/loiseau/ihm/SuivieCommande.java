@@ -6,7 +6,9 @@ package loiseau.ihm;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
@@ -15,8 +17,11 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.filechooser.FileSystemView;
+import jxl.Cell;
+import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
+import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -49,7 +54,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList3 = new javax.swing.JList();
+        jListClient = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
@@ -118,12 +123,12 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        jList3.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+        jListClient.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Collette", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane3.setViewportView(jList3);
+        jScrollPane3.setViewportView(jListClient);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -446,24 +451,53 @@ public class SuivieCommande extends javax.swing.JFrame {
 
     private void jMenuExFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExFactureActionPerformed
         // TODO add your handling code here:
+
+        Connection connect;
+        ResultSet resultats = null;
         
-        try {
-            // TODO add your handling code here:
-//             connect = DriverManager.getConnection(url, user, passwd);
-//             Statement stmt = connect.createStatement();
-//             resultats=stmt.executeQuery("Select * From client;");
-//              while (resultats.next())
-//             { 
-//                 System.out.println(resultats.getString("id_client"));
-//              
-//             }
-//             System.out.println(resultats);
-//             
-            FileSystemView fsv = FileSystemView.getFileSystemView(); 
+//        String a=jListClient.getSelectedValue();
+//        System.out.println((String)a);
+//           try {       
+//            
+          
+            String urlDocs=RecupUrlMesDocs();
+            CreationDossier(urlDocs);            
+            
+            DateFormat format = new SimpleDateFormat("dd-MM-yyyy"); 
+            String dateAujourdhui=(format.format(new Date())).toString();
+            CreatonExcel(urlDocs,dateAujourdhui);
+             
+//            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/loiseaudb", "root", "root");
+//      
+//            Statement stmt = connect.createStatement();
+//          //  resultats=stmt.executeQuery("Select * From client Where nom="+txtNom.getText()+";");
+//            resultats=stmt.executeQuery("Select * From client;");
+//            while (resultats.next())
+//            {                
+//                System.out.println(resultats.getString("id_client"));              
+//            } 
+//            
+//              } catch (SQLException ex) {
+//            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+            
+            
+
+    
+
+            
+    }//GEN-LAST:event_jMenuExFactureActionPerformed
+    public String RecupUrlMesDocs()
+    {
+         FileSystemView fsv = FileSystemView.getFileSystemView(); 
             File mesDocs = fsv.getDefaultDirectory(); 
             String urlMesDocs = mesDocs.toString();
-            
-            File dossierClient = new File(urlMesDocs+"\\Client");
+            return  urlMesDocs;
+    }
+    
+    public void CreationDossier(String urlMesDocs)
+    {
+         File dossierClient = new File(urlMesDocs+"\\Client");
             if(!dossierClient.exists())
             {
                  dossierClient.mkdir();
@@ -478,46 +512,35 @@ public class SuivieCommande extends javax.swing.JFrame {
             {
                  dossierFacturation.mkdir();
             }           
-         
-
-            DateFormat format = new SimpleDateFormat("dd-MM-yyyy"); 
-            String dateAujourdhui=(format.format(new Date())).toString();
-            
-            // Chargement du fichier
+    }
+    public void CreatonExcel(String urlMesDocs,String dateAujourdhui )
+    {
+        try {
             Workbook fichierCharge = Workbook.getWorkbook(new File("D:\\Projet Loiseau\\FileModel\\Facture.xls"));
-            
-            File fichierEnregistre = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+".xls");
-            if(fichierEnregistre.exists())
-            {
-                File fichierEnregistreRename = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+"_2.xls");
-                fichierEnregistre.renameTo(fichierEnregistreRename);
-            }           
-            WritableWorkbook fichierExcelFin = Workbook.createWorkbook(fichierEnregistre, fichierCharge);
-            WritableSheet out = fichierExcelFin.getSheet(0);
-//              Number number = new Number(0, 1, txtNom.getText());
-//              out.addCell(number);
-//            
-            
-            fichierExcelFin.write();
-            fichierExcelFin.close();
-    
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
-            e.printStackTrace();
+             
+               File fichierEnregistre = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+".xls");
+               if(fichierEnregistre.exists())
+               {
+                   File fichierEnregistreRename = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+"_2.xls");
+                   fichierEnregistre.renameTo(fichierEnregistreRename);
+               }           
+               WritableWorkbook fichierExcelFin = Workbook.createWorkbook(fichierEnregistre, fichierCharge);
+               WritableSheet sheel = fichierExcelFin.getSheet(0);
+               //             Label label = new Label(0, 3, "position A4");
+   //            sheel.addCell(label);
+   //             Label label2 = new Label(0, 1, "position A2");
+   //            sheel.addCell(label2);
+               
+               fichierExcelFin.write();
+               fichierExcelFin.close();
+        } catch (IOException ex) {
+            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BiffException ex) {
+            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
         } catch (WriteException ex) {
             Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
-//        } catch (SQLException ex) {
-//            Logger.getLogger(trtr.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (BiffException ex) {
-//            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (WriteException ex) {
-//            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-    }//GEN-LAST:event_jMenuExFactureActionPerformed
-
+    }
     /**
      * @param args the command line arguments
      */
@@ -567,7 +590,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList jList1;
-    private javax.swing.JList jList3;
+    private javax.swing.JList jListClient;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
