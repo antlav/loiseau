@@ -4,6 +4,25 @@
  */
 package loiseau.ihm;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.filechooser.FileSystemView;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+
+import jxl.write.Number;
+
 /**
  *
  * @author guillaume
@@ -36,7 +55,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         jList1 = new javax.swing.JList();
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNom = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -71,7 +90,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenuItem6 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuExFacture = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -152,8 +171,8 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        jTextField1.setEditable(false);
-        jTextField1.setText("jTextField1");
+        txtNom.setEditable(false);
+        txtNom.setText("jTextField1");
 
         jLabel6.setText("Téléphone");
 
@@ -200,7 +219,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -212,7 +231,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -365,8 +384,13 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenuItem7.setText("Préstation de pose");
         jMenu3.add(jMenuItem7);
 
-        jMenuItem8.setText("Facture");
-        jMenu3.add(jMenuItem8);
+        jMenuExFacture.setText("Facture");
+        jMenuExFacture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuExFactureActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuExFacture);
 
         jMenu1.add(jMenu3);
 
@@ -419,6 +443,80 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuExFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExFactureActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+            // TODO add your handling code here:
+//             connect = DriverManager.getConnection(url, user, passwd);
+//             Statement stmt = connect.createStatement();
+//             resultats=stmt.executeQuery("Select * From client;");
+//              while (resultats.next())
+//             { 
+//                 System.out.println(resultats.getString("id_client"));
+//              
+//             }
+//             System.out.println(resultats);
+//             
+            FileSystemView fsv = FileSystemView.getFileSystemView(); 
+            File mesDocs = fsv.getDefaultDirectory(); 
+            String urlMesDocs = mesDocs.toString();
+            
+            File dossierClient = new File(urlMesDocs+"\\Client");
+            if(!dossierClient.exists())
+            {
+                 dossierClient.mkdir();
+            }
+            File dossierCommande = new File(urlMesDocs+"\\Client\\Commande");
+            if(!dossierCommande.exists())
+            {
+                 dossierCommande.mkdir();
+            }
+            File dossierFacturation = new File(urlMesDocs+"\\Client\\Commande\\Facturation");
+            if(!dossierFacturation.exists())
+            {
+                 dossierFacturation.mkdir();
+            }           
+         
+
+            DateFormat format = new SimpleDateFormat("dd-MM-yyyy"); 
+            String dateAujourdhui=(format.format(new Date())).toString();
+            
+            // Chargement du fichier
+            Workbook fichierCharge = Workbook.getWorkbook(new File("D:\\Projet Loiseau\\FileModel\\Facture.xls"));
+            
+            File fichierEnregistre = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+".xls");
+            if(fichierEnregistre.exists())
+            {
+                File fichierEnregistreRename = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+"_2.xls");
+                fichierEnregistre.renameTo(fichierEnregistreRename);
+            }           
+            WritableWorkbook fichierExcelFin = Workbook.createWorkbook(fichierEnregistre, fichierCharge);
+            WritableSheet out = fichierExcelFin.getSheet(0);
+//              Number number = new Number(0, 1, txtNom.getText());
+//              out.addCell(number);
+//            
+            
+            fichierExcelFin.write();
+            fichierExcelFin.close();
+    
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        } catch (WriteException ex) {
+            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+//        } catch (SQLException ex) {
+//            Logger.getLogger(trtr.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (BiffException ex) {
+//            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (WriteException ex) {
+//            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    }//GEN-LAST:event_jMenuExFactureActionPerformed
 
     /**
      * @param args the command line arguments
@@ -474,6 +572,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuExFacture;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
@@ -481,7 +580,6 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -494,7 +592,6 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
@@ -502,5 +599,6 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
+    private javax.swing.JTextField txtNom;
     // End of variables declaration//GEN-END:variables
 }
