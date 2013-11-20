@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileSystemView;
 import jxl.Cell;
 import jxl.Sheet;
@@ -27,6 +28,7 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 
 import jxl.write.Number;
+import jxl.write.biff.RowsExceededException;
 
 /**
  *
@@ -448,17 +450,17 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+        Workbook fichierCharge=null;
+        File fichierEnregistre=null;
+       
     private void jMenuExFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExFactureActionPerformed
         // TODO add your handling code here:
-
+       
         Connection connect;
         ResultSet resultats = null;
-        
-//        String a=jListClient.getSelectedValue();
-//        System.out.println((String)a);
-//           try {       
-//            
+        WritableWorkbook fichierExcelFin=null;  
+          try {       
+            
           
             String urlDocs=RecupUrlMesDocs();
             CreationDossier(urlDocs);            
@@ -467,19 +469,54 @@ public class SuivieCommande extends javax.swing.JFrame {
             String dateAujourdhui=(format.format(new Date())).toString();
             CreatonExcel(urlDocs,dateAujourdhui);
              
-//            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/loiseaudb", "root", "root");
-//      
-//            Statement stmt = connect.createStatement();
-//          //  resultats=stmt.executeQuery("Select * From client Where nom="+txtNom.getText()+";");
-//            resultats=stmt.executeQuery("Select * From client;");
-//            while (resultats.next())
-//            {                
-//                System.out.println(resultats.getString("id_client"));              
-//            } 
-//            
-//              } catch (SQLException ex) {
-//            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/loiseaudb", "root", "root");
+      
+            Statement stmt = connect.createStatement();
+        
+            if(jListClient.getSelectedValue()!=null)
+            {   
+               String res=jListClient.getSelectedValue().toString();
+               resultats=stmt.executeQuery("Select nom,prenom,rue,code_postal,ville From client where nom='"+res+"';");
+
+               if(resultats!=0)
+               {                    
+                   fichierExcelFin = Workbook.createWorkbook(fichierEnregistre, fichierCharge);  
+                   WritableSheet sheel = fichierExcelFin.getSheet(0);
+                   while(resultats.next())
+                   {           
+                     
+                     JOptionPane.showMessageDialog(this, "1");
+                   // Label label = new Label(0, 3,resultats.getString("nom")+" "+resultats.getString("prenom"));
+//                      Label label = new Label(0, 1,"A4");
+//                     sheel.addCell(label);
+                       
+                    
+                   }
+                         
+                    fichierExcelFin.write(); 
+                    fichierExcelFin.close();
+             
+               }
+               else
+               {
+                   JOptionPane.showMessageDialog(this, "Aucune information sur ce client");
+               }
+           
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Veuillez saisir un client");
+            }
+                
+              
+            
+              } catch (SQLException ex) {
+            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (WriteException ex) {
+                Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) { 
+            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+        } 
             
             
 
@@ -513,33 +550,25 @@ public class SuivieCommande extends javax.swing.JFrame {
                  dossierFacturation.mkdir();
             }           
     }
+    
     public void CreatonExcel(String urlMesDocs,String dateAujourdhui )
     {
         try {
-            Workbook fichierCharge = Workbook.getWorkbook(new File("D:\\Projet Loiseau\\FileModel\\Facture.xls"));
+            fichierCharge = Workbook.getWorkbook(new File("D:\\Projet Loiseau\\FileModel\\Facture.xls"));
              
-               File fichierEnregistre = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+".xls");
-               if(fichierEnregistre.exists())
-               {
-                   File fichierEnregistreRename = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+"_2.xls");
-                   fichierEnregistre.renameTo(fichierEnregistreRename);
-               }           
-               WritableWorkbook fichierExcelFin = Workbook.createWorkbook(fichierEnregistre, fichierCharge);
-               WritableSheet sheel = fichierExcelFin.getSheet(0);
-               //             Label label = new Label(0, 3, "position A4");
-   //            sheel.addCell(label);
-   //             Label label2 = new Label(0, 1, "position A2");
-   //            sheel.addCell(label2);
-               
-               fichierExcelFin.write();
-               fichierExcelFin.close();
+                fichierEnregistre = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+".xls");
+//               if(fichierEnregistre.exists())
+//               {
+//                   File fichierEnregistreRename = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+"_2.xls");
+//                   fichierEnregistre.renameTo(fichierEnregistreRename);
+//               }           
+                        
+             
         } catch (IOException ex) {
             Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BiffException ex) {
             Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (WriteException ex) {
-            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
     /**
      * @param args the command line arguments
