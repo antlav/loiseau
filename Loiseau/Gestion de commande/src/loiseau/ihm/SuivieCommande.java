@@ -21,6 +21,7 @@ import javax.swing.filechooser.FileSystemView;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
@@ -137,7 +138,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         jLabel3.setText("Commandes");
 
         jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -477,30 +478,25 @@ public class SuivieCommande extends javax.swing.JFrame {
             {   
                String res=jListClient.getSelectedValue().toString();
                resultats=stmt.executeQuery("Select nom,prenom,rue,code_postal,ville From client where nom='"+res+"';");
-
-               if(resultats!=0)
-               {                    
+                    
                    fichierExcelFin = Workbook.createWorkbook(fichierEnregistre, fichierCharge);  
                    WritableSheet sheel = fichierExcelFin.getSheet(0);
                    while(resultats.next())
-                   {           
-                     
-                     JOptionPane.showMessageDialog(this, "1");
-                   // Label label = new Label(0, 3,resultats.getString("nom")+" "+resultats.getString("prenom"));
-//                      Label label = new Label(0, 1,"A4");
-//                     sheel.addCell(label);
-                       
-                    
+                   {       
+                    Label labelNom = new Label(4, 3,resultats.getString("nom")+" "+resultats.getString("prenom"));
+                    sheel.addCell(labelNom);
+                    Label labelRue = new Label(4, 4,resultats.getString("rue"));
+                    sheel.addCell(labelRue);
+                    Label labelCp = new Label(4, 5,resultats.getString("code_postal")+" "+resultats.getString("ville"));
+                    sheel.addCell(labelCp);
                    }
-                         
+                    Label labelDate = new Label(1,8,dateAujourdhui);
+                    sheel.addCell(labelDate); 
+                    
                     fichierExcelFin.write(); 
                     fichierExcelFin.close();
              
-               }
-               else
-               {
-                   JOptionPane.showMessageDialog(this, "Aucune information sur ce client");
-               }
+          
            
             }
             else
@@ -508,7 +504,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Veuillez saisir un client");
             }
                 
-              
+              connect.close();
             
               } catch (SQLException ex) {
             Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
@@ -553,22 +549,26 @@ public class SuivieCommande extends javax.swing.JFrame {
     
     public void CreatonExcel(String urlMesDocs,String dateAujourdhui )
     {
-        try {
-            fichierCharge = Workbook.getWorkbook(new File("D:\\Projet Loiseau\\FileModel\\Facture.xls"));
+        try {      
+            
+            WorkbookSettings ws = new WorkbookSettings();
+            ws.setEncoding("windows-1252");
+            fichierCharge = Workbook.getWorkbook(new File("D:\\Projet Loiseau\\FileModel\\Facture.xls"),ws);
              
                 fichierEnregistre = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+".xls");
-//               if(fichierEnregistre.exists())
+//              
+   //             if(fichierEnregistre.exists())
 //               {
 //                   File fichierEnregistreRename = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+"_2.xls");
 //                   fichierEnregistre.renameTo(fichierEnregistreRename);
 //               }           
-                        
-             
+
         } catch (IOException ex) {
             Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BiffException ex) {
             Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
+
     }
     /**
      * @param args the command line arguments
