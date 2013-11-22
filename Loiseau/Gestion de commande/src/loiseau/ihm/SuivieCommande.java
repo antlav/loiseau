@@ -453,13 +453,15 @@ public class SuivieCommande extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
         Workbook fichierCharge=null;
         File fichierEnregistre=null;
+       ResultSet resultats = null;
+        WritableWorkbook fichierExcelFin=null;  
+        String dateAujourdhui=null;
        
     private void jMenuExFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExFactureActionPerformed
         // TODO add your handling code here:
        
         Connection connect;
-        ResultSet resultats = null;
-        WritableWorkbook fichierExcelFin=null;  
+     
           try {       
             
           
@@ -467,37 +469,22 @@ public class SuivieCommande extends javax.swing.JFrame {
             CreationDossier(urlDocs);            
             
             DateFormat format = new SimpleDateFormat("dd-MM-yyyy"); 
-            String dateAujourdhui=(format.format(new Date())).toString();
-            CreatonExcel(urlDocs,dateAujourdhui);
+            dateAujourdhui=(format.format(new Date())).toString();
+            ChargementExcel(urlDocs,dateAujourdhui);
              
-            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/loiseaudb", "root", "root");
+            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/loiseaudb","root","root");
       
             Statement stmt = connect.createStatement();
         
             if(jListClient.getSelectedValue()!=null)
             {   
-               String res=jListClient.getSelectedValue().toString();
-               resultats=stmt.executeQuery("Select nom,prenom,rue,code_postal,ville From client where nom='"+res+"';");
-                    
-                   fichierExcelFin = Workbook.createWorkbook(fichierEnregistre, fichierCharge);  
-                   WritableSheet sheel = fichierExcelFin.getSheet(0);
-                   while(resultats.next())
-                   {       
-                    Label labelNom = new Label(4, 3,resultats.getString("nom")+" "+resultats.getString("prenom"));
-                    sheel.addCell(labelNom);
-                    Label labelRue = new Label(4, 4,resultats.getString("rue"));
-                    sheel.addCell(labelRue);
-                    Label labelCp = new Label(4, 5,resultats.getString("code_postal")+" "+resultats.getString("ville"));
-                    sheel.addCell(labelCp);
-                   }
-                    Label labelDate = new Label(1,8,dateAujourdhui);
-                    sheel.addCell(labelDate); 
-                    
-                    fichierExcelFin.write(); 
-                    fichierExcelFin.close();
-             
-          
-           
+               String nomClient=jListClient.getSelectedValue().toString();
+               resultats=stmt.executeQuery("Select nom,prenom,rue,code_postal,ville From client where nom='"+nomClient+"';");
+               RemplirExcel();
+               String idCommande=jListClient.getSelectedValue().toString();
+               //resultats=stmt.executeQuery("Select * From where nom='"+idCommande+"';");
+                 
+               
             }
             else
             {
@@ -508,10 +495,7 @@ public class SuivieCommande extends javax.swing.JFrame {
             
               } catch (SQLException ex) {
             Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (WriteException ex) {
-                Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) { 
-            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+            
         } 
             
             
@@ -547,7 +531,7 @@ public class SuivieCommande extends javax.swing.JFrame {
             }           
     }
     
-    public void CreatonExcel(String urlMesDocs,String dateAujourdhui )
+    public void ChargementExcel(String urlMesDocs,String dateAujourdhui )
     {
         try {      
             
@@ -555,13 +539,7 @@ public class SuivieCommande extends javax.swing.JFrame {
             ws.setEncoding("windows-1252");
             fichierCharge = Workbook.getWorkbook(new File("D:\\Projet Loiseau\\FileModel\\Facture.xls"),ws);
              
-                fichierEnregistre = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+".xls");
-//              
-   //             if(fichierEnregistre.exists())
-//               {
-//                   File fichierEnregistreRename = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+"_2.xls");
-//                   fichierEnregistre.renameTo(fichierEnregistreRename);
-//               }           
+                fichierEnregistre = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+".xls");      
 
         } catch (IOException ex) {
             Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
@@ -569,6 +547,33 @@ public class SuivieCommande extends javax.swing.JFrame {
             Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    public void RemplirExcel()
+    {
+        try {
+            fichierExcelFin = Workbook.createWorkbook(fichierEnregistre, fichierCharge);  
+               WritableSheet sheel = fichierExcelFin.getSheet(0);
+                  while(resultats.next())
+                  {       
+                   Label labelNom = new Label(4, 3,resultats.getString("nom")+" "+resultats.getString("prenom"));
+                   sheel.addCell(labelNom);
+                   Label labelRue = new Label(4, 4,resultats.getString("rue"));
+                   sheel.addCell(labelRue);
+                   Label labelCp = new Label(4, 5,resultats.getString("code_postal")+" "+resultats.getString("ville"));
+                   sheel.addCell(labelCp);
+                  }
+                   Label labelDate = new Label(1,8,dateAujourdhui);
+                   sheel.addCell(labelDate); 
+                   
+                   fichierExcelFin.write();
+                   fichierExcelFin.close();
+        } catch (IOException ex) {
+            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (WriteException ex) {
+            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
     /**
      * @param args the command line arguments
