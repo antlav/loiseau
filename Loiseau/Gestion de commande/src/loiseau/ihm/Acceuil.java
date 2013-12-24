@@ -21,7 +21,7 @@ public class Acceuil extends javax.swing.JFrame {
     public Acceuil() {
         initComponents();
     }
-
+    GestionClient formClient;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,6 +50,11 @@ public class Acceuil extends javax.swing.JFrame {
         jButton1.setBackground(new java.awt.Color(87, 164, 94));
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton1.setText("Gestion Client");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(87, 164, 94));
         jButton3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -97,6 +102,13 @@ public class Acceuil extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,ex);
         }
     }//GEN-LAST:event_formWindowOpened
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        formClient=new GestionClient();
+        formClient.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments
