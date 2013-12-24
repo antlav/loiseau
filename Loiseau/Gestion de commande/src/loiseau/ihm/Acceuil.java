@@ -4,6 +4,11 @@
  */
 package loiseau.ihm;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import loiseau.metier.ConectionBdd;
+
 /**
  *
  * @author guillaume
@@ -34,6 +39,11 @@ public class Acceuil extends javax.swing.JFrame {
         setBackground(new java.awt.Color(0, 0, 0));
         setMaximizedBounds(new java.awt.Rectangle(0, 0, 634, 310));
         setMinimumSize(new java.awt.Dimension(634, 272));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loiseau/ihm/loiseau.jpg"))); // NOI18N
 
@@ -73,6 +83,20 @@ public class Acceuil extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        try {
+            // TODO add your handling code here:
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Acceuil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ConectionBdd.getInstance();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,ex);
+        }
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
