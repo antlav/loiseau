@@ -29,10 +29,16 @@ public class GestionClient extends javax.swing.JFrame {
         initComponents();
     }
     DefaultListModel lst;
+    Acceuil laForm;
+    ResultSet rs;
+    Vector<Object> lesInfos;
     Client unClient = new Client();
-    ClientOperation tri=new ClientOperation();
-    Vector<Client> lesClient = new Vector<Client>(); 
+    ClientOperation tri = new ClientOperation();
+    Vector<Client> lesClient = new Vector<Client>();
     String GETCLIENT = "SELECT * FROM client";
+    String ADDCLIENT = "INSERT INTO `loiseaudb`.`client` (`nomClient`, `telephone`, `fax`, `mail`, `divers`, `typeClient`, `rue`, `codePostal`, `ville`, `vendeur`, `prenomClient`, `numSiret`, `siteWeb`, `nbCommande`, `numMobil`, `remise`, `titre`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String UPDATECLIENT = "UPDATE `loiseaudb`.`client` SET `nomClient`=?, `telephone`=?, `fax`=?, `mail`=?, `divers`=?, `typeClient`=?, `rue`=?, `codePostal`=?, `ville`=?, `vendeur`=?, `prenomClient`=?, `numSiret`=?, `siteWeb`=?, `nbCommande`=?, `numMobil`=?, `remise`=?, `titre`=? WHERE `ID_Clients`=?";
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -147,6 +153,11 @@ public class GestionClient extends javax.swing.JFrame {
         txtFax.setText("jTextField1");
 
         txtNom.setText("jTextField1");
+        txtNom.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNomKeyReleased(evt);
+            }
+        });
 
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel9.setText("Nom");
@@ -161,7 +172,7 @@ public class GestionClient extends javax.swing.JFrame {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText("Email");
 
-        cbbType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbbType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Particulier", "Revendeur" }));
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText("Titre");
@@ -264,10 +275,25 @@ public class GestionClient extends javax.swing.JFrame {
         jButton3.setText("Suprimer");
 
         jButton1.setText("Sauvegarder");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         jButton2.setText("Modifier");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
 
         jButton4.setText("Retour");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -447,24 +473,24 @@ public class GestionClient extends javax.swing.JFrame {
             ResultSet rs = DialogueBdd.select(GETCLIENT);
             while (rs.next()) {
                 unClient = new Client();
-                unClient.setPrenom(rs.getString("prenomClient"));
-                unClient.setNom(rs.getString("nomClient"));
-                unClient.setEmail(rs.getString("mail"));
+                unClient.setPrenom(rs.getString("prenom"));
+                unClient.setNom(rs.getString("nom"));
+                unClient.setEmail(rs.getString("email"));
                 unClient.setTitre(rs.getString("titre"));
                 unClient.setVille(rs.getString("ville"));
-                unClient.setCode_postal(Integer.parseInt(rs.getString("codePostal")));
+                unClient.setCode_postal(Integer.parseInt(rs.getString("code_postal")));
                 unClient.setDivers(rs.getString("divers"));
-                unClient.setSite_web(rs.getString("siteWeb"));
-                unClient.setTel_fix(rs.getString("telephone"));
+                unClient.setSite_web(rs.getString("site_web"));
+                unClient.setTel_fix(rs.getString("tel_fix"));
                 unClient.setFax(rs.getString("fax"));
-                unClient.setType(rs.getString("typeClient"));
-                unClient.setNum_siret(Integer.parseInt(rs.getString("numSiret")));
+                unClient.setType(rs.getString("type"));
+                unClient.setNum_siret(Integer.parseInt(rs.getString("num_siret")));
                 unClient.setRemise(rs.getString("remise"));
                 unClient.setVendeur(rs.getString("vendeur"));
-                unClient.setTel_port(rs.getString("numMobil"));
+                unClient.setTel_port(rs.getString("tel_port"));
                 unClient.setRue(rs.getString("rue"));
-                unClient.setNb_commande(Integer.parseInt(rs.getString("nbCommande")));
-                unClient.setId_client(Integer.parseInt(rs.getString("ID_Clients")));
+                unClient.setNb_commande(Integer.parseInt(rs.getString("nb_commande")));
+                unClient.setId_client(Integer.parseInt(rs.getString("id_clients")));
                 lesClient.add(unClient);
             }
         } catch (Exception ex) {
@@ -495,7 +521,105 @@ public class GestionClient extends javax.swing.JFrame {
     private void lstClientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstClientMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_lstClientMouseClicked
-private void completerChamp(int index) {
+
+    private void txtNomKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomKeyReleased
+        // TODO add your handling code here:
+        lst = new DefaultListModel();
+        lstClient.setModel(lst);
+        for (Client c : lesClient) {
+            if (txtNom.getText().regionMatches(true, 0, c.getNom(), 0, txtNom.getText().length())) {
+                lst.addElement(c.getNom());
+            }
+        }
+    }//GEN-LAST:event_txtNomKeyReleased
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        // TODO add your handling code here:
+        laForm = new Acceuil();
+        laForm.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        boolean existance = false;
+        lesInfos = new Vector<>();
+        completerClient();
+        lesInfos.add(unClient.getNom());
+        lesInfos.add(unClient.getTel_fix());
+        lesInfos.add(unClient.getFax());
+        lesInfos.add(unClient.getEmail());
+        lesInfos.add(unClient.getDivers());
+        lesInfos.add(unClient.getType());
+        lesInfos.add(unClient.getRue());
+        lesInfos.add(unClient.getCode_postal());
+        lesInfos.add(unClient.getVille());
+        lesInfos.add(unClient.getVendeur());
+        lesInfos.add(unClient.getPrenom());
+        lesInfos.add(unClient.getNum_siret());
+        lesInfos.add(unClient.getSite_web());
+        lesInfos.add(unClient.getTel_port());
+        lesInfos.add(unClient.getRemise());
+        lesInfos.add(unClient.getTitre());
+        for (Client c : lesClient) {
+            if (cbbTitre.getSelectedItem().toString().compareTo("Revendeur") == 0) {
+                if (txtNom.getText().compareTo(c.getNom()) == 0) {
+                    existance = true;
+                    unClient.setId_client(lesClient.get(lesClient.indexOf(c)).getId_client());
+                    lesClient.setElementAt(unClient, lesClient.indexOf(c));
+
+                }
+            } else {
+                if (txtNom.getText().compareTo(c.getNom()) == 0) {
+                    if (c.getPrenom() == null) {
+                        existance = true;
+                        unClient.setId_client(lesClient.get(lesClient.indexOf(c)).getId_client());
+                        lesClient.setElementAt(unClient, lesClient.indexOf(c));
+                    } else {
+                        if (TxtPrenom.getText().compareTo(c.getPrenom()) == 0) {
+                            existance = true;
+                            unClient.setId_client(lesClient.get(lesClient.indexOf(c)).getId_client());
+                            lesClient.setElementAt(unClient, lesClient.indexOf(c));
+                        }
+                    }
+
+                }
+            }
+        }
+
+        try {
+            ClientOperation.verificationNom(unClient);
+            if (existance) {
+                lesInfos.add(unClient.getId_client());
+                DialogueBdd.update(UPDATECLIENT, lesInfos);
+                JOptionPane.showMessageDialog(this, "le client est modifier");
+            } else {
+                rs = DialogueBdd.insert(ADDCLIENT, lesInfos);
+                while (rs.next()) {
+                    unClient.setId_client(rs.getInt(1));
+                }
+                lesClient.add(unClient);
+                lst = new DefaultListModel();
+                lstClient.setModel(lst);
+                for (Client c : lesClient) {
+                    lst.addElement(c.getNom());
+                }
+                JOptionPane.showMessageDialog(this, "le client est ajouter");
+            }
+
+
+        } catch (Exception ex) {
+            Logger.getLogger(GestionClient.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex);
+        }
+        Collections.sort(lesClient, tri);
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        // TODO add your handling code here:
+        jButton1MouseClicked(evt);       
+    }//GEN-LAST:event_jButton2MouseClicked
+    private void completerChamp(int index) {
         cbbTitre.setSelectedItem(lesClient.get(index).getTitre());
         cbbType.setSelectedItem(lesClient.get(index).getType());
         txtNom.setText(lesClient.get(index).getNom());
@@ -533,6 +657,7 @@ private void completerChamp(int index) {
         unClient.setVille(txtVille.getText());
 
     }
+
     /**
      * @param args the command line arguments
      */
