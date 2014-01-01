@@ -4,6 +4,11 @@
  */
 package loiseau.ihm;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import loiseau.metier.ConectionBdd;
+
 /**
  *
  * @author guillaume
@@ -16,7 +21,7 @@ public class Acceuil extends javax.swing.JFrame {
     public Acceuil() {
         initComponents();
     }
-
+    GestionClient formClient;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,12 +39,22 @@ public class Acceuil extends javax.swing.JFrame {
         setBackground(new java.awt.Color(0, 0, 0));
         setMaximizedBounds(new java.awt.Rectangle(0, 0, 634, 310));
         setMinimumSize(new java.awt.Dimension(634, 272));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loiseau/ihm/loiseau.jpg"))); // NOI18N
 
         jButton1.setBackground(new java.awt.Color(87, 164, 94));
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton1.setText("Gestion Client");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(87, 164, 94));
         jButton3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -73,6 +88,27 @@ public class Acceuil extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        try {
+            // TODO add your handling code here:
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Acceuil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ConectionBdd.getInstance();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,ex);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        formClient=new GestionClient();
+        formClient.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments
