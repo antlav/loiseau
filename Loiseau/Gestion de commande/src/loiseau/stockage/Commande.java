@@ -12,6 +12,7 @@ import java.util.Date;
  * Florian
  */
 public class Commande {
+    private int id_client;
     private int id_commande;
     private String ref_dossier;
     private double acompte;
@@ -29,7 +30,8 @@ public class Commande {
     public Commande() {
     }
 
-    public Commande(int id_commande, String ref_dossier, double acompte, double taux_tva, double taux_ht, double prix_ttc, String type_reglement, int etat_commande, int temps_pose_moeteur, int temps_pose_commercial, int temps_pose_vendu, int delais_prevu, Date date_pose) {
+    public Commande(int id_client, int id_commande, String ref_dossier, double acompte, double taux_tva, double taux_ht, double prix_ttc, String type_reglement, int etat_commande, int temps_pose_moeteur, int temps_pose_commercial, int temps_pose_vendu, int delais_prevu, Date date_pose) {
+        this.id_client = id_client;
         this.id_commande = id_commande;
         this.ref_dossier = ref_dossier;
         this.acompte = acompte;
@@ -225,5 +227,19 @@ public class Commande {
      */
     public void setDate_pose(Date date_pose) {
         this.date_pose = date_pose;
+    }
+
+    /**
+     * @return the id_client
+     */
+    public int getId_client() {
+        return id_client;
+    }
+
+    /**
+     * @param id_client the id_client to set
+     */
+    public void setId_client(int id_client) {
+        this.id_client = id_client;
     }
 }

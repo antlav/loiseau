@@ -22,6 +22,7 @@ public class Acceuil extends javax.swing.JFrame {
         initComponents();
     }
     GestionClient formClient;
+    SuivieCommande formCommande;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,6 +60,11 @@ public class Acceuil extends javax.swing.JFrame {
         jButton3.setBackground(new java.awt.Color(87, 164, 94));
         jButton3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton3.setText("Suivi de commande");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,6 +115,13 @@ public class Acceuil extends javax.swing.JFrame {
         formClient.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        // TODO add your handling code here:
+        formCommande= new SuivieCommande();
+        formCommande.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton3MouseClicked
 
     /**
      * @param args the command line arguments

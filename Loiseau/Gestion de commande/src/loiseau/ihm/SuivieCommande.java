@@ -4,32 +4,20 @@
  */
 package loiseau.ihm;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Collections;
+import loiseau.metier.ClientOperation;
+import java.util.HashMap;
+import java.util.Vector;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileSystemView;
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.read.biff.BiffException;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-
-import jxl.write.Number;
-import jxl.write.biff.RowsExceededException;
+import loiseau.metier.DialogueBdd;
+import loiseau.stockage.Article_fabrication;
+import loiseau.stockage.Client;
+import loiseau.stockage.Commande;
+import loiseau.stockage.Type_article;
+import loiseau.stockage.Type_pose;
+import loiseau.stockage.telecommande;
 
 /**
  *
@@ -43,6 +31,44 @@ public class SuivieCommande extends javax.swing.JFrame {
     public SuivieCommande() {
         initComponents();
     }
+    DefaultListModel lst;
+    ClientOperation tri = new ClientOperation();
+    ResultSet rs;
+    Client unClient;
+    telecommande uneTelecomande;
+    Type_article unTypeArticle;
+    Type_pose unTypePose;
+    HashMap<Double, HashMap<Double, Vector<String>>> lesPrixCalypso = new HashMap<>();
+    HashMap<Double, HashMap<Double, Vector<String>>> lesPrixMozart = new HashMap<>();
+    HashMap<Double, HashMap<Double, Vector<String>>> lesPrixTradi = new HashMap<>();
+    HashMap<Double, HashMap<Double, Vector<String>>> lesPrixAntitempete = new HashMap<>();
+    HashMap<Double, HashMap<Double, Vector<String>>> lesPrixGarageReno = new HashMap<>();
+    Commande uneCommande;
+    String GETCLIENT = "SELECT * FROM client";
+    String GETCOMMANDE = "SELECT * FROM commande";
+    String GETARTICLEFABRICATION = "";
+    String GETCAISSONS = "";
+    String GETCOULEUR = "";
+    String GETCOULLISSE = "";
+    String GETETATCOMMANDE = "";
+    String GETLAME = "";
+    String GETMOTEUR = "";
+    String GETOPTION = "";
+    String GETPRIXCALYPSO = "";
+    String GETPRIXMOZART = "";
+    String GETGARAGEANTITEMPETE = "";
+    String GETPRIXTRADITONNEL = "";
+    String GETGARAGERENOVATION = "";
+    String GETTELECOMANDE = "";
+    String GETTYPEARTICLE = "";
+    String GETTYPEMANOEUVRE = "";
+    String GETTYPEPOSE = "";
+    Vector<Client> lesClient = new Vector<>();
+    Vector<Commande> lesCommandes = new Vector<>();
+    Vector<Article_fabrication> article = new Vector<>();
+    Vector<Article_fabrication> articleLoiseau = new Vector<>();
+    Vector<Article_fabrication> lesArticle = new Vector<>();
+    Vector<Article_fabrication> lesArticleLoiseau = new Vector<>();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,31 +83,31 @@ public class SuivieCommande extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jListClient = new javax.swing.JList();
+        lstClient = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        lstCommande = new javax.swing.JList();
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         txtNom = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtType = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        txtTel = new javax.swing.JTextField();
+        txtMail = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jTextField6 = new javax.swing.JTextField();
+        txtTVA = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
+        txtTTC = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        txtHT = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtAcompte = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -102,6 +128,11 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -126,23 +157,33 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        jListClient.setModel(new javax.swing.AbstractListModel() {
+        lstClient.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Collette", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane3.setViewportView(jListClient);
+        lstClient.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstClientMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(lstClient);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Commandes");
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        lstCommande.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        lstCommande.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstCommandeMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lstCommande);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -184,8 +225,8 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jLabel6.setText("Téléphone");
 
-        jTextField2.setEditable(false);
-        jTextField2.setText("jTextField1");
+        txtType.setEditable(false);
+        txtType.setText("jTextField1");
 
         jLabel5.setText("Nom");
 
@@ -193,11 +234,11 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jLabel7.setText("Email");
 
-        jTextField3.setEditable(false);
-        jTextField3.setText("jTextField1");
+        txtTel.setEditable(false);
+        txtTel.setText("jTextField1");
 
-        jTextField4.setEditable(false);
-        jTextField4.setText("jTextField1");
+        txtMail.setEditable(false);
+        txtMail.setText("jTextField1");
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Informations client");
@@ -215,15 +256,15 @@ public class SuivieCommande extends javax.swing.JFrame {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtMail, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtType, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -243,27 +284,27 @@ public class SuivieCommande extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        jTextField6.setEditable(false);
-        jTextField6.setText("jTextField1");
+        txtTVA.setEditable(false);
+        txtTVA.setText("jTextField1");
 
         jLabel12.setText("Total HT");
 
-        jTextField8.setEditable(false);
-        jTextField8.setText("jTextField1");
+        txtTTC.setEditable(false);
+        txtTTC.setText("jTextField1");
 
         jLabel10.setText("Acompte");
 
@@ -272,13 +313,13 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jLabel13.setText("Total TTC");
 
-        jTextField7.setEditable(false);
-        jTextField7.setText("jTextField1");
+        txtHT.setEditable(false);
+        txtHT.setText("jTextField1");
 
         jLabel11.setText("Taux TVA");
 
-        jTextField5.setEditable(false);
-        jTextField5.setText("jTextField1");
+        txtAcompte.setEditable(false);
+        txtAcompte.setText("jTextField1");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -296,10 +337,10 @@ public class SuivieCommande extends javax.swing.JFrame {
                             .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtAcompte, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTVA, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtHT, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTTC, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -311,19 +352,19 @@ public class SuivieCommande extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtAcompte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTVA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtHT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTTC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -451,130 +492,134 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-        Workbook fichierCharge=null;
-        File fichierEnregistre=null;
-       ResultSet resultats = null;
-        WritableWorkbook fichierExcelFin=null;  
-        String dateAujourdhui=null;
-       
+
+
     private void jMenuExFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExFactureActionPerformed
-        // TODO add your handling code here:
-       
-        Connection connect;
-     
-          try {       
-            
-          
-            String urlDocs=RecupUrlMesDocs();
-            CreationDossier(urlDocs);            
-            
-            DateFormat format = new SimpleDateFormat("dd-MM-yyyy"); 
-            dateAujourdhui=(format.format(new Date())).toString();
-            ChargementExcel(urlDocs,dateAujourdhui);
-             
-            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/loiseaudb","root","root");
-      
-            Statement stmt = connect.createStatement();
-        
-            if(jListClient.getSelectedValue()!=null)
-            {   
-               String nomClient=jListClient.getSelectedValue().toString();
-               resultats=stmt.executeQuery("Select nom,prenom,rue,code_postal,ville From client where nom='"+nomClient+"';");
-               RemplirExcel();
-               String idCommande=jListClient.getSelectedValue().toString();
-               //resultats=stmt.executeQuery("Select * From where nom='"+idCommande+"';");
-                 
-               
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(this, "Veuillez saisir un client");
-            }
-                
-              connect.close();
-            
-              } catch (SQLException ex) {
-            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-            
-        } 
-            
-            
-
-    
-
-            
+        // TODO add your handling code here:         
     }//GEN-LAST:event_jMenuExFactureActionPerformed
-    public String RecupUrlMesDocs()
-    {
-         FileSystemView fsv = FileSystemView.getFileSystemView(); 
-            File mesDocs = fsv.getDefaultDirectory(); 
-            String urlMesDocs = mesDocs.toString();
-            return  urlMesDocs;
-    }
-    
-    public void CreationDossier(String urlMesDocs)
-    {
-         File dossierClient = new File(urlMesDocs+"\\Client");
-            if(!dossierClient.exists())
-            {
-                 dossierClient.mkdir();
-            }
-            File dossierCommande = new File(urlMesDocs+"\\Client\\Commande");
-            if(!dossierCommande.exists())
-            {
-                 dossierCommande.mkdir();
-            }
-            File dossierFacturation = new File(urlMesDocs+"\\Client\\Commande\\Facturation");
-            if(!dossierFacturation.exists())
-            {
-                 dossierFacturation.mkdir();
-            }           
-    }
-    
-    public void ChargementExcel(String urlMesDocs,String dateAujourdhui )
-    {
-        try {      
-            
-            WorkbookSettings ws = new WorkbookSettings();
-            ws.setEncoding("windows-1252");
-            fichierCharge = Workbook.getWorkbook(new File("D:\\Projet Loiseau\\FileModel\\Facture.xls"),ws);
-             
-                fichierEnregistre = new File(urlMesDocs+"\\Client\\Commande\\Facturation\\FactureExcel_"+dateAujourdhui+".xls");      
 
-        } catch (IOException ex) {
-            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BiffException ex) {
-            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-    public void RemplirExcel()
-    {
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
         try {
-            fichierExcelFin = Workbook.createWorkbook(fichierEnregistre, fichierCharge);  
-               WritableSheet sheel = fichierExcelFin.getSheet(0);
-                  while(resultats.next())
-                  {       
-                   Label labelNom = new Label(4, 3,resultats.getString("nom")+" "+resultats.getString("prenom"));
-                   sheel.addCell(labelNom);
-                   Label labelRue = new Label(4, 4,resultats.getString("rue"));
-                   sheel.addCell(labelRue);
-                   Label labelCp = new Label(4, 5,resultats.getString("code_postal")+" "+resultats.getString("ville"));
-                   sheel.addCell(labelCp);
-                  }
-                   Label labelDate = new Label(1,8,dateAujourdhui);
-                   sheel.addCell(labelDate); 
-                   
-                   fichierExcelFin.write();
-                   fichierExcelFin.close();
-        } catch (IOException ex) {
-            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (WriteException ex) {
-            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+            rs = DialogueBdd.select(GETCLIENT);
+            while (rs.next()) {
+                unClient = new Client();
+                unClient.setPrenom(rs.getString("prenom"));
+                unClient.setNom(rs.getString("nom"));
+                unClient.setEmail(rs.getString("email"));
+                unClient.setTitre(rs.getString("titre"));
+                unClient.setVille(rs.getString("ville"));
+                unClient.setCode_postal(Integer.parseInt(rs.getString("code_postal")));
+                unClient.setDivers(rs.getString("divers"));
+                unClient.setSite_web(rs.getString("site_web"));
+                unClient.setTel_fix(rs.getString("tel_fix"));
+                unClient.setFax(rs.getString("fax"));
+                unClient.setType(rs.getString("type"));
+                unClient.setNum_siret(Integer.parseInt(rs.getString("num_siret")));
+                unClient.setRemise(rs.getString("remise"));
+                unClient.setVendeur(rs.getString("vendeur"));
+                unClient.setTel_port(rs.getString("tel_port"));
+                unClient.setRue(rs.getString("rue"));
+                unClient.setNb_commande(Integer.parseInt(rs.getString("nb_commande")));
+                unClient.setId_client(Integer.parseInt(rs.getString("id_clients")));
+                lesClient.add(unClient);
+            }
+            rs = DialogueBdd.select(GETCOMMANDE);
+            while (rs.next()) {
+                //REMPLIR LE VECTEUR COMMANDE
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex);
+        }
+        lst = new DefaultListModel();
+        lstClient.setModel(lst);
+        Collections.sort(lesClient, tri);
+        for (Client c : lesClient) {
+            lst.addElement(c.getNom());
+        }
+        lst = new DefaultListModel();
+        lstCommande.setModel(lst);
+        for (Commande c : lesCommandes) {
+            lst.addElement(c.getRef_dossier());
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void lstClientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstClientMouseClicked
+        // TODO add your handling code here:
+        completerClient(lstClient.getSelectedIndex());
+        lst = new DefaultListModel();
+        lstCommande.setModel(lst);
+        for (Commande c : lesCommandes) {
+            if (lesClient.get(lstClient.getSelectedIndex()).getId_client() == c.getId_client()) {
+                lst.addElement(c.getRef_dossier());
+            }
+        }
+    }//GEN-LAST:event_lstClientMouseClicked
+
+    private void lstCommandeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstCommandeMouseClicked
+        // TODO add your handling code here:
+        article.removeAllElements();
+        articleLoiseau.removeAllElements();
+        int indice = 0;
+        for (Commande c : lesCommandes) {
+            if (lstCommande.getSelectedValue().toString().compareTo(c.getRef_dossier()) == 0) {
+                indice = lesCommandes.indexOf(c);
+            }
+        }
+        for (Client c : lesClient) {
+            if (c.getId_client() == lesCommandes.get(indice).getId_client()) {
+                lstClient.setSelectedIndex(lesClient.indexOf(c));
+            }
+        }
+        completerClient(lstClient.getSelectedIndex());
+        for (Article_fabrication a : lesArticle) {
+            if (a.getCommande() == lesCommandes.get(indice).getId_commande()) {
+                article.add(a);
+            }
+        }
+        for (Article_fabrication a : lesArticleLoiseau) {
+            if (a.getCommande() == lesCommandes.get(indice).getId_commande()) {
+                articleLoiseau.add(a);
+            }
+        }
+        completerCommande(indice);
+        afficherArticle();
+        calculTva();
+    }//GEN-LAST:event_lstCommandeMouseClicked
+    public void completerClient(int index) {
+        txtNom.setText(lesClient.get(index).getNom());
+        txtTel.setText(lesClient.get(index).getTel_fix());
+        txtType.setText(lesClient.get(index).getType());
+        txtMail.setText(lesClient.get(index).getEmail());
     }
+
+    public void completerCommande(int index) {
+
+        txtAcompte.setText(String.valueOf(lesCommandes.get(index).getAcompte()));
+        txtHT.setText(String.valueOf(lesCommandes.get(index).getTaux_ht()));
+        txtTTC.setText(String.valueOf(lesCommandes.get(index).getPrix_ttc()));
+        txtTVA.setText(String.valueOf(lesCommandes.get(index).getTaux_tva()));
+
+    }
+
+    public void calculTva() {
+        double resultat = 0.0;
+        if (lesClient.get(lstClient.getSelectedIndex()).getType().compareTo("Revendeur") == 0) {
+            for (Article_fabrication a : article) {
+                resultat += a.getQuantite() * a.getPrix();
+            }
+            for (Article_fabrication a : articleLoiseau) {
+                resultat += a.getQuantite() * a.getPrix();
+            }
+            resultat -= (resultat * Double.parseDouble(lesClient.get(lstClient.getSelectedIndex()).getRemise()) / 100);
+            resultat = (double) (int) (resultat + 0.5);
+            txtHT.setText(String.valueOf(resultat));
+            resultat += (resultat * Double.parseDouble(txtTVA.getText()) / 100);
+            resultat = (Math.floor(resultat * 100 + 0.5)) / 100;
+            txtTTC.setText(String.valueOf(resultat));
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -623,8 +668,6 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList jList1;
-    private javax.swing.JList jListClient;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -649,13 +692,15 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
+    private javax.swing.JList lstClient;
+    private javax.swing.JList lstCommande;
+    private javax.swing.JTextField txtAcompte;
+    private javax.swing.JTextField txtHT;
+    private javax.swing.JTextField txtMail;
     private javax.swing.JTextField txtNom;
+    private javax.swing.JTextField txtTTC;
+    private javax.swing.JTextField txtTVA;
+    private javax.swing.JTextField txtTel;
+    private javax.swing.JTextField txtType;
     // End of variables declaration//GEN-END:variables
 }
