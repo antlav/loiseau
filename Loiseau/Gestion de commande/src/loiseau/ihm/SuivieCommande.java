@@ -127,6 +127,8 @@ public class SuivieCommande extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         ItemPrestaPose = new javax.swing.JMenuItem();
         ItemFacture = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        itemAjoutArticle = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -444,6 +446,10 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenu3.add(ItemFacture);
 
         jMenu1.add(jMenu3);
+        jMenu1.add(jSeparator4);
+
+        itemAjoutArticle.setText("Ajouter Article");
+        jMenu1.add(itemAjoutArticle);
 
         jMenuBar1.add(jMenu1);
 
@@ -523,12 +529,16 @@ public class SuivieCommande extends javax.swing.JFrame {
                 unClient.setTel_port(rs.getString("tel_port"));
                 unClient.setRue(rs.getString("rue"));
                 unClient.setNb_commande(rs.getString("nb_commande"));
-                unClient.setId_client(Integer.parseInt(rs.getString("id_clients")));
+                unClient.setId_client(Integer.parseInt(rs.getString("id_client")));
                 lesClient.add(unClient);
             }
             rs = DialogueBdd.select(GETCOMMANDE);
             while (rs.next()) {
-                //REMPLIR LE VECTEUR COMMANDE
+                uneCommande=new Commande(Integer.parseInt(rs.getString("id_client")), Integer.parseInt(rs.getString("id_commande")), rs.getString("ref_dossier"),
+                        rs.getString("acompte"), Double.parseDouble(rs.getString("taux_tva")), Double.parseDouble(rs.getString("prix_ht")),Double.parseDouble(rs.getString("prix_ttc")),
+                        rs.getString("type_reglement"), Integer.parseInt(rs.getString("etat_commande")), rs.getString("temps_pose_metreur"), rs.getString("temps_pose_commercial"),
+                        rs.getString("temps_pose_vendu"), rs.getString("delais_prevu"), rs.getString("date_pose"));
+                lesCommandes.add(uneCommande);
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex);
@@ -687,6 +697,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenuItem ItemFacture;
     private javax.swing.JMenuItem ItemPrestaPose;
     private javax.swing.JMenuItem ItemSuprCommande;
+    private javax.swing.JMenuItem itemAjoutArticle;
     private javax.swing.JMenuItem itemNewCommande;
     private javax.swing.JMenuItem itemPriseMesur;
     private javax.swing.JLabel jLabel1;
@@ -717,6 +728,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JList lstClient;
     private javax.swing.JList lstCommande;
     private javax.swing.JTable tblArticle;

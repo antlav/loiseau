@@ -15,22 +15,22 @@ public class Commande {
     private int id_client;
     private int id_commande;
     private String ref_dossier;
-    private double acompte;
+    private String acompte;
     private double taux_tva;
     private double taux_ht;
     private double prix_ttc;
     private String type_reglement;
     private int etat_commande;
-    private int temps_pose_moeteur;
-    private int temps_pose_commercial;
-    private int temps_pose_vendu;
-    private int delais_prevu;
-    private Date date_pose;
+    private String temps_pose_moeteur;
+    private String temps_pose_commercial;
+    private String temps_pose_vendu;
+    private String delais_prevu;
+    private String date_pose;
 
     public Commande() {
     }
 
-    public Commande(int id_client, int id_commande, String ref_dossier, double acompte, double taux_tva, double taux_ht, double prix_ttc, String type_reglement, int etat_commande, int temps_pose_moeteur, int temps_pose_commercial, int temps_pose_vendu, int delais_prevu, Date date_pose) {
+    public Commande(int id_client, int id_commande, String ref_dossier, String acompte, double taux_tva, double taux_ht, double prix_ttc, String type_reglement, int etat_commande, String temps_pose_moeteur, String temps_pose_commercial, String temps_pose_vendu, String delais_prevu, String date_pose) {
         this.id_client = id_client;
         this.id_commande = id_commande;
         this.ref_dossier = ref_dossier;
@@ -78,14 +78,14 @@ public class Commande {
     /**
      * @return the acompte
      */
-    public double getAcompte() {
+    public String getAcompte() {
         return acompte;
     }
 
     /**
      * @param acompte the acompte to set
      */
-    public void setAcompte(double acompte) {
+    public void setAcompte(String acompte) {
         this.acompte = acompte;
     }
 
@@ -162,70 +162,70 @@ public class Commande {
     /**
      * @return the temps_pose_moeteur
      */
-    public int getTemps_pose_moeteur() {
+    public String getTemps_pose_moeteur() {
         return temps_pose_moeteur;
     }
 
     /**
      * @param temps_pose_moeteur the temps_pose_moeteur to set
      */
-    public void setTemps_pose_moeteur(int temps_pose_moeteur) {
+    public void setTemps_pose_moeteur(String temps_pose_moeteur) {
         this.temps_pose_moeteur = temps_pose_moeteur;
     }
 
     /**
      * @return the temps_pose_commercial
      */
-    public int getTemps_pose_commercial() {
+    public String getTemps_pose_commercial() {
         return temps_pose_commercial;
     }
 
     /**
      * @param temps_pose_commercial the temps_pose_commercial to set
      */
-    public void setTemps_pose_commercial(int temps_pose_commercial) {
+    public void setTemps_pose_commercial(String temps_pose_commercial) {
         this.temps_pose_commercial = temps_pose_commercial;
     }
 
     /**
      * @return the temps_pose_vendu
      */
-    public int getTemps_pose_vendu() {
+    public String getTemps_pose_vendu() {
         return temps_pose_vendu;
     }
 
     /**
      * @param temps_pose_vendu the temps_pose_vendu to set
      */
-    public void setTemps_pose_vendu(int temps_pose_vendu) {
+    public void setTemps_pose_vendu(String temps_pose_vendu) {
         this.temps_pose_vendu = temps_pose_vendu;
     }
 
     /**
      * @return the delais_prevu
      */
-    public int getDelais_prevu() {
+    public String getDelais_prevu() {
         return delais_prevu;
     }
 
     /**
      * @param delais_prevu the delais_prevu to set
      */
-    public void setDelais_prevu(int delais_prevu) {
+    public void setDelais_prevu(String delais_prevu) {
         this.delais_prevu = delais_prevu;
     }
 
     /**
      * @return the date_pose
      */
-    public Date getDate_pose() {
+    public String getDate_pose() {
         return date_pose;
     }
 
     /**
      * @param date_pose the date_pose to set
      */
-    public void setDate_pose(Date date_pose) {
+    public void setDate_pose(String date_pose) {
         this.date_pose = date_pose;
     }
 
