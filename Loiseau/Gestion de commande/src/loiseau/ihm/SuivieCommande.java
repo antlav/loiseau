@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import loiseau.metier.DialogueBdd;
 import loiseau.stockage.Article_fabrication;
 import loiseau.stockage.Client;
@@ -32,6 +33,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         initComponents();
     }
     DefaultListModel lst;
+    DefaultTableModel dtm;
     ClientOperation tri = new ClientOperation();
     ResultSet rs;
     Client unClient;
@@ -110,21 +112,21 @@ public class SuivieCommande extends javax.swing.JFrame {
         txtAcompte = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblArticle = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        itemNewCommande = new javax.swing.JMenuItem();
+        ItemSuprCommande = new javax.swing.JMenuItem();
+        ItemEtatSuivant = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        itemPriseMesur = new javax.swing.JMenuItem();
+        ItemDevis = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        ItemDecote = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuExFacture = new javax.swing.JMenuItem();
+        ItemPrestaPose = new javax.swing.JMenuItem();
+        ItemFacture = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -370,7 +372,7 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblArticle.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -386,7 +388,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tblArticle);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -407,39 +409,39 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
-        jMenuItem2.setText("Nouvelle commande");
-        jMenu1.add(jMenuItem2);
+        itemNewCommande.setText("Nouvelle commande");
+        jMenu1.add(itemNewCommande);
 
-        jMenuItem1.setText("Suprimer commande");
-        jMenu1.add(jMenuItem1);
+        ItemSuprCommande.setText("Suprimer commande");
+        jMenu1.add(ItemSuprCommande);
 
-        jMenuItem3.setText("Etat suivant");
-        jMenu1.add(jMenuItem3);
+        ItemEtatSuivant.setText("Etat suivant");
+        jMenu1.add(ItemEtatSuivant);
         jMenu1.add(jSeparator3);
 
         jMenu3.setText("Export");
 
-        jMenuItem4.setText("Préstation de pris de mesures");
-        jMenu3.add(jMenuItem4);
+        itemPriseMesur.setText("Préstation de pris de mesures");
+        jMenu3.add(itemPriseMesur);
 
-        jMenuItem5.setText("Devis");
-        jMenu3.add(jMenuItem5);
+        ItemDevis.setText("Devis");
+        jMenu3.add(ItemDevis);
         jMenu3.add(jSeparator1);
 
-        jMenuItem6.setText("Décote");
-        jMenu3.add(jMenuItem6);
+        ItemDecote.setText("Décote");
+        jMenu3.add(ItemDecote);
         jMenu3.add(jSeparator2);
 
-        jMenuItem7.setText("Préstation de pose");
-        jMenu3.add(jMenuItem7);
+        ItemPrestaPose.setText("Préstation de pose");
+        jMenu3.add(ItemPrestaPose);
 
-        jMenuExFacture.setText("Facture");
-        jMenuExFacture.addActionListener(new java.awt.event.ActionListener() {
+        ItemFacture.setText("Facture");
+        ItemFacture.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuExFactureActionPerformed(evt);
+                ItemFactureActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuExFacture);
+        jMenu3.add(ItemFacture);
 
         jMenu1.add(jMenu3);
 
@@ -494,9 +496,9 @@ public class SuivieCommande extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    private void jMenuExFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExFactureActionPerformed
+    private void ItemFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemFactureActionPerformed
         // TODO add your handling code here:         
-    }//GEN-LAST:event_jMenuExFactureActionPerformed
+    }//GEN-LAST:event_ItemFactureActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
@@ -509,18 +511,18 @@ public class SuivieCommande extends javax.swing.JFrame {
                 unClient.setEmail(rs.getString("email"));
                 unClient.setTitre(rs.getString("titre"));
                 unClient.setVille(rs.getString("ville"));
-                unClient.setCode_postal(Integer.parseInt(rs.getString("code_postal")));
+                unClient.setCode_postal(rs.getString("code_postal"));
                 unClient.setDivers(rs.getString("divers"));
                 unClient.setSite_web(rs.getString("site_web"));
                 unClient.setTel_fix(rs.getString("tel_fix"));
                 unClient.setFax(rs.getString("fax"));
                 unClient.setType(rs.getString("type"));
-                unClient.setNum_siret(Integer.parseInt(rs.getString("num_siret")));
+                unClient.setNum_siret(rs.getString("num_siret"));
                 unClient.setRemise(rs.getString("remise"));
                 unClient.setVendeur(rs.getString("vendeur"));
                 unClient.setTel_port(rs.getString("tel_port"));
                 unClient.setRue(rs.getString("rue"));
-                unClient.setNb_commande(Integer.parseInt(rs.getString("nb_commande")));
+                unClient.setNb_commande(rs.getString("nb_commande"));
                 unClient.setId_client(Integer.parseInt(rs.getString("id_clients")));
                 lesClient.add(unClient);
             }
@@ -619,6 +621,30 @@ public class SuivieCommande extends javax.swing.JFrame {
             txtTTC.setText(String.valueOf(resultat));
         }
     }
+        public void afficherArticle() {
+        dtm = (DefaultTableModel) tblArticle.getModel();
+        while (dtm.getRowCount() != 0) {
+            dtm.removeRow(0);
+        }
+        for (Article_fabrication a : article) {
+            Vector vect = new Vector();
+            vect.add(a.getRef_article());
+            vect.add("");
+            vect.add("");
+            vect.add(a.getQuantite());
+            vect.add(a.getPrix());
+            dtm.addRow(vect);
+        }
+        for (Article_fabrication a : articleLoiseau) {
+            Vector vect = new Vector();
+            vect.add(a.getRef_article());
+            vect.add(a.getLargeur());
+            vect.add(a.getHauteur());
+            vect.add(a.getQuantite());
+            vect.add(a.getPrix());
+            dtm.addRow(vect);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -655,6 +681,14 @@ public class SuivieCommande extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem ItemDecote;
+    private javax.swing.JMenuItem ItemDevis;
+    private javax.swing.JMenuItem ItemEtatSuivant;
+    private javax.swing.JMenuItem ItemFacture;
+    private javax.swing.JMenuItem ItemPrestaPose;
+    private javax.swing.JMenuItem ItemSuprCommande;
+    private javax.swing.JMenuItem itemNewCommande;
+    private javax.swing.JMenuItem itemPriseMesur;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -672,14 +706,6 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuExFacture;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -691,9 +717,9 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JList lstClient;
     private javax.swing.JList lstCommande;
+    private javax.swing.JTable tblArticle;
     private javax.swing.JTextField txtAcompte;
     private javax.swing.JTextField txtHT;
     private javax.swing.JTextField txtMail;

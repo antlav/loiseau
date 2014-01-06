@@ -12,6 +12,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
     <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
@@ -243,10 +244,10 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="4">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
+                <StringItem index="0" value="Monsieur"/>
+                <StringItem index="1" value="Madame"/>
+                <StringItem index="2" value="Mademoiselle"/>
+                <StringItem index="3" value="Entreprise"/>
               </StringArray>
             </Property>
           </Properties>
@@ -375,13 +376,13 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jButton3" min="-2" pref="130" max="-2" attributes="0"/>
+                  <Component id="btnSupr" min="-2" pref="130" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton2" min="-2" pref="130" max="-2" attributes="0"/>
+                  <Component id="btnModifier" min="-2" pref="130" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton1" min="-2" pref="130" max="-2" attributes="0"/>
+                  <Component id="btnSauvegarde" min="-2" pref="130" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton4" min="-2" pref="130" max="-2" attributes="0"/>
+                  <Component id="btnRetour" min="-2" pref="130" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -391,10 +392,10 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButton1" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                      <Component id="jButton2" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                      <Component id="jButton3" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                      <Component id="jButton4" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                      <Component id="btnSauvegarde" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                      <Component id="btnModifier" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                      <Component id="btnSupr" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                      <Component id="btnRetour" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -402,33 +403,33 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButton3">
+        <Component class="javax.swing.JButton" name="btnSupr">
           <Properties>
             <Property name="text" type="java.lang.String" value="Suprimer"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JButton" name="btnSauvegarde">
           <Properties>
             <Property name="text" type="java.lang.String" value="Sauvegarder"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton1MouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnSauvegardeMouseClicked"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="btnModifier">
           <Properties>
             <Property name="text" type="java.lang.String" value="Modifier"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton2MouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnModifierMouseClicked"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton4">
+        <Component class="javax.swing.JButton" name="btnRetour">
           <Properties>
             <Property name="text" type="java.lang.String" value="Retour"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton4MouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnRetourMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>

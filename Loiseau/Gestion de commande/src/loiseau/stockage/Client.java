@@ -21,17 +21,17 @@ public class Client {
     private String vendeur;
     private String site_web;
     private String remise;
-    private int num_siret;
+    private String num_siret;
     private String divers;
     private String rue;
-    private int code_postal;
+    private String code_postal;
     private String ville;
-    private int nb_commande;
+    private String nb_commande;
 
     public Client() {
     }
 
-    public Client(int id_client, String titre, String nom, String prenom, String type, String tel_port, String tel_fix, String fax, String email, String vendeur, String site_web, String remise, int num_siret, String divers, String rue, int code_postal, String ville, int nb_commande) {
+    public Client(int id_client, String titre, String nom, String prenom, String type, String tel_port, String tel_fix, String fax, String email, String vendeur, String site_web, String remise, String num_siret, String divers, String rue, String code_postal, String ville, String nb_commande) {
         this.id_client = id_client;
         this.titre = titre;
         this.nom = nom;
@@ -211,14 +211,14 @@ public class Client {
     /**
      * @return the num_siret
      */
-    public int getNum_siret() {
+    public String getNum_siret() {
         return num_siret;
     }
 
     /**
      * @param num_siret the num_siret to set
      */
-    public void setNum_siret(int num_siret) {
+    public void setNum_siret(String num_siret) {
         this.num_siret = num_siret;
     }
 
@@ -253,14 +253,14 @@ public class Client {
     /**
      * @return the code_postal
      */
-    public int getCode_postal() {
+    public String getCode_postal() {
         return code_postal;
     }
 
     /**
      * @param code_postal the code_postal to set
      */
-    public void setCode_postal(int code_postal) {
+    public void setCode_postal(String code_postal) {
         this.code_postal = code_postal;
     }
 
@@ -281,14 +281,14 @@ public class Client {
     /**
      * @return the nb_commande
      */
-    public int getNb_commande() {
+    public String getNb_commande() {
         return nb_commande;
     }
 
     /**
      * @param nb_commande the nb_commande to set
      */
-    public void setNb_commande(int nb_commande) {
+    public void setNb_commande(String nb_commande) {
         this.nb_commande = nb_commande;
     }
 

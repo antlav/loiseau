@@ -36,8 +36,8 @@ public class GestionClient extends javax.swing.JFrame {
     ClientOperation tri = new ClientOperation();
     Vector<Client> lesClient = new Vector<Client>();
     String GETCLIENT = "SELECT * FROM client";
-    String ADDCLIENT = "INSERT INTO `loiseaudb`.`client` (`nomClient`, `telephone`, `fax`, `mail`, `divers`, `typeClient`, `rue`, `codePostal`, `ville`, `vendeur`, `prenomClient`, `numSiret`, `siteWeb`, `nbCommande`, `numMobil`, `remise`, `titre`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    String UPDATECLIENT = "UPDATE `loiseaudb`.`client` SET `nomClient`=?, `telephone`=?, `fax`=?, `mail`=?, `divers`=?, `typeClient`=?, `rue`=?, `codePostal`=?, `ville`=?, `vendeur`=?, `prenomClient`=?, `numSiret`=?, `siteWeb`=?, `nbCommande`=?, `numMobil`=?, `remise`=?, `titre`=? WHERE `ID_Clients`=?";
+    String ADDCLIENT = "INSERT INTO `loiseaudb`.`client` (`titre`, `nom`, `prenom`, `type`, `tel_port`, `tel_fix`, `fax`, `email`, `vendeur`, `site_web`, `remise`, `num_siret`, `divers`, `rue`, `code_postal`, `ville`, `nb_commande`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String UPDATECLIENT = "UPDATE `loiseaudb`.`client` SET `titre`=?, `nom`=?, `prenom`=?, `type`=?, `tel_port`=?, `tel_fix`=?, `fax`=?, `email`=?, `vendeur`=?, `site_web`=?, `remise`=?, `num_siret`=?, `divers`=?, `rue`=?, `code_postal`=?, `ville`=?, `nb_commande`=? WHERE `id_client`=?";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -74,10 +74,10 @@ public class GestionClient extends javax.swing.JFrame {
         cbbType = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnSupr = new javax.swing.JButton();
+        btnSauvegarde = new javax.swing.JButton();
+        btnModifier = new javax.swing.JButton();
+        btnRetour = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -124,7 +124,7 @@ public class GestionClient extends javax.swing.JFrame {
 
         txtMobil.setText("jTextField1");
 
-        cbbTitre.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbbTitre.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Monsieur", "Madame", "Mademoiselle", "Entreprise" }));
 
         txtPostal.setText("jTextField1");
 
@@ -272,26 +272,26 @@ public class GestionClient extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        jButton3.setText("Suprimer");
+        btnSupr.setText("Suprimer");
 
-        jButton1.setText("Sauvegarder");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnSauvegarde.setText("Sauvegarder");
+        btnSauvegarde.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                btnSauvegardeMouseClicked(evt);
             }
         });
 
-        jButton2.setText("Modifier");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnModifier.setText("Modifier");
+        btnModifier.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                btnModifierMouseClicked(evt);
             }
         });
 
-        jButton4.setText("Retour");
-        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnRetour.setText("Retour");
+        btnRetour.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton4MouseClicked(evt);
+                btnRetourMouseClicked(evt);
             }
         });
 
@@ -301,13 +301,13 @@ public class GestionClient extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSupr, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnModifier, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSauvegarde, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRetour, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -315,10 +315,10 @@ public class GestionClient extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSauvegarde, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnModifier, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSupr, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRetour, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -478,19 +478,19 @@ public class GestionClient extends javax.swing.JFrame {
                 unClient.setEmail(rs.getString("email"));
                 unClient.setTitre(rs.getString("titre"));
                 unClient.setVille(rs.getString("ville"));
-                unClient.setCode_postal(Integer.parseInt(rs.getString("code_postal")));
+                unClient.setCode_postal(rs.getString("code_postal"));
                 unClient.setDivers(rs.getString("divers"));
                 unClient.setSite_web(rs.getString("site_web"));
                 unClient.setTel_fix(rs.getString("tel_fix"));
                 unClient.setFax(rs.getString("fax"));
                 unClient.setType(rs.getString("type"));
-                unClient.setNum_siret(Integer.parseInt(rs.getString("num_siret")));
+                unClient.setNum_siret(rs.getString("num_siret"));
                 unClient.setRemise(rs.getString("remise"));
                 unClient.setVendeur(rs.getString("vendeur"));
                 unClient.setTel_port(rs.getString("tel_port"));
                 unClient.setRue(rs.getString("rue"));
-                unClient.setNb_commande(Integer.parseInt(rs.getString("nb_commande")));
-                unClient.setId_client(Integer.parseInt(rs.getString("id_clients")));
+                unClient.setNb_commande(rs.getString("nb_commande"));
+                unClient.setId_client(Integer.parseInt(rs.getString("id_client")));
                 lesClient.add(unClient);
             }
         } catch (Exception ex) {
@@ -520,6 +520,13 @@ public class GestionClient extends javax.swing.JFrame {
 
     private void lstClientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstClientMouseClicked
         // TODO add your handling code here:
+        int indice = 0;
+        for (Client c : lesClient) {
+            if (lstClient.getSelectedValue().toString().compareTo(c.getNom()) == 0 ) {
+                indice = lesClient.indexOf(c);
+            }
+        }
+        completerChamp(indice);
     }//GEN-LAST:event_lstClientMouseClicked
 
     private void txtNomKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomKeyReleased
@@ -533,34 +540,35 @@ public class GestionClient extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtNomKeyReleased
 
-    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+    private void btnRetourMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRetourMouseClicked
         // TODO add your handling code here:
         laForm = new Acceuil();
         laForm.setVisible(true);
         dispose();
-    }//GEN-LAST:event_jButton4MouseClicked
+    }//GEN-LAST:event_btnRetourMouseClicked
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void btnSauvegardeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSauvegardeMouseClicked
         // TODO add your handling code here:
         boolean existance = false;
         lesInfos = new Vector<>();
         completerClient();
+        lesInfos.add(unClient.getTitre());
         lesInfos.add(unClient.getNom());
+        lesInfos.add(unClient.getPrenom());
+        lesInfos.add(unClient.getType());
+        lesInfos.add(unClient.getTel_port());
         lesInfos.add(unClient.getTel_fix());
         lesInfos.add(unClient.getFax());
         lesInfos.add(unClient.getEmail());
+        lesInfos.add(unClient.getVendeur());
+        lesInfos.add(unClient.getSite_web());
+        lesInfos.add(unClient.getRemise());
+        lesInfos.add(unClient.getNum_siret());
         lesInfos.add(unClient.getDivers());
-        lesInfos.add(unClient.getType());
         lesInfos.add(unClient.getRue());
         lesInfos.add(unClient.getCode_postal());
         lesInfos.add(unClient.getVille());
-        lesInfos.add(unClient.getVendeur());
-        lesInfos.add(unClient.getPrenom());
-        lesInfos.add(unClient.getNum_siret());
-        lesInfos.add(unClient.getSite_web());
-        lesInfos.add(unClient.getTel_port());
-        lesInfos.add(unClient.getRemise());
-        lesInfos.add(unClient.getTitre());
+        lesInfos.add(unClient.getNb_commande());
         for (Client c : lesClient) {
             if (cbbTitre.getSelectedItem().toString().compareTo("Revendeur") == 0) {
                 if (txtNom.getText().compareTo(c.getNom()) == 0) {
@@ -607,18 +615,17 @@ public class GestionClient extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "le client est ajouter");
             }
 
-
         } catch (Exception ex) {
             Logger.getLogger(GestionClient.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex);
         }
         Collections.sort(lesClient, tri);
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_btnSauvegardeMouseClicked
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void btnModifierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModifierMouseClicked
         // TODO add your handling code here:
-        jButton1MouseClicked(evt);       
-    }//GEN-LAST:event_jButton2MouseClicked
+        btnSauvegardeMouseClicked(evt);
+    }//GEN-LAST:event_btnModifierMouseClicked
     private void completerChamp(int index) {
         cbbTitre.setSelectedItem(lesClient.get(index).getTitre());
         cbbType.setSelectedItem(lesClient.get(index).getType());
@@ -629,18 +636,18 @@ public class GestionClient extends javax.swing.JFrame {
         txtFax.setText(lesClient.get(index).getFax());
         txtMail.setText(lesClient.get(index).getEmail());
         txtRue.setText(lesClient.get(index).getRue());
-        txtPostal.setText(String.valueOf(lesClient.get(index).getCode_postal()));
+        txtPostal.setText(lesClient.get(index).getCode_postal());
         txtVille.setText(lesClient.get(index).getVille());
         txtVendeur.setText(lesClient.get(index).getVendeur());
         txtRemise.setText(lesClient.get(index).getRemise());
         txtWeb.setText(lesClient.get(index).getSite_web());
-        txtSiret.setText(String.valueOf(lesClient.get(index).getNum_siret()));
+        txtSiret.setText(lesClient.get(index).getNum_siret());
         txtDiver.setText(lesClient.get(index).getDivers());
     }
 
     private void completerClient() {
         unClient.setRue(txtRue.getText());
-        unClient.setCode_postal(Integer.parseInt(txtPostal.getText()));
+        unClient.setCode_postal(txtPostal.getText());
         unClient.setDivers(txtDiver.getText());
         unClient.setFax(txtFax.getText());
         unClient.setEmail(txtMail.getText());
@@ -648,7 +655,7 @@ public class GestionClient extends javax.swing.JFrame {
         unClient.setNom(txtNom.getText());
         unClient.setPrenom(TxtPrenom.getText());
         unClient.setRemise(txtRemise.getText());
-        unClient.setNum_siret(Integer.parseInt(txtSiret.getText()));
+        unClient.setNum_siret(txtSiret.getText());
         unClient.setSite_web(txtWeb.getText());
         unClient.setTel_fix(txtTel.getText());
         unClient.setTitre(cbbTitre.getSelectedItem().toString());
@@ -694,12 +701,12 @@ public class GestionClient extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField TxtPrenom;
+    private javax.swing.JButton btnModifier;
+    private javax.swing.JButton btnRetour;
+    private javax.swing.JButton btnSauvegarde;
+    private javax.swing.JButton btnSupr;
     private javax.swing.JComboBox cbbTitre;
     private javax.swing.JComboBox cbbType;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;

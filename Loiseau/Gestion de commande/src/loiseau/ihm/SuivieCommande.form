@@ -9,17 +9,17 @@
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+            <MenuItem class="javax.swing.JMenuItem" name="itemNewCommande">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nouvelle commande"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+            <MenuItem class="javax.swing.JMenuItem" name="ItemSuprCommande">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Suprimer commande"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
+            <MenuItem class="javax.swing.JMenuItem" name="ItemEtatSuivant">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Etat suivant"/>
               </Properties>
@@ -31,36 +31,36 @@
                 <Property name="text" type="java.lang.String" value="Export"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+                <MenuItem class="javax.swing.JMenuItem" name="itemPriseMesur">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Pr&#xe9;station de pris de mesures"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem5">
+                <MenuItem class="javax.swing.JMenuItem" name="ItemDevis">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Devis"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator1">
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
+                <MenuItem class="javax.swing.JMenuItem" name="ItemDecote">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="D&#xe9;cote"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem7">
+                <MenuItem class="javax.swing.JMenuItem" name="ItemPrestaPose">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Pr&#xe9;station de pose"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuExFacture">
+                <MenuItem class="javax.swing.JMenuItem" name="ItemFacture">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Facture"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuExFactureActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ItemFactureActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>
@@ -593,7 +593,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="jTable1">
+            <Component class="javax.swing.JTable" name="tblArticle">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="5" rowCount="0">
