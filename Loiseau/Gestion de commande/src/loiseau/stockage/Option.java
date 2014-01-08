@@ -12,12 +12,12 @@ package loiseau.stockage;
 public class Option {
     private int id_option;
     private String nom_option;
-    private float prix_option;
+    private double prix_option;
 
     public Option() {
     }
 
-    public Option(int id_option, String nom_option, float prix_option) {
+    public Option(int id_option, String nom_option, double prix_option) {
         this.id_option = id_option;
         this.nom_option = nom_option;
         this.prix_option = prix_option;
@@ -54,14 +54,14 @@ public class Option {
     /**
      * @return the prix_option
      */
-    public float getPrix_option() {
+    public double getPrix_option() {
         return prix_option;
     }
 
     /**
      * @param prix_option the prix_option to set
      */
-    public void setPrix_option(float prix_option) {
+    public void setPrix_option(double prix_option) {
         this.prix_option = prix_option;
     }
 }

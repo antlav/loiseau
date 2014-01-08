@@ -16,7 +16,14 @@ import loiseau.metier.DialogueBdd;
 import loiseau.stockage.Article_fabrication;
 import loiseau.stockage.Client;
 import loiseau.stockage.Commande;
+import loiseau.stockage.Couleur;
+import loiseau.stockage.Coulisse;
+import loiseau.stockage.Lame;
+import loiseau.stockage.Moteur;
+import loiseau.stockage.Option;
+import loiseau.stockage.Piece;
 import loiseau.stockage.Type_article;
+import loiseau.stockage.Type_manoeuvre;
 import loiseau.stockage.Type_pose;
 import loiseau.stockage.telecommande;
 
@@ -39,7 +46,14 @@ public class SuivieCommande extends javax.swing.JFrame {
     Client unClient;
     telecommande uneTelecomande;
     Type_article unTypeArticle;
-    Type_pose unTypePose;
+    Option uneOption;
+    Piece unePiece;
+    Couleur uneCouleur;
+    Coulisse uneCoulisse;
+    Lame uneLame;
+    Type_pose unePose;
+    Type_manoeuvre uneManoeuvre;
+    Moteur unMoteur;
     HashMap<Double, HashMap<Double, Vector<String>>> lesPrixCalypso = new HashMap<>();
     HashMap<Double, HashMap<Double, Vector<String>>> lesPrixMozart = new HashMap<>();
     HashMap<Double, HashMap<Double, Vector<String>>> lesPrixTradi = new HashMap<>();
@@ -65,12 +79,26 @@ public class SuivieCommande extends javax.swing.JFrame {
     String GETTYPEARTICLE = "";
     String GETTYPEMANOEUVRE = "";
     String GETTYPEPOSE = "";
+    String GETPIECE;
+    String GETCOULISSE;
     Vector<Client> lesClient = new Vector<>();
     Vector<Commande> lesCommandes = new Vector<>();
     Vector<Article_fabrication> article = new Vector<>();
     Vector<Article_fabrication> articleLoiseau = new Vector<>();
     Vector<Article_fabrication> lesArticle = new Vector<>();
     Vector<Article_fabrication> lesArticleLoiseau = new Vector<>();
+    Vector<Couleur> lesCouleurs = new Vector<>();
+    Vector<String> prixEtMoteur;
+    Vector<Object> lesInfos;
+    Vector<Option> lesOption = new Vector<>();
+    Vector<Type_manoeuvre> lesManoeuvres = new Vector<>();
+    Vector<telecommande> lesTele = new Vector<>();
+    Vector<Moteur> lesMoteur = new Vector();
+    Vector<Coulisse> lesCoulisses = new Vector<>();
+    Vector<Lame> lesLames = new Vector<>();
+    Vector<Type_pose> lesPoses = new Vector<>();
+    Vector<Type_article> lesTypeArticle = new Vector<>();
+    Vector<Piece> lesPieces = new Vector<>();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -128,7 +156,11 @@ public class SuivieCommande extends javax.swing.JFrame {
         ItemPrestaPose = new javax.swing.JMenuItem();
         ItemFacture = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
-        itemAjoutArticle = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -448,8 +480,21 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenu1.add(jMenu3);
         jMenu1.add(jSeparator4);
 
-        itemAjoutArticle.setText("Ajouter Article");
-        jMenu1.add(itemAjoutArticle);
+        jMenu4.setText("Ajouter");
+
+        jMenuItem1.setText("jMenuItem1");
+        jMenu4.add(jMenuItem1);
+
+        jMenuItem2.setText("jMenuItem2");
+        jMenu4.add(jMenuItem2);
+
+        jMenuItem3.setText("jMenuItem3");
+        jMenu4.add(jMenuItem3);
+
+        jMenuItem4.setText("jMenuItem4");
+        jMenu4.add(jMenuItem4);
+
+        jMenu1.add(jMenu4);
 
         jMenuBar1.add(jMenu1);
 
@@ -534,11 +579,52 @@ public class SuivieCommande extends javax.swing.JFrame {
             }
             rs = DialogueBdd.select(GETCOMMANDE);
             while (rs.next()) {
-                uneCommande=new Commande(Integer.parseInt(rs.getString("id_client")), Integer.parseInt(rs.getString("id_commande")), rs.getString("ref_dossier"),
-                        rs.getString("acompte"), Double.parseDouble(rs.getString("taux_tva")), Double.parseDouble(rs.getString("prix_ht")),Double.parseDouble(rs.getString("prix_ttc")),
+                uneCommande = new Commande(Integer.parseInt(rs.getString("id_client")), Integer.parseInt(rs.getString("id_commande")), rs.getString("ref_dossier"),
+                        rs.getString("acompte"), Double.parseDouble(rs.getString("taux_tva")), Double.parseDouble(rs.getString("prix_ht")), Double.parseDouble(rs.getString("prix_ttc")),
                         rs.getString("type_reglement"), Integer.parseInt(rs.getString("etat_commande")), rs.getString("temps_pose_metreur"), rs.getString("temps_pose_commercial"),
                         rs.getString("temps_pose_vendu"), rs.getString("delais_prevu"), rs.getString("date_pose"));
                 lesCommandes.add(uneCommande);
+            }
+            rs = DialogueBdd.select(GETOPTION);
+            while (rs.next()) {
+                uneOption = new Option(rs.getInt("id_option"), rs.getString("nom_option"), Double.parseDouble(rs.getString("prix")));
+                lesOption.add(uneOption);
+            }
+            rs = DialogueBdd.select(GETTELECOMANDE);
+            while (rs.next()) {
+                uneTelecomande = new telecommande(rs.getInt("id_telecomande"), rs.getString("nom"), Double.parseDouble(rs.getString("prix_telecommande")), rs.getString("reference"));
+                lesTele.add(uneTelecomande);
+            }
+            rs = DialogueBdd.select(GETMOTEUR);
+            while (rs.next()) {
+                unMoteur = new Moteur(rs.getInt("id_moteur"), rs.getString("nom_moteur"), rs.getString("ref_moteur"), rs.getString("prix_moteur"),
+                        rs.getString("quantite_moteur"));
+                lesMoteur.add(unMoteur);
+            }
+            rs = DialogueBdd.select(GETPIECE);
+            while (rs.next()) {
+                unePiece = new Piece(rs.getInt("id_piece"), rs.getString("nom_piece"), rs.getString("ref_piece"), Double.parseDouble(rs.getString("prix_piece")), rs.getString("valeur_quantite_piece"));
+                lesPieces.add(unePiece);
+            }
+            rs = DialogueBdd.select(GETLAME);
+            while (rs.next()) {
+                uneLame = new Lame(rs.getInt("id_lame"), rs.getString("nom_lame"), Double.parseDouble(rs.getString("prix")), rs.getString("pas"));
+                lesLames.add(uneLame);
+            }
+            rs = DialogueBdd.select(GETCOULISSE);
+            while (rs.next()) {
+                uneCoulisse = new Coulisse(rs.getInt("id_coulisse"), rs.getString("nom"), Double.parseDouble(rs.getString("profondeur")), rs.getInt("rabat"));
+                lesCoulisses.add(uneCoulisse);
+            }
+            rs = DialogueBdd.select(GETTYPEARTICLE);
+            while (rs.next()) {
+                unTypeArticle = new Type_article(rs.getInt("id_type_article"),rs.getString("nom"));
+                lesTypeArticle.add(unTypeArticle);
+            }
+            rs = DialogueBdd.select(GETTYPEPOSE);
+            while (rs.next()) {
+                unePose = new Type_pose(rs.getInt("id_type_pose"),rs.getString("nom"), rs.getString("enroulement"), rs.getInt("rabat"));
+                lesPoses.add(unePose);
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex);
@@ -631,7 +717,8 @@ public class SuivieCommande extends javax.swing.JFrame {
             txtTTC.setText(String.valueOf(resultat));
         }
     }
-        public void afficherArticle() {
+
+    public void afficherArticle() {
         dtm = (DefaultTableModel) tblArticle.getModel();
         while (dtm.getRowCount() != 0) {
             dtm.removeRow(0);
@@ -697,7 +784,6 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenuItem ItemFacture;
     private javax.swing.JMenuItem ItemPrestaPose;
     private javax.swing.JMenuItem ItemSuprCommande;
-    private javax.swing.JMenuItem itemAjoutArticle;
     private javax.swing.JMenuItem itemNewCommande;
     private javax.swing.JMenuItem itemPriseMesur;
     private javax.swing.JLabel jLabel1;
@@ -716,7 +802,12 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
