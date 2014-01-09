@@ -438,7 +438,7 @@ public class GestionClient extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jMenu2.setText("File");
+        jMenu2.setText("Fichier");
 
         jMenuItem2.setText("Paramètres");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
