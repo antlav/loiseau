@@ -6,8 +6,7 @@ package loiseau.stockage;
 
 /**
  *
- * @author
- * Florian
+ * @author guillaume
  */
 public class Article_fabrication {
     private int id_article_fabrication;
@@ -31,11 +30,12 @@ public class Article_fabrication {
     private int telecommande;
     private int commande;
     private int client;
+    private String nom;
 
     public Article_fabrication() {
     }
 
-    public Article_fabrication(int id_article_fabrication, int type_article, double largeur, double hauteur, String ref_article, int quantite, double prix, int type_pose, int couleur_tablier, int couleur_coffre, int couleur_coulisse, int type_manoeuvre, String cote_manoeuvre, String type_moteur, int puissance_moteur, int hors_cote, int type_coulisse, int type_lame, int telecommande, int commande, int client) {
+    public Article_fabrication(int id_article_fabrication, int type_article, double largeur, double hauteur, String ref_article, int quantite, double prix, int type_pose, int couleur_tablier, int couleur_coffre, int couleur_coulisse, int type_manoeuvre, String cote_manoeuvre, String type_moteur, int puissance_moteur, int hors_cote, int type_coulisse, int type_lame, int telecommande, int commande, int client, String nom) {
         this.id_article_fabrication = id_article_fabrication;
         this.type_article = type_article;
         this.largeur = largeur;
@@ -57,6 +57,7 @@ public class Article_fabrication {
         this.telecommande = telecommande;
         this.commande = commande;
         this.client = client;
+        this.nom = nom;
     }
 
     /**
@@ -351,6 +352,20 @@ public class Article_fabrication {
      */
     public void setClient(int client) {
         this.client = client;
+    }
+
+    /**
+     * @return the nom
+     */
+    public String getNom() {
+        return nom;
+    }
+
+    /**
+     * @param nom the nom to set
+     */
+    public void setNom(String nom) {
+        this.nom = nom;
     }
     
 }

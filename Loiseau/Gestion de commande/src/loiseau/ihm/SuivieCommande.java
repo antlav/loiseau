@@ -54,6 +54,8 @@ public class SuivieCommande extends javax.swing.JFrame {
     Type_pose unePose;
     Type_manoeuvre uneManoeuvre;
     Moteur unMoteur;
+    Article_fabrication unArticleCommande;
+    Article_fabrication unArticle;
     HashMap<Double, HashMap<Double, Vector<String>>> lesPrixCalypso = new HashMap<>();
     HashMap<Double, HashMap<Double, Vector<String>>> lesPrixMozart = new HashMap<>();
     HashMap<Double, HashMap<Double, Vector<String>>> lesPrixTradi = new HashMap<>();
@@ -157,10 +159,15 @@ public class SuivieCommande extends javax.swing.JFrame {
         ItemFacture = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         jMenu4 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        itemAjoutVolet = new javax.swing.JMenuItem();
+        itemAjoutTelecomande = new javax.swing.JMenuItem();
+        itemAjoutAxe = new javax.swing.JMenuItem();
+        itemAjoutGarage = new javax.swing.JMenuItem();
+        itemMoteur = new javax.swing.JMenuItem();
+        itemAjoutTablier = new javax.swing.JMenuItem();
+        itemAjoutPiece = new javax.swing.JMenuItem();
+        itemAjoutOption = new javax.swing.JMenuItem();
+        itemAjoutAutre = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -482,17 +489,42 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jMenu4.setText("Ajouter");
 
-        jMenuItem1.setText("jMenuItem1");
-        jMenu4.add(jMenuItem1);
+        itemAjoutVolet.setText("Volet Loiseau");
+        itemAjoutVolet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                itemAjoutVoletMouseClicked(evt);
+            }
+        });
+        jMenu4.add(itemAjoutVolet);
 
-        jMenuItem2.setText("jMenuItem2");
-        jMenu4.add(jMenuItem2);
+        itemAjoutTelecomande.setText("Télécommande");
+        jMenu4.add(itemAjoutTelecomande);
 
-        jMenuItem3.setText("jMenuItem3");
-        jMenu4.add(jMenuItem3);
+        itemAjoutAxe.setText("Axe motorisé");
+        jMenu4.add(itemAjoutAxe);
 
-        jMenuItem4.setText("jMenuItem4");
-        jMenu4.add(jMenuItem4);
+        itemAjoutGarage.setText("Porte de garage");
+        jMenu4.add(itemAjoutGarage);
+
+        itemMoteur.setText("Moteur");
+        jMenu4.add(itemMoteur);
+
+        itemAjoutTablier.setText("Tablier");
+        itemAjoutTablier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAjoutTablierActionPerformed(evt);
+            }
+        });
+        jMenu4.add(itemAjoutTablier);
+
+        itemAjoutPiece.setText("Piéces");
+        jMenu4.add(itemAjoutPiece);
+
+        itemAjoutOption.setText("Options");
+        jMenu4.add(itemAjoutOption);
+
+        itemAjoutAutre.setText("Autres");
+        jMenu4.add(itemAjoutAutre);
 
         jMenu1.add(jMenu4);
 
@@ -684,6 +716,40 @@ public class SuivieCommande extends javax.swing.JFrame {
         afficherArticle();
         calculTva();
     }//GEN-LAST:event_lstCommandeMouseClicked
+
+    private void itemAjoutTablierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutTablierActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemAjoutTablierActionPerformed
+
+    private void itemAjoutVoletMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemAjoutVoletMouseClicked
+        // TODO add your handling code here:
+                        unArticleCommande = JDialogVoletLoiseau.openForm(this, lesTypeArticle, lesCoulisses, lesLames, lesPoses, lesManoeuvres, lesCouleurs);
+                if (unArticleCommande != null) {
+                    try {
+                        unArticleCommande = CalculPrixLoiseau(unArticleCommande);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Attention le volet est hors cote");
+                        unArticleCommande.setHors_cote(1);
+                        unArticleCommande.setPrix(JDialogPrix.openForm(this));
+                    }
+                    unArticle = JDialogueTelecomande.openForm(this, lesTele);
+                    if (unArticle != null) {
+                        unArticleCommande.setTelecommande(unArticle.getId_article_fabrication());
+                        articleLoiseau.add(unArticleCommande);
+                        if (unArticle.getNom().compareTo("Pas de télécomande") == 0) {
+                        } else {
+                            article.add(unArticle);
+                        }
+                        afficherArticle();
+                        calculTva();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "volet non enregistrer, choisissez une télécomande");
+                    }
+                }
+        
+        
+        
+    }//GEN-LAST:event_itemAjoutVoletMouseClicked
     public void completerClient(int index) {
         txtNom.setText(lesClient.get(index).getNom());
         txtTel.setText(lesClient.get(index).getTel_fix());
@@ -784,6 +850,15 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenuItem ItemFacture;
     private javax.swing.JMenuItem ItemPrestaPose;
     private javax.swing.JMenuItem ItemSuprCommande;
+    private javax.swing.JMenuItem itemAjoutAutre;
+    private javax.swing.JMenuItem itemAjoutAxe;
+    private javax.swing.JMenuItem itemAjoutGarage;
+    private javax.swing.JMenuItem itemAjoutOption;
+    private javax.swing.JMenuItem itemAjoutPiece;
+    private javax.swing.JMenuItem itemAjoutTablier;
+    private javax.swing.JMenuItem itemAjoutTelecomande;
+    private javax.swing.JMenuItem itemAjoutVolet;
+    private javax.swing.JMenuItem itemMoteur;
     private javax.swing.JMenuItem itemNewCommande;
     private javax.swing.JMenuItem itemPriseMesur;
     private javax.swing.JLabel jLabel1;
@@ -804,10 +879,6 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
