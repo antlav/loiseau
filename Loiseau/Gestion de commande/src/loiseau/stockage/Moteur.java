@@ -13,13 +13,13 @@ public class Moteur {
     private int id_moteur;
     private String nom_moteur;
     private String ref_moteur;
-    private String prix_moteur;
+    private Double prix_moteur;
     private String quantite_moteur;
 
     public Moteur() {
     }
 
-    public Moteur(int id_moteur, String nom_moteur, String ref_moteur, String prix_moteur, String quantite_moteur) {
+    public Moteur(int id_moteur, String nom_moteur, String ref_moteur, Double prix_moteur, String quantite_moteur) {
         this.id_moteur = id_moteur;
         this.nom_moteur = nom_moteur;
         this.ref_moteur = ref_moteur;
@@ -72,14 +72,14 @@ public class Moteur {
     /**
      * @return the prix_moteur
      */
-    public String getPrix_moteur() {
+    public Double getPrix_moteur() {
         return prix_moteur;
     }
 
     /**
      * @param prix_moteur the prix_moteur to set
      */
-    public void setPrix_moteur(String prix_moteur) {
+    public void setPrix_moteur(Double prix_moteur) {
         this.prix_moteur = prix_moteur;
     }
 

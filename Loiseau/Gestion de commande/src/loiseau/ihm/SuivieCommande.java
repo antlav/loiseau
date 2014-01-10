@@ -9,6 +9,8 @@ import java.util.Collections;
 import loiseau.metier.ClientOperation;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -495,18 +497,43 @@ public class SuivieCommande extends javax.swing.JFrame {
                 itemAjoutVoletMouseClicked(evt);
             }
         });
+        itemAjoutVolet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAjoutVoletActionPerformed(evt);
+            }
+        });
         jMenu4.add(itemAjoutVolet);
 
         itemAjoutTelecomande.setText("Télécommande");
+        itemAjoutTelecomande.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAjoutTelecomandeActionPerformed(evt);
+            }
+        });
         jMenu4.add(itemAjoutTelecomande);
 
         itemAjoutAxe.setText("Axe motorisé");
+        itemAjoutAxe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAjoutAxeActionPerformed(evt);
+            }
+        });
         jMenu4.add(itemAjoutAxe);
 
         itemAjoutGarage.setText("Porte de garage");
+        itemAjoutGarage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAjoutGarageActionPerformed(evt);
+            }
+        });
         jMenu4.add(itemAjoutGarage);
 
         itemMoteur.setText("Moteur");
+        itemMoteur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemMoteurActionPerformed(evt);
+            }
+        });
         jMenu4.add(itemMoteur);
 
         itemAjoutTablier.setText("Tablier");
@@ -518,12 +545,27 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenu4.add(itemAjoutTablier);
 
         itemAjoutPiece.setText("Piéces");
+        itemAjoutPiece.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAjoutPieceActionPerformed(evt);
+            }
+        });
         jMenu4.add(itemAjoutPiece);
 
         itemAjoutOption.setText("Options");
+        itemAjoutOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAjoutOptionActionPerformed(evt);
+            }
+        });
         jMenu4.add(itemAjoutOption);
 
         itemAjoutAutre.setText("Autres");
+        itemAjoutAutre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAjoutAutreActionPerformed(evt);
+            }
+        });
         jMenu4.add(itemAjoutAutre);
 
         jMenu1.add(jMenu4);
@@ -719,6 +761,17 @@ public class SuivieCommande extends javax.swing.JFrame {
 
     private void itemAjoutTablierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutTablierActionPerformed
         // TODO add your handling code here:
+        unArticleCommande = JDialogTablier.openForm(this, lesLames, lesCouleurs);
+        if (unArticleCommande != null) {
+            try {
+                unArticleCommande = CalculPrixLoiseau(unArticleCommande);
+            } catch (Exception ex) {
+                Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            articleLoiseau.add(unArticleCommande);
+            afficherArticle();
+            calculTva();
+        }
     }//GEN-LAST:event_itemAjoutTablierActionPerformed
 
     private void itemAjoutVoletMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemAjoutVoletMouseClicked
@@ -747,6 +800,110 @@ public class SuivieCommande extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_itemAjoutVoletMouseClicked
+
+    private void itemAjoutVoletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutVoletActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemAjoutVoletActionPerformed
+
+    private void itemAjoutTelecomandeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutTelecomandeActionPerformed
+        // TODO add your handling code here:
+        unArticle = JDialogueTelecomande.openForm(this, lesTele);
+        if (unArticle != null) {
+            article.add(unArticle);
+            afficherArticle();
+            calculTva();
+        }
+    }//GEN-LAST:event_itemAjoutTelecomandeActionPerformed
+
+    private void itemAjoutAxeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutAxeActionPerformed
+        // TODO add your handling code here:
+        unArticleCommande = JDialogAxe.openForm(this, lesPieces);
+        if (unArticleCommande != null) {
+            articleLoiseau.add(unArticleCommande);
+            afficherArticle();
+            calculTva();
+        }
+    }//GEN-LAST:event_itemAjoutAxeActionPerformed
+
+    private void itemAjoutGarageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutGarageActionPerformed
+        // TODO add your handling code here:
+        unArticleCommande = JDialogGarage.openForm(this);
+        if (unArticleCommande != null) {
+            if (unArticleCommande.getNom().regionMatches(true, 0, "porte", 0, 4)) {
+                try {
+                    calculPrixGarageAntiTempete(unArticleCommande);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Attention la porte de garage est hors cote");
+                    unArticleCommande.setHors_cote(1);
+                    unArticleCommande.setPrix(JDialogPrix.openForm(this));
+                }
+            } else {
+                try {
+                    calculPrixGarageReno(unArticleCommande);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Attention la porte de garage est hors cote");
+                    unArticleCommande.setHors_cote(1);
+                    unArticleCommande.setPrix(JDialogPrix.openForm(this));
+                }
+            }
+            unArticle = JDialogueTelecomande.openForm(this, lesTele);
+            if (unArticle != null) {
+                unArticleCommande.setId_article_fabrication(unArticle.getId_article_fabrication());
+                articleLoiseau.add(unArticleCommande);
+                article.add(unArticle);
+                afficherArticle();
+                calculTva();
+            } else {
+                JOptionPane.showMessageDialog(this, "Porte de garage non enregistrer, choisissez une télécomande");
+            }
+        }
+    }//GEN-LAST:event_itemAjoutGarageActionPerformed
+
+    private void itemMoteurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMoteurActionPerformed
+        // TODO add your handling code here:
+        unArticle = JDialogMoteur.openForm(this, lesMoteur);
+        if (unArticle != null) {
+            article.add(unArticle);
+            afficherArticle();
+            calculTva();
+        }
+    }//GEN-LAST:event_itemMoteurActionPerformed
+
+    private void itemAjoutPieceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutPieceActionPerformed
+        // TODO add your handling code here:
+        unArticle = JDialogPieces.openForm(this, lesPieces);
+        if (unArticle != null) {
+            article.add(unArticle);
+            afficherArticle();
+            calculTva();
+        }
+    }//GEN-LAST:event_itemAjoutPieceActionPerformed
+
+    private void itemAjoutOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutOptionActionPerformed
+        // TODO add your handling code here:
+        if (tblArticle.getSelectedRow() != -1) {
+            unArticle = JDialogOptions.openForm(this, tblArticle.getValueAt(tblArticle.getSelectedRow(), 1).toString(),
+                    tblArticle.getValueAt(tblArticle.getSelectedRow(), 3).toString(), tblArticle.getValueAt(tblArticle.getSelectedRow(), 2).toString(), lesOption);
+            if (unArticle != null) {
+                article.add(unArticle);
+                afficherArticle();
+                calculTva();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Choisissez un article");
+        }
+    }//GEN-LAST:event_itemAjoutOptionActionPerformed
+
+    private void itemAjoutAutreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutAutreActionPerformed
+        // TODO add your handling code here:
+        unArticleCommande = JDialogAutres.openForm(this);
+        if (unArticleCommande != null) {
+            articleLoiseau.add(unArticleCommande);
+            afficherArticle();
+            calculTva();
+        }
+    }//GEN-LAST:event_itemAjoutAutreActionPerformed
+    
     public void completerClient(int index) {
         txtNom.setText(lesClient.get(index).getNom());
         txtTel.setText(lesClient.get(index).getTel_fix());
