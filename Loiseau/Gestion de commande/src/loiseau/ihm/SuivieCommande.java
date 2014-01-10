@@ -650,12 +650,12 @@ public class SuivieCommande extends javax.swing.JFrame {
             }
             rs = DialogueBdd.select(GETTYPEARTICLE);
             while (rs.next()) {
-                unTypeArticle = new Type_article(rs.getInt("id_type_article"),rs.getString("nom"));
+                unTypeArticle = new Type_article(rs.getInt("id_type_article"), rs.getString("nom"));
                 lesTypeArticle.add(unTypeArticle);
             }
             rs = DialogueBdd.select(GETTYPEPOSE);
             while (rs.next()) {
-                unePose = new Type_pose(rs.getInt("id_type_pose"),rs.getString("nom"), rs.getString("enroulement"), rs.getInt("rabat"));
+                unePose = new Type_pose(rs.getInt("id_type_pose"), rs.getString("nom"), rs.getString("enroulement"), rs.getInt("rabat"));
                 lesPoses.add(unePose);
             }
         } catch (Exception ex) {
@@ -723,32 +723,29 @@ public class SuivieCommande extends javax.swing.JFrame {
 
     private void itemAjoutVoletMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemAjoutVoletMouseClicked
         // TODO add your handling code here:
-                        unArticleCommande = JDialogVoletLoiseau.openForm(this, lesTypeArticle, lesCoulisses, lesLames, lesPoses, lesManoeuvres, lesCouleurs);
-                if (unArticleCommande != null) {
-                    try {
-                        unArticleCommande = CalculPrixLoiseau(unArticleCommande);
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "Attention le volet est hors cote");
-                        unArticleCommande.setHors_cote(1);
-                        unArticleCommande.setPrix(JDialogPrix.openForm(this));
-                    }
-                    unArticle = JDialogueTelecomande.openForm(this, lesTele);
-                    if (unArticle != null) {
-                        unArticleCommande.setTelecommande(unArticle.getId_article_fabrication());
-                        articleLoiseau.add(unArticleCommande);
-                        if (unArticle.getNom().compareTo("Pas de télécomande") == 0) {
-                        } else {
-                            article.add(unArticle);
-                        }
-                        afficherArticle();
-                        calculTva();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "volet non enregistrer, choisissez une télécomande");
-                    }
+        unArticleCommande = JDialogVoletLoiseau.openForm(this, lesTypeArticle, lesCoulisses, lesLames, lesPoses, lesManoeuvres, lesCouleurs);
+        if (unArticleCommande != null) {
+            try {
+                unArticleCommande = CalculPrixLoiseau(unArticleCommande);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Attention le volet est hors cote");
+                unArticleCommande.setHors_cote(1);
+                unArticleCommande.setPrix(JDialogPrix.openForm(this));
+            }
+            unArticle = JDialogueTelecomande.openForm(this, lesTele);
+            if (unArticle != null) {
+                unArticleCommande.setTelecommande(unArticle.getId_article_fabrication());
+                articleLoiseau.add(unArticleCommande);
+                if (unArticle.getNom().compareTo("Pas de télécomande") == 0) {
+                } else {
+                    article.add(unArticle);
                 }
-        
-        
-        
+                afficherArticle();
+                calculTva();
+            } else {
+                JOptionPane.showMessageDialog(this, "volet non enregistrer, choisissez une télécomande");
+            }
+        }
     }//GEN-LAST:event_itemAjoutVoletMouseClicked
     public void completerClient(int index) {
         txtNom.setText(lesClient.get(index).getNom());
