@@ -266,12 +266,10 @@ public class SuivieCommande extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         txtNom.setEditable(false);
-        txtNom.setText("jTextField1");
 
         jLabel6.setText("Téléphone");
 
         txtType.setEditable(false);
-        txtType.setText("jTextField1");
 
         jLabel5.setText("Nom");
 
@@ -280,10 +278,8 @@ public class SuivieCommande extends javax.swing.JFrame {
         jLabel7.setText("Email");
 
         txtTel.setEditable(false);
-        txtTel.setText("jTextField1");
 
         txtMail.setEditable(false);
-        txtMail.setText("jTextField1");
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Informations client");
@@ -344,12 +340,10 @@ public class SuivieCommande extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         txtTVA.setEditable(false);
-        txtTVA.setText("jTextField1");
 
         jLabel12.setText("Total HT");
 
         txtTTC.setEditable(false);
-        txtTTC.setText("jTextField1");
 
         jLabel10.setText("Acompte");
 
@@ -359,12 +353,10 @@ public class SuivieCommande extends javax.swing.JFrame {
         jLabel13.setText("Total TTC");
 
         txtHT.setEditable(false);
-        txtHT.setText("jTextField1");
 
         jLabel11.setText("Taux TVA");
 
         txtAcompte.setEditable(false);
-        txtAcompte.setText("jTextField1");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -490,6 +482,11 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenu1.add(jSeparator4);
 
         jMenu4.setText("Ajouter");
+        jMenu4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu4ActionPerformed(evt);
+            }
+        });
 
         itemAjoutVolet.setText("Volet Loiseau");
         itemAjoutVolet.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -671,7 +668,7 @@ public class SuivieCommande extends javax.swing.JFrame {
             }
             rs = DialogueBdd.select(GETMOTEUR);
             while (rs.next()) {
-                unMoteur = new Moteur(rs.getInt("id_moteur"), rs.getString("nom_moteur"), rs.getString("ref_moteur"), rs.getString("prix_moteur"),
+                unMoteur = new Moteur(rs.getInt("id_moteur"), rs.getString("nom_moteur"), rs.getString("ref_moteur"), Double.parseDouble(rs.getString("prix_moteur")),
                         rs.getString("quantite_moteur"));
                 lesMoteur.add(unMoteur);
             }
@@ -831,7 +828,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         if (unArticleCommande != null) {
             if (unArticleCommande.getNom().regionMatches(true, 0, "porte", 0, 4)) {
                 try {
-                    calculPrixGarageAntiTempete(unArticleCommande);
+                    unArticleCommande=calculPrixGarageAntiTempete(unArticleCommande);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Attention la porte de garage est hors cote");
                     unArticleCommande.setHors_cote(1);
@@ -839,7 +836,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                 }
             } else {
                 try {
-                    calculPrixGarageReno(unArticleCommande);
+                    unArticleCommande=calculPrixGarageReno(unArticleCommande);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Attention la porte de garage est hors cote");
                     unArticleCommande.setHors_cote(1);
@@ -903,7 +900,11 @@ public class SuivieCommande extends javax.swing.JFrame {
             calculTva();
         }
     }//GEN-LAST:event_itemAjoutAutreActionPerformed
-    
+
+    private void jMenu4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu4ActionPerformed
+
     public void completerClient(int index) {
         txtNom.setText(lesClient.get(index).getNom());
         txtTel.setText(lesClient.get(index).getTel_fix());
@@ -961,6 +962,87 @@ public class SuivieCommande extends javax.swing.JFrame {
             vect.add(a.getPrix());
             dtm.addRow(vect);
         }
+    }
+    public Article_fabrication calculPrixGarageReno(Article_fabrication artLoiseauCmd) throws Exception {
+        double prix = artLoiseauCmd.getPrix();
+        prix += Double.parseDouble(lesPrixGarageReno.get(artLoiseauCmd.getHauteur()).get(artLoiseauCmd.getLargeur()).get(0));
+        prix = prix * artLoiseauCmd.getQuantite();
+        artLoiseauCmd.setPrix(prix);
+        return artLoiseauCmd;
+    }
+
+    public Article_fabrication calculPrixGarageAntiTempete(Article_fabrication artLoiseauCmd) throws Exception {
+        double prix = artLoiseauCmd.getPrix();
+        prix += Double.parseDouble(lesPrixAntitempete.get(artLoiseauCmd.getHauteur()).get(artLoiseauCmd.getLargeur()).get(0));
+        prix = prix * artLoiseauCmd.getQuantite();
+        artLoiseauCmd.setPrix(prix);
+        return artLoiseauCmd;
+    }
+    public Article_fabrication CalculPrixLoiseau(Article_fabrication artLoiseauCmd) throws Exception {
+        double prix = 0;
+        int hauteur = 0;
+        int largeur = 0;
+        hauteur = (int) ((artLoiseauCmd.getHauteur() / 100) + 0.5);
+        hauteur = hauteur * 100;
+        largeur = (int) ((artLoiseauCmd.getLargeur() / 100) + 0.5);
+        largeur = largeur * 100;
+        prixEtMoteur = new Vector<>();
+
+        switch (artLoiseauCmd.getType_article()) {
+            case 1:
+                break;
+            case 3:
+                prix = Double.parseDouble(lesPrixCalypso.get((double) hauteur).get((double) largeur).get(0));
+                prix = prix * artLoiseauCmd.getQuantite();
+                for (Type_manoeuvre m : lesManoeuvres) {
+                    if (m.getId_type_manoeuvre() == artLoiseauCmd.getType_manoeuvre()) {
+                        prix -= m.getMoin_value() * artLoiseauCmd.getQuantite();
+                    }
+                }
+                artLoiseauCmd.setPrix(prix);
+                break;
+            case 2:
+                prix = Double.parseDouble(lesPrixMozart.get((double) hauteur).get((double) largeur).get(0));
+                prix = prix * artLoiseauCmd.getQuantite();
+                for (Type_manoeuvre m : lesManoeuvres) {
+                    if (m.getId_type_manoeuvre() == artLoiseauCmd.getType_manoeuvre()) {
+                        prix -= m.getMoin_value() * artLoiseauCmd.getQuantite();
+                    }
+                }
+                artLoiseauCmd.setPrix(prix);
+                break;
+            case 4:
+                prix = Double.parseDouble(lesPrixTradi.get((double) hauteur).get((double) largeur).get(0));
+                prix = prix * artLoiseauCmd.getQuantite();
+                for (Type_manoeuvre m : lesManoeuvres) {
+                    if (m.getId_type_manoeuvre() == artLoiseauCmd.getType_manoeuvre()) {
+                        prix -= m.getMoin_value() * artLoiseauCmd.getQuantite();
+                    }
+                }
+                artLoiseauCmd.setPrix(prix);
+                break;
+            case 6:
+                prix = artLoiseauCmd.getHauteur() * artLoiseauCmd.getLargeur() / 1000000;
+
+                if (prix < 1) {
+                    for (Lame l : lesLames) {
+                        if (l.getId_lame() == artLoiseauCmd.getType_lame()) {
+                            prix = l.getPrix();
+                            artLoiseauCmd.setPrix(prix);
+                        }
+                    }
+                } else {
+                    for (Lame l : lesLames) {
+                        if (l.getId_lame() == artLoiseauCmd.getType_lame()) {
+                            prix = l.getPrix() * prix;
+                            prix = (double) (int) (prix + 0.5);
+                            artLoiseauCmd.setPrix(prix);
+                        }
+                    }
+                }
+                break;              
+        }
+        return artLoiseauCmd;
     }
 
     /**

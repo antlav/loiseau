@@ -4,8 +4,6 @@
  */
 package loiseau.ihm;
 
-import classeStockage.ArticleCommande;
-import classeStockage.ArticleLoiseauCommande;
 import java.awt.Component;
 import loiseau.stockage.Article_fabrication;
 
@@ -22,7 +20,7 @@ public class JDialogAutres extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
-    static ArticleLoiseauCommande unAutre;
+    static Article_fabrication unAutre;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -136,24 +134,26 @@ public class JDialogAutres extends javax.swing.JDialog {
 
     private void btnAjoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAjoutMouseClicked
         // TODO add your handling code here:
-        unAutre = new ArticleLoiseauCommande();
+        unAutre = new Article_fabrication();
         unAutre.setNom(txtNom.getText());
-        unAutre.setRef(txtRef.getText());
+        unAutre.setRef_article(txtRef.getText());
         unAutre.setPrix(Integer.parseInt(txtPrix.getText()));
-        unAutre.setQt(Integer.parseInt(txtQuantite.getText()));
-        unAutre.setTablier(0);
-        unAutre.setVolet(0);
-        unAutre.setAxe(0);
-        unAutre.setCouleurCoffre(1);
-        unAutre.setCouleurCoulisse(1);
-        unAutre.setCoteManoeuvre(1);
-        unAutre.setUneCoulisse(1);
-        unAutre.setTypeManoeuvre(1);
-        unAutre.setCouleurTablier(1);
-        unAutre.setUneLame(1);
-        unAutre.setIdtelecommande(1);
-        unAutre.setHorsCote(1);
-        unAutre.setTypPose(1);
+        unAutre.setQuantite(Integer.parseInt(txtQuantite.getText()));
+        unAutre.setHauteur(Double.parseDouble(txtHauteur.getText()));
+        unAutre.setLargeur(Double.parseDouble(txtLargeur.getText()));
+        unAutre.setType_article(0);
+        unAutre.setPuissance_moteur(0);
+        unAutre.setCouleur_coffre(0);
+        unAutre.setCouleur_coulisse(0);
+        unAutre.setCote_manoeuvre("0");
+        unAutre.setType_coulisse(0);
+        unAutre.setType_manoeuvre(0);
+        unAutre.setCouleur_tablier(0);
+        unAutre.setType_lame(0);
+        unAutre.setTelecommande(0);
+        unAutre.setHors_cote(0);
+        unAutre.setType_pose(0);
+        unAutre.setType_moteur("0");
         dispose();
     }//GEN-LAST:event_btnAjoutMouseClicked
     public static Article_fabrication openForm(Component cpt) {

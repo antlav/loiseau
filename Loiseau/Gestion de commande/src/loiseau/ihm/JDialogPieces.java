@@ -8,6 +8,7 @@ package loiseau.ihm;
 import java.awt.Component;
 import java.util.Vector;
 import loiseau.stockage.Article_fabrication;
+import loiseau.stockage.Piece;
 
 /**
  *
@@ -23,12 +24,12 @@ public class JDialogPieces extends javax.swing.JDialog {
         initComponents();
     }
 
-    public JDialogPieces(java.awt.Frame parent, boolean modal, Vector<PieceEtOptions> v) {
+    public JDialogPieces(java.awt.Frame parent, boolean modal, Vector<Piece> v) {
         super(parent, modal);
         initComponents();
         lesPiece = v;
     }
-    Vector<PieceEtOptions> lesPiece;
+    Vector<Piece> lesPiece;
     static Article_fabrication laPiece;
 
     /**
@@ -111,19 +112,31 @@ public class JDialogPieces extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        for (PieceEtOptions t : lesPiece) {
-            jComboBox1.addItem(t.getNom());
+        for (Piece t : lesPiece) {
+            jComboBox1.addItem(t.getNom_piece());
         }
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
         laPiece=new Article_fabrication();
-        laPiece.setNom(lesPiece.get(jComboBox1.getSelectedIndex()).getNom());
-        laPiece.setRef(lesPiece.get(jComboBox1.getSelectedIndex()).getRef());
-        laPiece.setPrix(lesPiece.get(jComboBox1.getSelectedIndex()).getPrix());
-        laPiece.setUniteQt(lesPiece.get(jComboBox1.getSelectedIndex()).getUniteQuantite());
-        laPiece.setQt(Integer.parseInt(txtQt.getText()));
+        laPiece.setNom(lesPiece.get(jComboBox1.getSelectedIndex()).getNom_piece());
+        laPiece.setRef_article(lesPiece.get(jComboBox1.getSelectedIndex()).getRef_piece());
+        laPiece.setPrix(lesPiece.get(jComboBox1.getSelectedIndex()).getPrix_piece());
+        laPiece.setQuantite(Integer.parseInt(txtQt.getText()));
+        laPiece.setType_article(1);
+        laPiece.setPuissance_moteur(0);
+        laPiece.setCouleur_coffre(1);
+        laPiece.setCouleur_coulisse(1);
+        laPiece.setCote_manoeuvre("0");
+        laPiece.setType_coulisse(1);
+        laPiece.setType_manoeuvre(1);
+        laPiece.setCouleur_tablier(1);
+        laPiece.setType_lame(1);
+        laPiece.setTelecommande(1);
+        laPiece.setHors_cote(1);
+        laPiece.setType_pose(1);
+        laPiece.setType_moteur("0");
         dispose();
     }//GEN-LAST:event_jButton1MouseClicked
 
@@ -133,9 +146,9 @@ public class JDialogPieces extends javax.swing.JDialog {
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
         // TODO add your handling code here:
-        jLabel2.setText(lesPiece.get(jComboBox1.getSelectedIndex()).getUniteQuantite().toString());
+        jLabel2.setText(lesPiece.get(jComboBox1.getSelectedIndex()).getValeur().toString());
     }//GEN-LAST:event_jComboBox1ItemStateChanged
-    public static Article_fabrication openForm(Component cpt, Vector<PieceEtOptions> v) {
+    public static Article_fabrication openForm(Component cpt, Vector<Piece> v) {
         laPiece = null;
         JDialogPieces mot = new JDialogPieces(null, true, v);
         mot.setLocationRelativeTo(cpt);

@@ -190,14 +190,19 @@ public class JDialogTablier extends javax.swing.JDialog {
                 art.setCouleur_tablier(c.getId_couleur());
             }
         }
-        art.setCouleurCoffre(1);
-        art.setCouleurCoulisse(1);
-        art.setCoteManoeuvre(1);
-        art.setUneCoulisse(1);
-        art.setTypeManoeuvre(1);
-        art.setQt(Integer.parseInt(txtQt.getText()));
+        art.setType_article(6);
+        art.setPuissance_moteur(0);
+        art.setCouleur_coffre(1);
+        art.setCouleur_coulisse(1);
+        art.setCote_manoeuvre("0");
+        art.setType_coulisse(1);
+        art.setType_manoeuvre(1);
+        art.setTelecommande(1);
+        art.setHors_cote(1);
         art.setType_pose(1);
-        art.setIdtelecommande(76);
+        art.setType_moteur("0");
+        art.setQuantite(Integer.parseInt(txtQt.getText()));
+        art.setType_pose(1);
         dispose();
     }//GEN-LAST:event_btnAjoutMouseClicked
 

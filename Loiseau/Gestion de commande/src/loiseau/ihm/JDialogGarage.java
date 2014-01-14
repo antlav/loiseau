@@ -4,7 +4,7 @@
  */
 package loiseau.ihm;
 
-import classeStockage.ArticleLoiseauCommande;
+
 import java.awt.Component;
 import loiseau.stockage.Article_fabrication;
 
@@ -21,7 +21,7 @@ public class JDialogGarage extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
-    static ArticleLoiseauCommande art;
+    static Article_fabrication art;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -184,7 +184,7 @@ public class JDialogGarage extends javax.swing.JDialog {
 
     private void btnAjoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAjoutMouseClicked
         // TODO add your handling code here:
-        art = new ArticleLoiseauCommande();
+        art = new Article_fabrication();
         String nom;
         if (cbbNom.getSelectedItem().toString().compareTo("Porte de garage a enroulement anti tempéte") == 0) {
             nom = "Porte de garage anti tempéte";
@@ -212,18 +212,20 @@ public class JDialogGarage extends javax.swing.JDialog {
         art.setNom(nom);
         art.setHauteur(Double.parseDouble(txtHauteur.getText()));
         art.setLargeur(Double.parseDouble(txtLargeur.getText()));
-        art.setQt(Integer.parseInt(txtQt.getText()));
-        art.setTablier(0);
-        art.setVolet(0);
-        art.setAxe(0);
-        art.setCouleurCoffre(1);
-        art.setCouleurCoulisse(1);
-        art.setCoteManoeuvre(1);
-        art.setUneCoulisse(1);
-        art.setTypeManoeuvre(1);
-        art.setCouleurTablier(1);
-        art.setUneLame(1);
-        art.setTypPose(1);
+        art.setQuantite(Integer.parseInt(txtQt.getText()));
+        art.setType_article(5);
+        art.setPuissance_moteur(1);
+        art.setCouleur_coffre(1);
+        art.setCouleur_coulisse(1);
+        art.setCote_manoeuvre("0");
+        art.setType_coulisse(1);
+        art.setType_manoeuvre(1);
+        art.setCouleur_tablier(1);
+        art.setType_lame(1);
+        art.setTelecommande(1);
+        art.setHors_cote(1);
+        art.setType_pose(1);
+        art.setType_moteur("0");
         dispose();
     }//GEN-LAST:event_btnAjoutMouseClicked
 

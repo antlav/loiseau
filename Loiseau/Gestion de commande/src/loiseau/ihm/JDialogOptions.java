@@ -4,7 +4,6 @@
  */
 package loiseau.ihm;
 
-
 import java.awt.Component;
 import java.util.Vector;
 import loiseau.stockage.Article_fabrication;
@@ -32,7 +31,7 @@ public class JDialogOptions extends javax.swing.JDialog {
         largeur = uneLargeur;
         lesOption = Option;
     }
-    static Article_fabrication uneOption;
+    static Article_fabrication art;
     String nom;
     String hauteur;
     String largeur;
@@ -142,14 +141,27 @@ public class JDialogOptions extends javax.swing.JDialog {
 
     private void btnAjoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAjoutMouseClicked
         // TODO add your handling code here:
-        uneOption=new Article_fabrication();
-        uneOption.setHauteur(Double.valueOf(txtHauteur.getText()));
-        uneOption.setLargeur(Double.valueOf(txtLargeur.getText()));
-        nom=cbbOption.getSelectedItem().toString().concat(" pour "+nom);
-        uneOption.setNom(nom);
-        uneOption.setQuantite(1);
-        uneOption.setRef_article("option");
-        uneOption.setPrix(lesOption.get(cbbOption.getSelectedIndex()).getPrix_option()); 
+        art = new Article_fabrication();
+        art.setHauteur(Double.valueOf(txtHauteur.getText()));
+        art.setLargeur(Double.valueOf(txtLargeur.getText()));
+        nom = cbbOption.getSelectedItem().toString().concat(" pour " + nom);
+        art.setNom(nom);
+        art.setQuantite(1);
+        art.setRef_article("option");
+        art.setPrix(lesOption.get(cbbOption.getSelectedIndex()).getPrix_option());
+        art.setType_article(5);
+        art.setPuissance_moteur(0);
+        art.setCouleur_coffre(0);
+        art.setCouleur_coulisse(0);
+        art.setCote_manoeuvre("0");
+        art.setType_coulisse(0);
+        art.setType_manoeuvre(0);
+        art.setCouleur_tablier(0);
+        art.setType_lame(0);
+        art.setTelecommande(0);
+        art.setHors_cote(0);
+        art.setType_pose(0);
+        art.setType_moteur("0");
         dispose();
     }//GEN-LAST:event_btnAjoutMouseClicked
 
@@ -157,11 +169,11 @@ public class JDialogOptions extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static Article_fabrication openForm(Component cpt, String unNom, String uneHauteur, String uneLargeur, Vector<Option> Option) {
-        uneOption = null;
+        art = null;
         JDialogOptions dialOption = new JDialogOptions(null, true, unNom, uneHauteur, uneLargeur, Option);
         dialOption.setLocationRelativeTo(cpt);
         dialOption.setVisible(true);
-        return uneOption;
+        return art;
     }
 
     public static void main(String args[]) {

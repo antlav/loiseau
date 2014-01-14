@@ -29,7 +29,7 @@ public class JDialogMoteur extends javax.swing.JDialog {
         lesMot=v;
     }
     Vector<Moteur> lesMot;
-    static Article_fabrication leMot;
+    static Article_fabrication art;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,12 +111,25 @@ public class JDialogMoteur extends javax.swing.JDialog {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        leMot=new Article_fabrication();
-        leMot.setNom(lesMot.get(jComboBox1.getSelectedIndex()).getNom_moteur());
-        leMot.setRef_article(lesMot.get(jComboBox1.getSelectedIndex()).getRef_moteur());
-        leMot.setPrix(lesMot.get(jComboBox1.getSelectedIndex()).getPrix_moteur());
-        leMot.setUniteQt(lesMot.get(jComboBox1.getSelectedIndex()).getUniteQuantite());
-        leMot.setQuantite(Integer.parseInt(txtQt.getText()));
+        art=new Article_fabrication();
+        art.setNom(lesMot.get(jComboBox1.getSelectedIndex()).getNom_moteur());
+        art.setRef_article(lesMot.get(jComboBox1.getSelectedIndex()).getRef_moteur());
+        art.setPrix(lesMot.get(jComboBox1.getSelectedIndex()).getPrix_moteur());
+        art.setQuantite(Integer.parseInt(txtQt.getText()));
+        art.setHauteur(0);
+        art.setType_article(1);
+        art.setPuissance_moteur(1);
+        art.setCouleur_coffre(1);
+        art.setCouleur_coulisse(1);
+        art.setCote_manoeuvre("0");
+        art.setType_coulisse(1);
+        art.setType_manoeuvre(1);
+        art.setCouleur_tablier(1);
+        art.setType_lame(1);
+        art.setTelecommande(1);
+        art.setHors_cote(1);
+        art.setType_pose(1);
+        art.setType_moteur("0");
         dispose();
     }//GEN-LAST:event_jButton1MouseClicked
 
@@ -133,14 +146,13 @@ public class JDialogMoteur extends javax.swing.JDialog {
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
         // TODO add your handling code here:
-        jLabel2.setText(lesMot.get(jComboBox1.getSelectedIndex()).getUniteQuantite().toString());
     }//GEN-LAST:event_jComboBox1ItemStateChanged
     public static Article_fabrication openForm(Component cpt,Vector<Moteur> v) {
-        leMot = null;
+        art = null;
         JDialogMoteur mot = new JDialogMoteur(null, true,v);
         mot.setLocationRelativeTo(cpt);
         mot.setVisible(true);
-        return leMot;
+        return art;
     }
     /**
      * @param args the command line arguments

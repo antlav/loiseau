@@ -4,11 +4,10 @@
  */
 package loiseau.ihm;
 
-import classeStockage.ArticleLoiseauCommande;
-import classeStockage.PieceEtOptions;
 import java.awt.Component;
 import java.util.Vector;
 import loiseau.stockage.Article_fabrication;
+import loiseau.stockage.Piece;
 
 /**
  *
@@ -23,14 +22,14 @@ public class JDialogAxe extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
-    
-    public JDialogAxe(java.awt.Frame parent, boolean modal, Vector<PieceEtOptions> o) {
+
+    public JDialogAxe(java.awt.Frame parent, boolean modal, Vector<Piece> o) {
         super(parent, modal);
         initComponents();
         lesOptions = o;
     }
-    static ArticleLoiseauCommande art;
-    Vector<PieceEtOptions> lesOptions;
+    static Article_fabrication art;
+    Vector<Piece> lesOptions;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -136,24 +135,28 @@ public class JDialogAxe extends javax.swing.JDialog {
     private void btnAjoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAjoutMouseClicked
         // TODO add your handling code here:
         double prix = 0;
-        art = new ArticleLoiseauCommande();
+        art = new Article_fabrication();
         art.setNom(cbbAxe.getSelectedItem().toString());
         art.setLargeur(Double.parseDouble(txtLargeur.getText()));
-        art.setQt(Integer.parseInt(txtQt.getText()));
-        art.setTablier(0);
-        art.setVolet(0);
-        art.setAxe(1);
-        art.setCouleurCoffre(1);
-        art.setCouleurCoulisse(1);
-        art.setCoteManoeuvre(1);
-        art.setUneCoulisse(1);
-        art.setTypeManoeuvre(1);
-        art.setCouleurTablier(1);
-        art.setUneLame(1);
-        art.setTypPose(1);
-        for (PieceEtOptions p : lesOptions) {
-            if (p.getNom().compareTo(cbbAxe.getSelectedItem().toString()) == 0) {
-                prix = p.getPrix();
+        art.setQuantite(Integer.parseInt(txtQt.getText()));
+        art.setHauteur(0);
+        art.setType_article(8);
+        art.setPuissance_moteur(1);
+        art.setCouleur_coffre(1);
+        art.setCouleur_coulisse(1);
+        art.setCote_manoeuvre("0");
+        art.setType_coulisse(1);
+        art.setType_manoeuvre(1);
+        art.setCouleur_tablier(1);
+        art.setType_lame(1);
+        art.setTelecommande(1);
+        art.setHors_cote(1);
+        art.setType_pose(1);
+        art.setType_moteur("0");
+
+        for (Piece p : lesOptions) {
+            if (p.getNom_piece().compareTo(cbbAxe.getSelectedItem().toString()) == 0) {
+                prix = p.getPrix_piece();
             }
         }
         if (jCheckBox1.isSelected()) {
@@ -163,16 +166,16 @@ public class JDialogAxe extends javax.swing.JDialog {
         art.setPrix(prix);
         dispose();
     }//GEN-LAST:event_btnAjoutMouseClicked
-    
+
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        for (PieceEtOptions p : lesOptions) {
-            if (p.getNom().regionMatches(true, 0, "axe", 0, 3)) {
-                cbbAxe.addItem(p.getNom());
+        for (Piece p : lesOptions) {
+            if (p.getNom_piece().regionMatches(true, 0, "axe", 0, 3)) {
+                cbbAxe.addItem(p.getNom_piece());
             }
         }
     }//GEN-LAST:event_formWindowOpened
-    public static Article_fabrication openForm(Component cpt, Vector<PieceEtOptions> o) {
+    public static Article_fabrication openForm(Component cpt, Vector<Piece> o) {
         art = null;
         JDialogAxe axe = new JDialogAxe(null, true, o);
         axe.setLocationRelativeTo(cpt);

@@ -29,13 +29,12 @@ public class Article_fabrication {
     private int type_lame;
     private int telecommande;
     private int commande;
-    private int client;
     private String nom;
 
     public Article_fabrication() {
     }
 
-    public Article_fabrication(int id_article_fabrication, int type_article, double largeur, double hauteur, String ref_article, int quantite, double prix, int type_pose, int couleur_tablier, int couleur_coffre, int couleur_coulisse, int type_manoeuvre, String cote_manoeuvre, String type_moteur, int puissance_moteur, int hors_cote, int type_coulisse, int type_lame, int telecommande, int commande, int client, String nom) {
+    public Article_fabrication(int id_article_fabrication, int type_article, double largeur, double hauteur, String ref_article, int quantite, double prix, int type_pose, int couleur_tablier, int couleur_coffre, int couleur_coulisse, int type_manoeuvre, String cote_manoeuvre, String type_moteur, int puissance_moteur, int hors_cote, int type_coulisse, int type_lame, int telecommande, int commande, String nom) {
         this.id_article_fabrication = id_article_fabrication;
         this.type_article = type_article;
         this.largeur = largeur;
@@ -56,7 +55,6 @@ public class Article_fabrication {
         this.type_lame = type_lame;
         this.telecommande = telecommande;
         this.commande = commande;
-        this.client = client;
         this.nom = nom;
     }
 
@@ -338,20 +336,6 @@ public class Article_fabrication {
      */
     public void setCommande(int commande) {
         this.commande = commande;
-    }
-
-    /**
-     * @return the client
-     */
-    public int getClient() {
-        return client;
-    }
-
-    /**
-     * @param client the client to set
-     */
-    public void setClient(int client) {
-        this.client = client;
     }
 
     /**
