@@ -193,6 +193,8 @@ public class SuivieCommande extends javax.swing.JFrame {
         itemAjoutAutre = new javax.swing.JMenuItem();
         itemReset = new javax.swing.JMenuItem();
         itemRetour = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem10 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -481,7 +483,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         jTabbedPane2.addTab("Date de pose", txtDatePose);
         jTabbedPane2.addTab("Delai max", txtDelai);
 
-        jMenu1.setText("File");
+        jMenu1.setText("Fichier");
         jMenu1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenu1ActionPerformed(evt);
@@ -631,6 +633,15 @@ public class SuivieCommande extends javax.swing.JFrame {
             }
         });
         jMenu1.add(itemRetour);
+        jMenu1.add(jSeparator5);
+
+        jMenuItem10.setText("Paramètres");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem10);
 
         jMenuBar1.add(jMenu1);
 
@@ -1387,6 +1398,13 @@ public class SuivieCommande extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_itemRetourActionPerformed
 
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        // TODO add your handling code here:
+        Parametres formParam = new Parametres();
+        formParam.setVisible(true);
+
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
     public void completerClient(int index) {
         txtNom.setText(lesClient.get(index).getNom());
         txtTel.setText(lesClient.get(index).getTel_fix());
@@ -1621,6 +1639,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1633,6 +1652,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JList lstClient;

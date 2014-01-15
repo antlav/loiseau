@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<root>
+  <param name="bddPath" pathName="\\127.0.0.1" />
+  <param name="bddUser" pathName="ant" />
+  <param name="bddPass" pathName="ant123456" />
+  <param name="factureModel" pathName="/Users/laveauantoine/Applications" />
+  <param name="devisModel" pathName="/Users/laveauantoine/Desktop" />
+  <param name="mesureModel" pathName="/Users/laveauantoine/Documents" />
+  <param name="decoteModel" pathName="/Users/laveauantoine/Downloads" />
+  <param name="folderCommandePath" pathName="/Users/laveauantoine/Google Drive" />
+</root>
+

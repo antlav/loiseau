@@ -92,6 +92,9 @@ public class GestionClient extends javax.swing.JFrame {
         txtRemise = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDiver = new javax.swing.JTextArea();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximizedBounds(new java.awt.Rectangle(0, 0, 803, 660));
@@ -429,6 +432,20 @@ public class GestionClient extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jMenu2.setText("Fichier");
+
+        jMenuItem2.setText("Paramètres");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -626,6 +643,13 @@ public class GestionClient extends javax.swing.JFrame {
         // TODO add your handling code here:
         btnSauvegardeMouseClicked(evt);
     }//GEN-LAST:event_btnModifierMouseClicked
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        Parametres formParam = new Parametres();
+        formParam.setVisible(true);
+
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
     private void completerChamp(int index) {
         cbbTitre.setSelectedItem(lesClient.get(index).getTitre());
         cbbType.setSelectedItem(lesClient.get(index).getType());
@@ -724,6 +748,9 @@ public class GestionClient extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
