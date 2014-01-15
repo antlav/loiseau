@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
 import loiseau.metier.DialogueBdd;
 import loiseau.stockage.Article_fabrication;
@@ -41,6 +42,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     public SuivieCommande() {
         initComponents();
     }
+    Acceuil laForm;
     DefaultListModel lst;
     DefaultTableModel dtm;
     ClientOperation tri = new ClientOperation();
@@ -63,34 +65,35 @@ public class SuivieCommande extends javax.swing.JFrame {
     HashMap<Double, HashMap<Double, Vector<String>>> lesPrixTradi = new HashMap<>();
     HashMap<Double, HashMap<Double, Vector<String>>> lesPrixAntitempete = new HashMap<>();
     HashMap<Double, HashMap<Double, Vector<String>>> lesPrixGarageReno = new HashMap<>();
+    HashMap<Double, Vector<String>> lesLargeur = new HashMap<>();
     Commande uneCommande;
     String GETCLIENT = "SELECT * FROM client";
     String GETCOMMANDE = "SELECT * FROM commande";
-    String GETARTICLEFABRICATION = "";
-    String GETCAISSONS = "";
-    String GETCOULEUR = "";
-    String GETCOULLISSE = "";
-    String GETETATCOMMANDE = "";
-    String GETLAME = "";
-    String GETMOTEUR = "";
-    String GETOPTION = "";
-    String GETPRIXCALYPSO = "";
-    String GETPRIXMOZART = "";
-    String GETGARAGEANTITEMPETE = "";
-    String GETPRIXTRADITONNEL = "";
-    String GETGARAGERENOVATION = "";
-    String GETTELECOMANDE = "";
-    String GETTYPEARTICLE = "";
-    String GETTYPEMANOEUVRE = "";
-    String GETTYPEPOSE = "";
-    String GETPIECE;
-    String GETCOULISSE;
+    String GETARTICLEFABRICATION = "SELECT * FROM article_fabrication";
+    String GETCAISSONS = "SELECT * FROM caisson";
+    String GETCOULEUR = "SELECT * FROM couleur";
+    String GETCOULISSE = "SELECT * FROM coulisse";
+    String GETETATCOMMANDE = "SELECT * FROM etat_commande";
+    String GETLAME = "SELECT * FROM lame";
+    String GETMOTEUR = "SELECT * FROM moteur";
+    String GETOPTION = "SELECT * FROM option";
+    String GETPRIXCALYPSO = "SELECT * FROM prix_calypso";
+    String GETPRIXMOZART = "SELECT * FROM prix_mozart";
+    String GETGARAGEANTITEMPETE = "SELECT * FROM porte_garage_anti_tempete";
+    String GETPRIXTRADITONNEL = "SELECT * FROM traditionnel";
+    String GETGARAGERENOVATION = "SELECT * FROM prote_garage_reno";
+    String GETTELECOMANDE = "SELECT * FROM telecommande";
+    String GETTYPEARTICLE = "SELECT * FROM type_article";
+    String GETTYPEMANOEUVRE = "SELECT * FROM type_manoeuvre";
+    String GETTYPEPOSE = "SELECT * FROM type_pose";
+    String GETPIECE = "SELECT * FROM piece";
+    
     String ADDARTICLE = "INSERT INTO `loiseaudb`.`article_fabrication` (`largeur`, `hauteur`, `ref_article`, `quantite`, `prix`, `cote_manoeuvre`, `type_moteur`, `puissance_moteur`, `hors_cote`, `commande`, `id_couleur_coffre`, `id_couleur_coulisse`, `id_couleur_tablier`, `type_coulisse`, `type_lame`, `type_article`, `type_manoeuvre`, `type_pose`, `telecommande`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     String ADDCOMMAND;
     String UPDATEARTICLE = "UPDATE `loiseaudb`.`article_fabrication` SET `largeur`=?, `hauteur`=?, `ref_article`=?, `quantite`=?, `prix`=?, `cote_manoeuvre`=?, `type_moteur`=?, `puissance_moteur`=?, `hors_cote`=?, `commande`=?, `id_couleur_coffre`=?, `id_couleur_coulisse`=?, `id_couleur_tablier`=?, `type_coulisse`=?, `type_lame`=?, `type_article`=?, `type_manoeuvre`=?, `type_pose`=?, `telecommande`=? WHERE `id_article_fabrication`=?";
     String UPDATECOMMAND;
-    String DELETEARTICLELOISEAU;
-    String DELETEARTICLE;
+    String DELETEARTICLE = "DELETE FROM `loiseaudb`.`article_fabrication` WHERE `id_article_fabrication`=?";
+
     Vector<Client> lesClient = new Vector<>();
     Vector<Commande> lesCommandes = new Vector<>();
     Vector<Article_fabrication> article = new Vector<>();
@@ -119,6 +122,8 @@ public class SuivieCommande extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txtAcompte2 = new javax.swing.JTextField();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -139,19 +144,28 @@ public class SuivieCommande extends javax.swing.JFrame {
         txtMail = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        txtTVA = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txtTTC = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         txtHT = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        txtAcompte = new javax.swing.JTextField();
         txtRef = new javax.swing.JTextField();
         Reference = new javax.swing.JLabel();
+        cbbTva = new javax.swing.JComboBox();
+        jLabel10 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblArticle = new javax.swing.JTable();
+        txtCommercial = new javax.swing.JTabbedPane();
+        txtTmpCommercial = new javax.swing.JTextField();
+        txtMetreur = new javax.swing.JTextField();
+        txtVendu = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        txtAcompte = new javax.swing.JTextField();
+        txtReglement = new javax.swing.JTextField();
+        txtDatePose = new javax.swing.JTextField();
+        txtDelai = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         itemNewCommande = new javax.swing.JMenuItem();
@@ -177,7 +191,8 @@ public class SuivieCommande extends javax.swing.JFrame {
         itemAjoutPiece = new javax.swing.JMenuItem();
         itemAjoutOption = new javax.swing.JMenuItem();
         itemAjoutAutre = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        itemReset = new javax.swing.JMenuItem();
+        itemRetour = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -199,7 +214,7 @@ public class SuivieCommande extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 793, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -323,9 +338,9 @@ public class SuivieCommande extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -348,13 +363,22 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jLabel12.setText("Total HT");
 
-        jLabel10.setText("Acompte");
-
         jLabel13.setText("Total TTC");
+
+        txtHT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtHTActionPerformed(evt);
+            }
+        });
 
         jLabel11.setText("Taux TVA");
 
         Reference.setText("Reference");
+
+        cbbTva.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "19.6" }));
+
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("Information commande");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -363,42 +387,42 @@ public class SuivieCommande extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(Reference))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtRef, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAcompte, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTVA, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtHT, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTTC, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Reference))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtHT, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                .addComponent(txtTTC, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                .addComponent(cbbTva, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtRef, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtRef, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Reference))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtAcompte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(txtTVA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbbTva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(txtHT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(14, 14, 14)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13)
                     .addComponent(txtTTC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -441,7 +465,28 @@ public class SuivieCommande extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        txtTmpCommercial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTmpCommercialActionPerformed(evt);
+            }
+        });
+        txtCommercial.addTab("Commercial", txtTmpCommercial);
+        txtCommercial.addTab("Metreur", txtMetreur);
+        txtCommercial.addTab("Vendu", txtVendu);
+
+        jLabel9.setText("Temps de pose ");
+
+        jTabbedPane2.addTab("Acompte", txtAcompte);
+        jTabbedPane2.addTab("Reglement", txtReglement);
+        jTabbedPane2.addTab("Date de pose", txtDatePose);
+        jTabbedPane2.addTab("Delai max", txtDelai);
+
         jMenu1.setText("File");
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
+            }
+        });
 
         itemNewCommande.setText("Sauvegarder commande");
         itemNewCommande.addActionListener(new java.awt.event.ActionListener() {
@@ -451,7 +496,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         });
         jMenu1.add(itemNewCommande);
 
-        ItemSuprCommande.setText("Suprimer commande");
+        ItemSuprCommande.setText("Suprimer article");
         jMenu1.add(ItemSuprCommande);
 
         ItemEtatSuivant.setText("Etat suivant");
@@ -571,10 +616,23 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jMenu1.add(jMenu4);
 
-        jMenuBar1.add(jMenu1);
+        itemReset.setText("Reset");
+        itemReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemResetActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemReset);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        itemRetour.setText("Retour");
+        itemRetour.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemRetourActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemRetour);
+
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -585,21 +643,25 @@ public class SuivieCommande extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap())))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(58, 58, 58)
+                                        .addComponent(jLabel9)
+                                        .addGap(54, 54, 54))
+                                    .addComponent(txtCommercial)
+                                    .addComponent(jTabbedPane2))))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -610,13 +672,21 @@ public class SuivieCommande extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtCommercial, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        txtCommercial.getAccessibleContext().setAccessibleName("Commercial");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -700,6 +770,103 @@ public class SuivieCommande extends javax.swing.JFrame {
             while (rs.next()) {
                 unePose = new Type_pose(rs.getInt("id_type_pose"), rs.getString("nom"), rs.getString("enroulement"), rs.getInt("rabat"));
                 lesPoses.add(unePose);
+            }
+            rs = DialogueBdd.select(GETPRIXCALYPSO);
+            prixEtMoteur = new Vector<>();
+            while (rs.next()) {
+                lesLargeur = new HashMap<>();
+                if (lesPrixCalypso.containsKey(Double.parseDouble(rs.getString("hauteur")))) {
+                    prixEtMoteur = new Vector<>();
+                    prixEtMoteur.add(rs.getString("prix"));
+                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("caisson"));
+                    lesPrixCalypso.get(Double.parseDouble(rs.getString("hauteur"))).put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
+                } else {
+                    prixEtMoteur = new Vector<>();
+                    prixEtMoteur.add(rs.getString("prix"));
+                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("caisson"));
+                    lesLargeur = new HashMap<>();
+                    lesLargeur.put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
+                    lesPrixCalypso.put(Double.parseDouble(rs.getString("hauteur")), lesLargeur);
+                }
+            }
+            rs = DialogueBdd.select(GETPRIXMOZART);
+            prixEtMoteur = new Vector<>();
+            while (rs.next()) {
+                lesLargeur = new HashMap<>();
+                if (lesPrixMozart.containsKey(Double.parseDouble(rs.getString("hauteur")))) {
+                    prixEtMoteur = new Vector<>();
+                    prixEtMoteur.add(rs.getString("prix"));
+                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("caisson"));
+                    lesPrixMozart.get(Double.parseDouble(rs.getString("hauteur"))).put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
+                } else {
+                    prixEtMoteur = new Vector<>();
+                    prixEtMoteur.add(rs.getString("prix"));
+                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("caisson"));
+                    lesLargeur = new HashMap<>();
+                    lesLargeur.put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
+                    lesPrixMozart.put(Double.parseDouble(rs.getString("hauteur")), lesLargeur);
+                }
+            }
+            rs = DialogueBdd.select(GETPRIXTRADITONNEL);
+            prixEtMoteur = new Vector<>();
+            while (rs.next()) {
+                lesLargeur = new HashMap<>();
+                if (lesPrixTradi.containsKey(Double.parseDouble(rs.getString("hauteur")))) {
+                    prixEtMoteur = new Vector<>();
+                    prixEtMoteur.add(rs.getString("prix"));
+                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("caisson"));
+                    lesPrixTradi.get(Double.parseDouble(rs.getString("hauteur"))).put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
+                } else {
+                    prixEtMoteur = new Vector<>();
+                    prixEtMoteur.add(rs.getString("prix"));
+                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("caisson"));
+                    lesLargeur = new HashMap<>();
+                    lesLargeur.put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
+                    lesPrixTradi.put(Double.parseDouble(rs.getString("hauteur")), lesLargeur);
+                }
+            }
+            rs = DialogueBdd.select(GETGARAGEANTITEMPETE);
+            prixEtMoteur = new Vector<>();
+            while (rs.next()) {
+                lesLargeur = new HashMap<>();
+                if (lesPrixAntitempete.containsKey(Double.parseDouble(rs.getString("hauteur")))) {
+                    prixEtMoteur = new Vector<>();
+                    prixEtMoteur.add(rs.getString("prix"));
+                    lesPrixAntitempete.get(Double.parseDouble(rs.getString("hauteur"))).put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
+                } else {
+                    prixEtMoteur = new Vector<>();
+                    prixEtMoteur.add(rs.getString("prix"));
+                    lesLargeur = new HashMap<>();
+                    lesLargeur.put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
+                    lesPrixAntitempete.put(Double.parseDouble(rs.getString("hauteur")), lesLargeur);
+                }
+            }
+            rs = DialogueBdd.select(GETGARAGERENOVATION);
+            prixEtMoteur = new Vector<>();
+            while (rs.next()) {
+                lesLargeur = new HashMap<>();
+                if (lesPrixGarageReno.containsKey(Double.parseDouble(rs.getString("hauteur")))) {
+                    prixEtMoteur = new Vector<>();
+                    prixEtMoteur.add(rs.getString("prix"));
+                    lesPrixGarageReno.get(Double.parseDouble(rs.getString("hauteur"))).put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
+                } else {
+                    prixEtMoteur = new Vector<>();
+                    prixEtMoteur.add(rs.getString("prix"));
+                    lesLargeur = new HashMap<>();
+                    lesLargeur.put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
+                    lesPrixGarageReno.put(Double.parseDouble(rs.getString("hauteur")), lesLargeur);
+                }
+            }
+            rs = DialogueBdd.select(GETCOULEUR);
+            while (rs.next()) {
+                uneCouleur = new Couleur(rs.getInt("id_couleur"), rs.getString("nom_couleur"));
+                lesCouleurs.add(uneCouleur);
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex);
@@ -1133,6 +1300,93 @@ public class SuivieCommande extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_itemNewCommandeActionPerformed
 
+    private void txtTmpCommercialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTmpCommercialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTmpCommercialActionPerformed
+
+    private void txtHTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHTActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHTActionPerformed
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+        int index = -1;
+        if (tblArticle.getSelectedRow() != -1) {
+            if (tblArticle.getSelectedRow() < article.size()) {
+                try {
+                    for (Article_fabrication a : lesArticle) {
+                        if (a.getId_article_fabrication()== article.get(tblArticle.getSelectedRow()).getId_article_fabrication()) {
+                            index = lesArticle.indexOf(a);
+                        }
+                    }
+                    if (article.get(tblArticle.getSelectedRow()).getId_article_fabrication()> 0) {
+                        DialogueBdd.delete(DELETEARTICLE, article.get(tblArticle.getSelectedRow()).getId_article_fabrication());
+                        lesArticle.remove(index);
+                    }
+                    article.remove(tblArticle.getSelectedRow());
+                } catch (Exception ex) {
+                    Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    for (Article_fabrication a : lesArticleLoiseau) {
+                        if (a.getId_article_fabrication()== articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication()) {
+                            index = lesArticleLoiseau.indexOf(a);
+                        }
+                    }
+                    if (articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication()> 0) {
+                        DialogueBdd.delete(DELETEARTICLE, articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication());
+                        lesArticleLoiseau.remove(index);
+                    }
+                    articleLoiseau.remove(tblArticle.getSelectedRow() - article.size());
+                } catch (Exception ex) {
+                    Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            afficherArticle();
+        } else {
+            JOptionPane.showMessageDialog(this, "selectionner une ligne");
+        }  
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void itemResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemResetActionPerformed
+        // TODO add your handling code here:
+         article.removeAllElements();
+        articleLoiseau.removeAllElements();
+        while (dtm.getRowCount() != 0) {
+            dtm.removeRow(0);
+        }
+        txtReglement.setText("");
+        txtHT.setText("");
+        txtAcompte.setText("");
+        txtTTC.setText("");
+        txtNom.setText("");
+        txtMail.setText("");
+        txtTel.setText("");
+        txtType.setText("");
+        txtRef.setText("");
+        txtTmpCommercial.setText("");
+        txtMetreur.setText("");
+        txtVendu.setText("");
+        txtDelai.setText("");
+        txtDatePose.setText("");
+        lstCommande.clearSelection();
+        lstClient.clearSelection();
+        lst = new DefaultListModel();
+        lstCommande.setModel(lst);
+        for (Commande c : lesCommandes) {
+            lst.addElement(c.getRef_dossier());
+        }
+        
+    }//GEN-LAST:event_itemResetActionPerformed
+
+    private void itemRetourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRetourActionPerformed
+        // TODO add your handling code here:
+        laForm = new Acceuil();
+        laForm.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_itemRetourActionPerformed
+
     public void completerClient(int index) {
         txtNom.setText(lesClient.get(index).getNom());
         txtTel.setText(lesClient.get(index).getTel_fix());
@@ -1145,10 +1399,26 @@ public class SuivieCommande extends javax.swing.JFrame {
         txtAcompte.setText(String.valueOf(lesCommandes.get(index).getAcompte()));
         txtHT.setText(String.valueOf(lesCommandes.get(index).getTaux_ht()));
         txtTTC.setText(String.valueOf(lesCommandes.get(index).getPrix_ttc()));
-        txtTVA.setText(String.valueOf(lesCommandes.get(index).getTaux_tva()));
+        cbbTva.setSelectedItem(String.valueOf(lesCommandes.get(index).getTaux_tva()));
 
     }
-
+    public void remplirCommande() {
+        uneCommande.setAcompte(txtAcompte.getText());
+        if (txtHT.getText().isEmpty()) {
+            uneCommande.setTaux_ht(0);
+        } else {
+            uneCommande.setTaux_ht(Double.parseDouble(txtHT.getText()));
+        }
+        uneCommande.setType_reglement(txtReglement.getText());
+        uneCommande.setPrix_ttc(Double.parseDouble(txtTTC.getText()));
+        uneCommande.setTaux_tva(Double.parseDouble(cbbTva.getSelectedItem().toString()));
+        uneCommande.setTemps_pose_commercial(txtTmpCommercial.getText());
+        uneCommande.setTemps_pose_moeteur(txtMetreur.getText());
+        uneCommande.setTemps_pose_vendu(txtVendu.getText());
+        uneCommande.setDelais_prevu(txtDelai.getText());
+        uneCommande.setDate_pose(txtDatePose.getText());
+        
+    }
     public void calculTva() {
         double resultat = 0.0;
         if (lesClient.get(lstClient.getSelectedIndex()).getType().compareTo("Revendeur") == 0) {
@@ -1161,7 +1431,7 @@ public class SuivieCommande extends javax.swing.JFrame {
             resultat -= (resultat * Double.parseDouble(lesClient.get(lstClient.getSelectedIndex()).getRemise()) / 100);
             resultat = (double) (int) (resultat + 0.5);
             txtHT.setText(String.valueOf(resultat));
-            resultat += (resultat * Double.parseDouble(txtTVA.getText()) / 100);
+            resultat += (resultat * Double.parseDouble(cbbTva.getSelectedItem().toString()) / 100);
             resultat = (Math.floor(resultat * 100 + 0.5)) / 100;
             txtTTC.setText(String.valueOf(resultat));
         }
@@ -1216,7 +1486,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         hauteur = hauteur * 100;
         largeur = (int) ((artLoiseauCmd.getLargeur() / 100) + 0.5);
         largeur = largeur * 100;
-        prixEtMoteur = new Vector<>();
+        //prixEtMoteur = new Vector<>(); a verifier
 
         switch (artLoiseauCmd.getType_article()) {
             case 1:
@@ -1230,6 +1500,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                     }
                 }
                 artLoiseauCmd.setPrix(prix);
+                artLoiseauCmd.setPuissance_moteur(Integer.parseInt(lesPrixCalypso.get((double) hauteur).get((double) largeur).get(1)));
                 break;
             case 2:
                 prix = Double.parseDouble(lesPrixMozart.get((double) hauteur).get((double) largeur).get(0));
@@ -1240,6 +1511,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                     }
                 }
                 artLoiseauCmd.setPrix(prix);
+                artLoiseauCmd.setPuissance_moteur(Integer.parseInt(lesPrixMozart.get((double) hauteur).get((double) largeur).get(1)));
                 break;
             case 4:
                 prix = Double.parseDouble(lesPrixTradi.get((double) hauteur).get((double) largeur).get(0));
@@ -1250,6 +1522,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                     }
                 }
                 artLoiseauCmd.setPrix(prix);
+                artLoiseauCmd.setPuissance_moteur(Integer.parseInt(lesPrixTradi.get((double) hauteur).get((double) largeur).get(1)));
                 break;
             case 6:
                 prix = artLoiseauCmd.getHauteur() * artLoiseauCmd.getLargeur() / 1000000;
@@ -1317,6 +1590,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenuItem ItemPrestaPose;
     private javax.swing.JMenuItem ItemSuprCommande;
     private javax.swing.JLabel Reference;
+    private javax.swing.JComboBox cbbTva;
     private javax.swing.JMenuItem itemAjoutAutre;
     private javax.swing.JMenuItem itemAjoutAxe;
     private javax.swing.JMenuItem itemAjoutGarage;
@@ -1328,6 +1602,8 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenuItem itemMoteur;
     private javax.swing.JMenuItem itemNewCommande;
     private javax.swing.JMenuItem itemPriseMesur;
+    private javax.swing.JMenuItem itemReset;
+    private javax.swing.JMenuItem itemRetour;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1340,8 +1616,8 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
@@ -1357,17 +1633,26 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JList lstClient;
     private javax.swing.JList lstCommande;
     private javax.swing.JTable tblArticle;
     private javax.swing.JTextField txtAcompte;
+    private javax.swing.JTextField txtAcompte2;
+    private javax.swing.JTabbedPane txtCommercial;
+    private javax.swing.JTextField txtDatePose;
+    private javax.swing.JTextField txtDelai;
     private javax.swing.JTextField txtHT;
     private javax.swing.JTextField txtMail;
+    private javax.swing.JTextField txtMetreur;
     private javax.swing.JTextField txtNom;
     private javax.swing.JTextField txtRef;
+    private javax.swing.JTextField txtReglement;
     private javax.swing.JTextField txtTTC;
-    private javax.swing.JTextField txtTVA;
     private javax.swing.JTextField txtTel;
+    private javax.swing.JTextField txtTmpCommercial;
     private javax.swing.JTextField txtType;
+    private javax.swing.JTextField txtVendu;
     // End of variables declaration//GEN-END:variables
 }
