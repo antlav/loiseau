@@ -4,6 +4,7 @@
  */
 package loiseau.ihm;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.util.Collections;
 import loiseau.metier.ClientOperation;
@@ -16,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
 import loiseau.metier.DialogueBdd;
+import loiseau.metier.ExportExcel;
+import loiseau.metier.Param;
 import loiseau.stockage.Article_fabrication;
 import loiseau.stockage.Client;
 import loiseau.stockage.Commande;
@@ -42,6 +45,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     public SuivieCommande() {
         initComponents();
     }
+    Param mesParam=new Param();
     Acceuil laForm;
     DefaultListModel lst;
     DefaultTableModel dtm;
@@ -265,9 +269,9 @@ public class SuivieCommande extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -508,9 +512,19 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenu3.setText("Export");
 
         itemPriseMesur.setText("Préstation de pris de mesures");
+        itemPriseMesur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemPriseMesurActionPerformed(evt);
+            }
+        });
         jMenu3.add(itemPriseMesur);
 
         ItemDevis.setText("Devis");
+        ItemDevis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemDevisActionPerformed(evt);
+            }
+        });
         jMenu3.add(ItemDevis);
         jMenu3.add(jSeparator1);
 
@@ -519,6 +533,11 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenu3.add(jSeparator2);
 
         ItemPrestaPose.setText("Préstation de pose");
+        ItemPrestaPose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemPrestaPoseActionPerformed(evt);
+            }
+        });
         jMenu3.add(ItemPrestaPose);
 
         ItemFacture.setText("Facture");
@@ -704,7 +723,21 @@ public class SuivieCommande extends javax.swing.JFrame {
 
 
     private void ItemFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemFactureActionPerformed
-        // TODO add your handling code here:         
+        // TODO add your handling code here:  
+        for (Commande c : lesCommandes) {
+            if (lstCommande.getSelectedValue().toString().compareTo(c.getRef_dossier()) == 0) {
+                uneCommande = c;
+            }
+        }
+        for (Client cl : lesClient) {
+            if (cl.getId_client() == uneCommande.getId_client()) {
+                unClient = cl;
+            }
+        }
+        try {
+            ExportExcel.exportFacture(unClient, uneCommande, article, articleLoiseau);
+        } catch (Exception ex) {
+        }
     }//GEN-LAST:event_ItemFactureActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -1089,6 +1122,7 @@ public class SuivieCommande extends javax.swing.JFrame {
 
     private void itemNewCommandeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNewCommandeActionPerformed
         // TODO add your handling code here:
+        String path;
         int idClient = 0;
         int idCommande = 0;
         int indice = 0;
@@ -1141,6 +1175,9 @@ public class SuivieCommande extends javax.swing.JFrame {
                                     uneCommande.setId_commande(rs.getInt(1));
                                     idCommande = rs.getInt(1);
                                 }
+                                path=mesParam.getParam("folderCommandePath");                                
+                                path=path.concat(uneCommande.getRef_dossier());
+                                new File(path).mkdir(); 
                                 for (Article_fabrication a : article) {
                                     a.setCommande(idCommande);
                                     lesInfos = new Vector<>();
@@ -1404,6 +1441,63 @@ public class SuivieCommande extends javax.swing.JFrame {
         formParam.setVisible(true);
 
     }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void ItemDevisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemDevisActionPerformed
+        // TODO add your handling code here:
+        for (Commande c : lesCommandes) {
+            if (lstCommande.getSelectedValue().toString().compareTo(c.getRef_dossier()) == 0) {
+                uneCommande = c;
+            }
+        }
+        for (Client cl : lesClient) {
+            if (cl.getId_client() == uneCommande.getId_client()) {
+                unClient = cl;
+            }
+        }
+        try {
+            ExportExcel.exportPrix(unClient, uneCommande, article, articleLoiseau, lesTele, lesCouleurs, lesPoses, lesManoeuvres);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }//GEN-LAST:event_ItemDevisActionPerformed
+
+    private void itemPriseMesurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPriseMesurActionPerformed
+        // TODO add your handling code here:
+        for (Commande c : lesCommandes) {
+            if (lstCommande.getSelectedValue().toString().compareTo(c.getRef_dossier()) == 0) {
+                uneCommande = c;
+            }
+        }
+        for (Client cl : lesClient) {
+            if (cl.getId_client() == uneCommande.getId_client()) {
+                unClient = cl;
+            }
+        }
+        try {
+            ExportExcel.exportPrix(unClient, uneCommande, article, articleLoiseau, lesTele, lesCouleurs, lesPoses, lesManoeuvres);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }//GEN-LAST:event_itemPriseMesurActionPerformed
+
+    private void ItemPrestaPoseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemPrestaPoseActionPerformed
+        // TODO add your handling code here:
+        for (Commande c : lesCommandes) {
+            if (lstCommande.getSelectedValue().toString().compareTo(c.getRef_dossier()) == 0) {
+                uneCommande = c;
+            }
+        }
+        for (Client cl : lesClient) {
+            if (cl.getId_client() == uneCommande.getId_client()) {
+                unClient = cl;
+            }
+        }
+        try {
+            ExportExcel.exportPrestationPose(unClient, uneCommande, lesArticleLoiseau);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }//GEN-LAST:event_ItemPrestaPoseActionPerformed
 
     public void completerClient(int index) {
         txtNom.setText(lesClient.get(index).getNom());
