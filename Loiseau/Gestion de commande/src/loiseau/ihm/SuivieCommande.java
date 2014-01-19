@@ -45,7 +45,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     public SuivieCommande() {
         initComponents();
     }
-    Param mesParam=new Param();
+    Param mesParam = new Param();
     Acceuil laForm;
     DefaultListModel lst;
     DefaultTableModel dtm;
@@ -80,22 +80,22 @@ public class SuivieCommande extends javax.swing.JFrame {
     String GETETATCOMMANDE = "SELECT * FROM etat_commande";
     String GETLAME = "SELECT * FROM lame";
     String GETMOTEUR = "SELECT * FROM moteur";
-    String GETOPTION = "SELECT * FROM option";
+    String GETOPTION = "SELECT * FROM loiseaudb.option";
     String GETPRIXCALYPSO = "SELECT * FROM prix_calypso";
     String GETPRIXMOZART = "SELECT * FROM prix_mozart";
     String GETGARAGEANTITEMPETE = "SELECT * FROM porte_garage_anti_tempete";
-    String GETPRIXTRADITONNEL = "SELECT * FROM traditionnel";
+    String GETPRIXTRADITONNEL = "SELECT * FROM prix_traditionnel";
     String GETGARAGERENOVATION = "SELECT * FROM prote_garage_reno";
     String GETTELECOMANDE = "SELECT * FROM telecommande";
     String GETTYPEARTICLE = "SELECT * FROM type_article";
     String GETTYPEMANOEUVRE = "SELECT * FROM type_manoeuvre";
     String GETTYPEPOSE = "SELECT * FROM type_pose";
     String GETPIECE = "SELECT * FROM piece";
-    
+
     String ADDARTICLE = "INSERT INTO `loiseaudb`.`article_fabrication` (`largeur`, `hauteur`, `ref_article`, `quantite`, `prix`, `cote_manoeuvre`, `type_moteur`, `puissance_moteur`, `hors_cote`, `commande`, `id_couleur_coffre`, `id_couleur_coulisse`, `id_couleur_tablier`, `type_coulisse`, `type_lame`, `type_article`, `type_manoeuvre`, `type_pose`, `telecommande`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    String ADDCOMMAND;
+    String ADDCOMMAND= "INSERT INTO `loiseaudb`.`commande` (`ref_dossier`, `acompte`, `taux_tva`, `prix_ht`, `prix_ttc`, `type_reglement`, `temps_pose_metreur`, `temps_pose_commercial`, `temps_pose_vendu`, `delais_prevu`, `date_pose`, `id_client`, `etat_commande`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     String UPDATEARTICLE = "UPDATE `loiseaudb`.`article_fabrication` SET `largeur`=?, `hauteur`=?, `ref_article`=?, `quantite`=?, `prix`=?, `cote_manoeuvre`=?, `type_moteur`=?, `puissance_moteur`=?, `hors_cote`=?, `commande`=?, `id_couleur_coffre`=?, `id_couleur_coulisse`=?, `id_couleur_tablier`=?, `type_coulisse`=?, `type_lame`=?, `type_article`=?, `type_manoeuvre`=?, `type_pose`=?, `telecommande`=? WHERE `id_article_fabrication`=?";
-    String UPDATECOMMAND;
+    String UPDATECOMMAND="UPDATE `loiseaudb`.`commande` SET `ref_dossier`=?, `acompte`=?, `taux_tva`=?, `prix_ht`=?, `prix_ttc`=?, `type_reglement`=?, `temps_pose_metreur`=?, `temps_pose_commercial`=?, `temps_pose_vendu`=?, `delais_prevu`=?, `date_pose`=?, `id_client`=?, `etat_commande`=? WHERE `id_commande`=?";
     String DELETEARTICLE = "DELETE FROM `loiseaudb`.`article_fabrication` WHERE `id_article_fabrication`=?";
 
     Vector<Client> lesClient = new Vector<>();
@@ -162,14 +162,14 @@ public class SuivieCommande extends javax.swing.JFrame {
         tblArticle = new javax.swing.JTable();
         txtCommercial = new javax.swing.JTabbedPane();
         txtTmpCommercial = new javax.swing.JTextField();
-        txtMetreur = new javax.swing.JTextField();
         txtVendu = new javax.swing.JTextField();
+        txtMetreur = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         txtAcompte = new javax.swing.JTextField();
         txtReglement = new javax.swing.JTextField();
-        txtDatePose = new javax.swing.JTextField();
         txtDelai = new javax.swing.JTextField();
+        txtDatePose = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         itemNewCommande = new javax.swing.JMenuItem();
@@ -381,7 +381,7 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         Reference.setText("Reference");
 
-        cbbTva.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "19.6" }));
+        cbbTva.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "19.6", "20", "7", "10" }));
 
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Information commande");
@@ -477,15 +477,21 @@ public class SuivieCommande extends javax.swing.JFrame {
             }
         });
         txtCommercial.addTab("Commercial", txtTmpCommercial);
-        txtCommercial.addTab("Metreur", txtMetreur);
         txtCommercial.addTab("Vendu", txtVendu);
+
+        txtMetreur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMetreurActionPerformed(evt);
+            }
+        });
+        txtCommercial.addTab("Metreur", txtMetreur);
 
         jLabel9.setText("Temps de pose ");
 
         jTabbedPane2.addTab("Acompte", txtAcompte);
         jTabbedPane2.addTab("Reglement", txtReglement);
-        jTabbedPane2.addTab("Date de pose", txtDatePose);
         jTabbedPane2.addTab("Delai max", txtDelai);
+        jTabbedPane2.addTab("Date de pose", txtDatePose);
 
         jMenu1.setText("Fichier");
         jMenu1.addActionListener(new java.awt.event.ActionListener() {
@@ -503,6 +509,11 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenu1.add(itemNewCommande);
 
         ItemSuprCommande.setText("Suprimer article");
+        ItemSuprCommande.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemSuprCommandeActionPerformed(evt);
+            }
+        });
         jMenu1.add(ItemSuprCommande);
 
         ItemEtatSuivant.setText("Etat suivant");
@@ -681,16 +692,16 @@ public class SuivieCommande extends javax.swing.JFrame {
                             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGap(58, 58, 58)
-                                        .addComponent(jLabel9)
-                                        .addGap(54, 54, 54))
                                     .addComponent(txtCommercial)
-                                    .addComponent(jTabbedPane2))))))
+                                    .addComponent(jTabbedPane2)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(0, 63, Short.MAX_VALUE)
+                                        .addComponent(jLabel9)
+                                        .addGap(55, 55, 55)))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -702,16 +713,17 @@ public class SuivieCommande extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCommercial, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
+                                .addComponent(txtCommercial, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -766,6 +778,13 @@ public class SuivieCommande extends javax.swing.JFrame {
                 unClient.setId_client(Integer.parseInt(rs.getString("id_client")));
                 lesClient.add(unClient);
             }
+            rs=DialogueBdd.select(GETARTICLEFABRICATION);
+            while(rs.next()){
+                unArticle=new Article_fabrication(rs.getInt("id_article_fabrication"),rs.getInt("type_article"),rs.getDouble("largeur"),rs.getDouble("hauteur"),rs.getString("ref_article"),
+                rs.getInt("quantite"),rs.getDouble("prix"),rs.getInt("type_pose"),rs.getInt("id_couleur_tablier"),rs.getInt("id_couleur_coffre"),rs.getInt("id_couleur_coulisse"),
+                rs.getInt("type_manoeuvre"),rs.getString("cote_manoeuvre"),rs.getString("type_moteur"),rs.getInt("puissance_moteur"),rs.getInt("hors_cote"),rs.getInt("type_coulisse"),
+                rs.getInt("type_lame"),rs.getInt("telecommande"),rs.getInt("commande"),rs.getString("nom"));
+            }
             rs = DialogueBdd.select(GETCOMMANDE);
             while (rs.next()) {
                 uneCommande = new Commande(Integer.parseInt(rs.getString("id_client")), Integer.parseInt(rs.getString("id_commande")), rs.getString("ref_dossier"),
@@ -776,12 +795,12 @@ public class SuivieCommande extends javax.swing.JFrame {
             }
             rs = DialogueBdd.select(GETOPTION);
             while (rs.next()) {
-                uneOption = new Option(rs.getInt("id_option"), rs.getString("nom_option"), Double.parseDouble(rs.getString("prix")));
+                uneOption = new Option(rs.getInt("id_option"), rs.getString("nom_option"), Double.parseDouble(rs.getString("prix_option")));
                 lesOption.add(uneOption);
             }
             rs = DialogueBdd.select(GETTELECOMANDE);
             while (rs.next()) {
-                uneTelecomande = new telecommande(rs.getInt("id_telecomande"), rs.getString("nom"), Double.parseDouble(rs.getString("prix_telecommande")), rs.getString("reference"));
+                uneTelecomande = new telecommande(rs.getInt("id_telecommande"), rs.getString("nom_telecommande"), Double.parseDouble(rs.getString("prix_telecommande")), rs.getString("ref_telecommande"));
                 lesTele.add(uneTelecomande);
             }
             rs = DialogueBdd.select(GETMOTEUR);
@@ -802,17 +821,17 @@ public class SuivieCommande extends javax.swing.JFrame {
             }
             rs = DialogueBdd.select(GETCOULISSE);
             while (rs.next()) {
-                uneCoulisse = new Coulisse(rs.getInt("id_coulisse"), rs.getString("nom"), Double.parseDouble(rs.getString("profondeur")), rs.getInt("rabat"));
+                uneCoulisse = new Coulisse(rs.getInt("id_coulisse"), rs.getString("nom_coulisse"), Double.parseDouble(rs.getString("profondeur")), rs.getInt("rabat"));
                 lesCoulisses.add(uneCoulisse);
             }
             rs = DialogueBdd.select(GETTYPEARTICLE);
             while (rs.next()) {
-                unTypeArticle = new Type_article(rs.getInt("id_type_article"), rs.getString("nom"));
+                unTypeArticle = new Type_article(rs.getInt("id_type_article"), rs.getString("nom_type"));
                 lesTypeArticle.add(unTypeArticle);
             }
             rs = DialogueBdd.select(GETTYPEPOSE);
             while (rs.next()) {
-                unePose = new Type_pose(rs.getInt("id_type_pose"), rs.getString("nom"), rs.getString("enroulement"), rs.getInt("rabat"));
+                unePose = new Type_pose(rs.getInt("id_type_pose"), rs.getString("nom_type_pose"), rs.getString("enroulement"), rs.getInt("rabat"));
                 lesPoses.add(unePose);
             }
             rs = DialogueBdd.select(GETPRIXCALYPSO);
@@ -822,13 +841,13 @@ public class SuivieCommande extends javax.swing.JFrame {
                 if (lesPrixCalypso.containsKey(Double.parseDouble(rs.getString("hauteur")))) {
                     prixEtMoteur = new Vector<>();
                     prixEtMoteur.add(rs.getString("prix"));
-                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("puissance_moteur"));
                     prixEtMoteur.add(rs.getString("caisson"));
                     lesPrixCalypso.get(Double.parseDouble(rs.getString("hauteur"))).put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
                 } else {
                     prixEtMoteur = new Vector<>();
                     prixEtMoteur.add(rs.getString("prix"));
-                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("puissance_moteur"));
                     prixEtMoteur.add(rs.getString("caisson"));
                     lesLargeur = new HashMap<>();
                     lesLargeur.put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
@@ -842,13 +861,13 @@ public class SuivieCommande extends javax.swing.JFrame {
                 if (lesPrixMozart.containsKey(Double.parseDouble(rs.getString("hauteur")))) {
                     prixEtMoteur = new Vector<>();
                     prixEtMoteur.add(rs.getString("prix"));
-                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("puissance_moteur"));
                     prixEtMoteur.add(rs.getString("caisson"));
                     lesPrixMozart.get(Double.parseDouble(rs.getString("hauteur"))).put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
                 } else {
                     prixEtMoteur = new Vector<>();
                     prixEtMoteur.add(rs.getString("prix"));
-                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("puissance_moteur"));
                     prixEtMoteur.add(rs.getString("caisson"));
                     lesLargeur = new HashMap<>();
                     lesLargeur.put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
@@ -862,13 +881,13 @@ public class SuivieCommande extends javax.swing.JFrame {
                 if (lesPrixTradi.containsKey(Double.parseDouble(rs.getString("hauteur")))) {
                     prixEtMoteur = new Vector<>();
                     prixEtMoteur.add(rs.getString("prix"));
-                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("puissance_moteur"));
                     prixEtMoteur.add(rs.getString("caisson"));
                     lesPrixTradi.get(Double.parseDouble(rs.getString("hauteur"))).put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
                 } else {
                     prixEtMoteur = new Vector<>();
                     prixEtMoteur.add(rs.getString("prix"));
-                    prixEtMoteur.add(rs.getString("puissanceMoteur"));
+                    prixEtMoteur.add(rs.getString("puissance_moteur"));
                     prixEtMoteur.add(rs.getString("caisson"));
                     lesLargeur = new HashMap<>();
                     lesLargeur.put(Double.parseDouble(rs.getString("largeur")), prixEtMoteur);
@@ -911,6 +930,11 @@ public class SuivieCommande extends javax.swing.JFrame {
             while (rs.next()) {
                 uneCouleur = new Couleur(rs.getInt("id_couleur"), rs.getString("nom_couleur"));
                 lesCouleurs.add(uneCouleur);
+            }
+            rs = DialogueBdd.select(GETTYPEMANOEUVRE);
+            while (rs.next()) {
+                uneManoeuvre = new Type_manoeuvre(rs.getInt("id_type_manoeuvre"), rs.getString("nom_type_manoeuvre"), rs.getInt("moin_value"));
+                lesManoeuvres.add(uneManoeuvre);
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex);
@@ -988,6 +1012,11 @@ public class SuivieCommande extends javax.swing.JFrame {
 
     private void itemAjoutVoletMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemAjoutVoletMouseClicked
         // TODO add your handling code here:
+
+    }//GEN-LAST:event_itemAjoutVoletMouseClicked
+
+    private void itemAjoutVoletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutVoletActionPerformed
+        // TODO add your handling code here:
         unArticleCommande = JDialogVoletLoiseau.openForm(this, lesTypeArticle, lesCoulisses, lesLames, lesPoses, lesManoeuvres, lesCouleurs);
         if (unArticleCommande != null) {
             try {
@@ -1011,10 +1040,6 @@ public class SuivieCommande extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "volet non enregistrer, choisissez une télécomande");
             }
         }
-    }//GEN-LAST:event_itemAjoutVoletMouseClicked
-
-    private void itemAjoutVoletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutVoletActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_itemAjoutVoletActionPerformed
 
     private void itemAjoutTelecomandeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutTelecomandeActionPerformed
@@ -1153,6 +1178,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                             }
                             uneCommande = new Commande();
                             remplirCommande();
+                            uneCommande.setEtat_commande(1);
                             uneCommande.setRef_dossier(txtRef.getText());
                             uneCommande.setId_client(idClient);
                             lesInfos = new Vector<>();
@@ -1162,22 +1188,22 @@ public class SuivieCommande extends javax.swing.JFrame {
                             lesInfos.add(String.valueOf(uneCommande.getTaux_ht()));
                             lesInfos.add(String.valueOf(uneCommande.getPrix_ttc()));
                             lesInfos.add(uneCommande.getType_reglement());
-                            lesInfos.add(String.valueOf(uneCommande.getId_client()));
-                            lesInfos.add(0);
-                            lesInfos.add(uneCommande.getTemps_pose_commercial());
                             lesInfos.add(uneCommande.getTemps_pose_moeteur());
+                            lesInfos.add(uneCommande.getTemps_pose_commercial());
                             lesInfos.add(uneCommande.getTemps_pose_vendu());
                             lesInfos.add(uneCommande.getDelais_prevu());
                             lesInfos.add(uneCommande.getDate_pose());
+                            lesInfos.add(String.valueOf(uneCommande.getId_client()));
+                            lesInfos.add(String.valueOf(uneCommande.getEtat_commande()));                                                  
                             try {
                                 rs = DialogueBdd.insert(ADDCOMMAND, lesInfos);
                                 while (rs.next()) {
                                     uneCommande.setId_commande(rs.getInt(1));
                                     idCommande = rs.getInt(1);
                                 }
-                                path=mesParam.getParam("folderCommandePath");                                
-                                path=path.concat(uneCommande.getRef_dossier());
-                                new File(path).mkdir(); 
+                                path = mesParam.getParam("folderCommandePath");
+                                path = path.concat(uneCommande.getRef_dossier());
+                                new File(path).mkdir();
                                 for (Article_fabrication a : article) {
                                     a.setCommande(idCommande);
                                     lesInfos = new Vector<>();
@@ -1256,20 +1282,20 @@ public class SuivieCommande extends javax.swing.JFrame {
                 }
                 remplirCommande();
                 lesInfos = new Vector<>();
-                lesInfos.add(uneCommande.getRef_dossier());
-                lesInfos.add(uneCommande.getAcompte());
-                lesInfos.add(String.valueOf(uneCommande.getTaux_tva()));
-                lesInfos.add(String.valueOf(uneCommande.getTaux_ht()));
-                lesInfos.add(String.valueOf(uneCommande.getPrix_ttc()));
-                lesInfos.add(uneCommande.getType_reglement());
-                lesInfos.add(String.valueOf(uneCommande.getId_client()));
-                lesInfos.add(0);
-                lesInfos.add(uneCommande.getTemps_pose_commercial());
-                lesInfos.add(uneCommande.getTemps_pose_moeteur());
-                lesInfos.add(uneCommande.getTemps_pose_vendu());
-                lesInfos.add(uneCommande.getDelais_prevu());
-                lesInfos.add(uneCommande.getDate_pose());
-                lesInfos.add(uneCommande.getId_commande());
+                            lesInfos.add(uneCommande.getRef_dossier());
+                            lesInfos.add(uneCommande.getAcompte());
+                            lesInfos.add(String.valueOf(uneCommande.getTaux_tva()));
+                            lesInfos.add(String.valueOf(uneCommande.getTaux_ht()));
+                            lesInfos.add(String.valueOf(uneCommande.getPrix_ttc()));
+                            lesInfos.add(uneCommande.getType_reglement());
+                            lesInfos.add(uneCommande.getTemps_pose_moeteur());
+                            lesInfos.add(uneCommande.getTemps_pose_commercial());
+                            lesInfos.add(uneCommande.getTemps_pose_vendu());
+                            lesInfos.add(uneCommande.getDelais_prevu());
+                            lesInfos.add(uneCommande.getDate_pose());
+                            lesInfos.add(String.valueOf(uneCommande.getId_client()));
+                            lesInfos.add(String.valueOf(uneCommande.getEtat_commande())); 
+                            lesInfos.add(uneCommande.getId_commande());
                 try {
                     DialogueBdd.update(UPDATECOMMAND, lesInfos);
                     for (Article_fabrication a : article) {
@@ -1363,11 +1389,11 @@ public class SuivieCommande extends javax.swing.JFrame {
             if (tblArticle.getSelectedRow() < article.size()) {
                 try {
                     for (Article_fabrication a : lesArticle) {
-                        if (a.getId_article_fabrication()== article.get(tblArticle.getSelectedRow()).getId_article_fabrication()) {
+                        if (a.getId_article_fabrication() == article.get(tblArticle.getSelectedRow()).getId_article_fabrication()) {
                             index = lesArticle.indexOf(a);
                         }
                     }
-                    if (article.get(tblArticle.getSelectedRow()).getId_article_fabrication()> 0) {
+                    if (article.get(tblArticle.getSelectedRow()).getId_article_fabrication() > 0) {
                         DialogueBdd.delete(DELETEARTICLE, article.get(tblArticle.getSelectedRow()).getId_article_fabrication());
                         lesArticle.remove(index);
                     }
@@ -1378,11 +1404,11 @@ public class SuivieCommande extends javax.swing.JFrame {
             } else {
                 try {
                     for (Article_fabrication a : lesArticleLoiseau) {
-                        if (a.getId_article_fabrication()== articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication()) {
+                        if (a.getId_article_fabrication() == articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication()) {
                             index = lesArticleLoiseau.indexOf(a);
                         }
                     }
-                    if (articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication()> 0) {
+                    if (articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication() > 0) {
                         DialogueBdd.delete(DELETEARTICLE, articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication());
                         lesArticleLoiseau.remove(index);
                     }
@@ -1394,12 +1420,12 @@ public class SuivieCommande extends javax.swing.JFrame {
             afficherArticle();
         } else {
             JOptionPane.showMessageDialog(this, "selectionner une ligne");
-        }  
+        }
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void itemResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemResetActionPerformed
         // TODO add your handling code here:
-         article.removeAllElements();
+        article.removeAllElements();
         articleLoiseau.removeAllElements();
         while (dtm.getRowCount() != 0) {
             dtm.removeRow(0);
@@ -1425,7 +1451,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         for (Commande c : lesCommandes) {
             lst.addElement(c.getRef_dossier());
         }
-        
+
     }//GEN-LAST:event_itemResetActionPerformed
 
     private void itemRetourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRetourActionPerformed
@@ -1499,6 +1525,51 @@ public class SuivieCommande extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ItemPrestaPoseActionPerformed
 
+    private void txtMetreurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMetreurActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMetreurActionPerformed
+
+    private void ItemSuprCommandeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemSuprCommandeActionPerformed
+        // TODO add your handling code here:
+        int index = -1;
+        if (tblArticle.getSelectedRow() != -1) {
+            if (tblArticle.getSelectedRow() < article.size()) {
+                try {
+                    for (Article_fabrication a : lesArticle) {
+                        if (a.getId_article_fabrication()== article.get(tblArticle.getSelectedRow()).getId_article_fabrication()) {
+                            index = lesArticle.indexOf(a);
+                        }
+                    }
+                    if (article.get(tblArticle.getSelectedRow()).getId_article_fabrication()> 0) {
+                        DialogueBdd.delete(DELETEARTICLE, article.get(tblArticle.getSelectedRow()).getId_article_fabrication());
+                        lesArticle.remove(index);
+                    }
+                    article.remove(tblArticle.getSelectedRow());
+                } catch (Exception ex) {
+                    Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    for (Article_fabrication a : lesArticleLoiseau) {
+                        if (a.getId_article_fabrication()== articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication()) {
+                            index = lesArticleLoiseau.indexOf(a);
+                        }
+                    }
+                    if (articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication()> 0) {
+                        DialogueBdd.delete(DELETEARTICLE, articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication());
+                        lesArticleLoiseau.remove(index);
+                    }
+                    articleLoiseau.remove(tblArticle.getSelectedRow() - article.size());
+                } catch (Exception ex) {
+                    Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            afficherArticle();
+        } else {
+            JOptionPane.showMessageDialog(this, "selectionner une ligne");
+        }
+    }//GEN-LAST:event_ItemSuprCommandeActionPerformed
+
     public void completerClient(int index) {
         txtNom.setText(lesClient.get(index).getNom());
         txtTel.setText(lesClient.get(index).getTel_fix());
@@ -1512,8 +1583,16 @@ public class SuivieCommande extends javax.swing.JFrame {
         txtHT.setText(String.valueOf(lesCommandes.get(index).getTaux_ht()));
         txtTTC.setText(String.valueOf(lesCommandes.get(index).getPrix_ttc()));
         cbbTva.setSelectedItem(String.valueOf(lesCommandes.get(index).getTaux_tva()));
+        txtDatePose.setText(lesCommandes.get(index).getDate_pose());
+        txtDelai.setText(lesCommandes.get(index).getDelais_prevu());
+        txtMetreur.setText(lesCommandes.get(index).getTemps_pose_moeteur());
+        txtTmpCommercial.setText(lesCommandes.get(index).getTemps_pose_commercial());
+        txtVendu.setText(lesCommandes.get(index).getTemps_pose_vendu());
+        txtReglement.setText(lesCommandes.get(index).getType_reglement());
+        txtRef.setText(lesCommandes.get(index).getRef_dossier());
 
     }
+
     public void remplirCommande() {
         uneCommande.setAcompte(txtAcompte.getText());
         if (txtHT.getText().isEmpty()) {
@@ -1529,8 +1608,9 @@ public class SuivieCommande extends javax.swing.JFrame {
         uneCommande.setTemps_pose_vendu(txtVendu.getText());
         uneCommande.setDelais_prevu(txtDelai.getText());
         uneCommande.setDate_pose(txtDatePose.getText());
-        
+
     }
+
     public void calculTva() {
         double resultat = 0.0;
         if (lesClient.get(lstClient.getSelectedIndex()).getType().compareTo("Revendeur") == 0) {
@@ -1556,7 +1636,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         }
         for (Article_fabrication a : article) {
             Vector vect = new Vector();
-            vect.add(a.getRef_article());
+            vect.add(a.getNom());
             vect.add("");
             vect.add("");
             vect.add(a.getQuantite());
@@ -1565,7 +1645,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         }
         for (Article_fabrication a : articleLoiseau) {
             Vector vect = new Vector();
-            vect.add(a.getRef_article());
+            vect.add(a.getNom());
             vect.add(a.getLargeur());
             vect.add(a.getHauteur());
             vect.add(a.getQuantite());

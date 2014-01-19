@@ -117,6 +117,7 @@ public class JDialogMoteur extends javax.swing.JDialog {
         art.setPrix(lesMot.get(jComboBox1.getSelectedIndex()).getPrix_moteur());
         art.setQuantite(Integer.parseInt(txtQt.getText()));
         art.setHauteur(0);
+        art.setLargeur(0);
         art.setType_article(1);
         art.setPuissance_moteur(1);
         art.setCouleur_coffre(1);

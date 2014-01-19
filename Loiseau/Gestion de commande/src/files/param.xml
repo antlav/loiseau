@@ -11,6 +11,6 @@ and open the template in the editor.
   <param name="devisModel" pathName="/Users/laveauantoine/Desktop" />
   <param name="mesureModel" pathName="/Users/laveauantoine/Documents" />
   <param name="decoteModel" pathName="/Users/laveauantoine/Downloads" />
-  <param name="folderCommandePath" pathName="/Users/laveauantoine/Google Drive/" />
+  <param name="folderCommandePath" pathName="D:/Loiseau/" />
 </root>
 

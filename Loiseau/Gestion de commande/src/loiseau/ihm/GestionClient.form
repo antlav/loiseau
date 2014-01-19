@@ -426,9 +426,9 @@
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnSupr">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Suprimer"/>
-          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnSuprMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnSauvegarde">
           <Properties>

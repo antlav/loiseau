@@ -275,7 +275,11 @@ public class GestionClient extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        btnSupr.setText("Suprimer");
+        btnSupr.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSuprMouseClicked(evt);
+            }
+        });
 
         btnSauvegarde.setText("Sauvegarder");
         btnSauvegarde.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -650,6 +654,11 @@ public class GestionClient extends javax.swing.JFrame {
         formParam.setVisible(true);
 
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void btnSuprMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSuprMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnSuprMouseClicked
     private void completerChamp(int index) {
         cbbTitre.setSelectedItem(lesClient.get(index).getTitre());
         cbbType.setSelectedItem(lesClient.get(index).getType());
