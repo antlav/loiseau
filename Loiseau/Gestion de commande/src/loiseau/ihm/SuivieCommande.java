@@ -92,9 +92,9 @@ public class SuivieCommande extends javax.swing.JFrame {
     String GETTYPEPOSE = "SELECT * FROM type_pose";
     String GETPIECE = "SELECT * FROM piece";
 
-    String ADDARTICLE = "INSERT INTO `loiseaudb`.`article_fabrication` (`largeur`, `hauteur`, `ref_article`, `quantite`, `prix`, `cote_manoeuvre`, `type_moteur`, `puissance_moteur`, `hors_cote`, `commande`, `id_couleur_coffre`, `id_couleur_coulisse`, `id_couleur_tablier`, `type_coulisse`, `type_lame`, `type_article`, `type_manoeuvre`, `type_pose`, `telecommande`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String ADDARTICLE = "INSERT INTO `loiseaudb`.`article_fabrication` (`largeur`, `hauteur`, `ref_article`, `quantite`, `prix`, `cote_manoeuvre`, `type_moteur`, `puissance_moteur`, `hors_cote`, `commande`, `id_couleur_coffre`, `id_couleur_coulisse`, `id_couleur_tablier`, `type_coulisse`, `type_lame`, `type_article`, `type_manoeuvre`, `type_pose`, `telecommande`, `nom`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     String ADDCOMMAND= "INSERT INTO `loiseaudb`.`commande` (`ref_dossier`, `acompte`, `taux_tva`, `prix_ht`, `prix_ttc`, `type_reglement`, `temps_pose_metreur`, `temps_pose_commercial`, `temps_pose_vendu`, `delais_prevu`, `date_pose`, `id_client`, `etat_commande`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    String UPDATEARTICLE = "UPDATE `loiseaudb`.`article_fabrication` SET `largeur`=?, `hauteur`=?, `ref_article`=?, `quantite`=?, `prix`=?, `cote_manoeuvre`=?, `type_moteur`=?, `puissance_moteur`=?, `hors_cote`=?, `commande`=?, `id_couleur_coffre`=?, `id_couleur_coulisse`=?, `id_couleur_tablier`=?, `type_coulisse`=?, `type_lame`=?, `type_article`=?, `type_manoeuvre`=?, `type_pose`=?, `telecommande`=? WHERE `id_article_fabrication`=?";
+    String UPDATEARTICLE = "UPDATE `loiseaudb`.`article_fabrication` SET `largeur`=?, `hauteur`=?, `ref_article`=?, `quantite`=?, `prix`=?, `cote_manoeuvre`=?, `type_moteur`=?, `puissance_moteur`=?, `hors_cote`=?, `commande`=?, `id_couleur_coffre`=?, `id_couleur_coulisse`=?, `id_couleur_tablier`=?, `type_coulisse`=?, `type_lame`=?, `type_article`=?, `type_manoeuvre`=?, `type_pose`=?, `telecommande`=?, `nom`=? WHERE `id_article_fabrication`=?";
     String UPDATECOMMAND="UPDATE `loiseaudb`.`commande` SET `ref_dossier`=?, `acompte`=?, `taux_tva`=?, `prix_ht`=?, `prix_ttc`=?, `type_reglement`=?, `temps_pose_metreur`=?, `temps_pose_commercial`=?, `temps_pose_vendu`=?, `delais_prevu`=?, `date_pose`=?, `id_client`=?, `etat_commande`=? WHERE `id_commande`=?";
     String DELETEARTICLE = "DELETE FROM `loiseaudb`.`article_fabrication` WHERE `id_article_fabrication`=?";
 
@@ -784,6 +784,11 @@ public class SuivieCommande extends javax.swing.JFrame {
                 rs.getInt("quantite"),rs.getDouble("prix"),rs.getInt("type_pose"),rs.getInt("id_couleur_tablier"),rs.getInt("id_couleur_coffre"),rs.getInt("id_couleur_coulisse"),
                 rs.getInt("type_manoeuvre"),rs.getString("cote_manoeuvre"),rs.getString("type_moteur"),rs.getInt("puissance_moteur"),rs.getInt("hors_cote"),rs.getInt("type_coulisse"),
                 rs.getInt("type_lame"),rs.getInt("telecommande"),rs.getInt("commande"),rs.getString("nom"));
+                if(unArticle.getType_article()==1||unArticle.getType_article()==7){
+                   lesArticle.add(unArticle);
+                }else{
+                    lesArticleLoiseau.add(unArticle);
+                }
             }
             rs = DialogueBdd.select(GETCOMMANDE);
             while (rs.next()) {
@@ -1226,6 +1231,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                                     lesInfos.add(a.getType_manoeuvre());
                                     lesInfos.add(a.getType_pose());
                                     lesInfos.add(a.getTelecommande());
+                                    lesInfos.add(a.getNom());
                                     rs = DialogueBdd.insert(ADDARTICLE, lesInfos);
                                     while (rs.next()) {
                                         a.setId_article_fabrication(rs.getInt(1));
@@ -1254,6 +1260,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                                     lesInfos.add(a.getType_manoeuvre());
                                     lesInfos.add(a.getType_pose());
                                     lesInfos.add(a.getTelecommande());
+                                    lesInfos.add(a.getNom());
                                     rs = DialogueBdd.insert(ADDARTICLE, lesInfos);
                                     while (rs.next()) {
                                         a.setId_article_fabrication(rs.getInt(1));
@@ -1318,6 +1325,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                         lesInfos.add(a.getType_manoeuvre());
                         lesInfos.add(a.getType_pose());
                         lesInfos.add(a.getTelecommande());
+                        lesInfos.add(a.getNom());
                         if (a.getCommande() < 1) {
                             a.setCommande(uneCommande.getId_commande());
                             lesInfos.insertElementAt(a.getCommande(), 9);
@@ -1352,6 +1360,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                         lesInfos.add(a.getType_manoeuvre());
                         lesInfos.add(a.getType_pose());
                         lesInfos.add(a.getTelecommande());
+                        lesInfos.add(a.getNom());
                         if (a.getCommande() < 1) {
                             a.setCommande(uneCommande.getId_commande());
                             lesInfos.insertElementAt(a.getCommande(), 9);
