@@ -16,7 +16,7 @@ import loiseau.metier.Param;
  */
 public class ConectionBdd {
 
-    private static Param mesParam;
+    private static Param mesParam=new Param();
     private static String url;
     private static String user;
     private static String passwd;

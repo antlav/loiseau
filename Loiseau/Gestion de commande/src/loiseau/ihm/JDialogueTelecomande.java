@@ -7,6 +7,7 @@ package loiseau.ihm;
 
 import java.awt.Component;
 import java.util.Vector;
+import static loiseau.ihm.JDialogMoteur.art;
 import loiseau.stockage.Article_fabrication;
 import loiseau.stockage.telecommande;
 
@@ -30,7 +31,7 @@ public class JDialogueTelecomande extends javax.swing.JDialog {
         lesTele = v;
     }
     Vector<telecommande> lesTele;
-    static Article_fabrication laTel;
+    static Article_fabrication art;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -113,12 +114,26 @@ public class JDialogueTelecomande extends javax.swing.JDialog {
 
     private void btnAjoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAjoutMouseClicked
         // TODO add your handling code here:
-        laTel=new Article_fabrication();       
-        laTel.setNom(lesTele.get(cbbTelecomande.getSelectedIndex()).getNom_telecommande());
-        laTel.setRef_article(lesTele.get(cbbTelecomande.getSelectedIndex()).getRef_telecommande());
-        laTel.setPrix(lesTele.get(cbbTelecomande.getSelectedIndex()).getPrix_telecommande());
-        laTel.setId_article_fabrication(lesTele.get(cbbTelecomande.getSelectedIndex()).getId_telecommande());
-        laTel.setQuantite(Integer.parseInt(txtQt.getText()));
+        art=new Article_fabrication();       
+        art.setNom(lesTele.get(cbbTelecomande.getSelectedIndex()).getNom_telecommande());
+        art.setRef_article(lesTele.get(cbbTelecomande.getSelectedIndex()).getRef_telecommande());
+        art.setPrix(lesTele.get(cbbTelecomande.getSelectedIndex()).getPrix_telecommande());
+        art.setId_article_fabrication(lesTele.get(cbbTelecomande.getSelectedIndex()).getId_telecommande());
+        art.setQuantite(Integer.parseInt(txtQt.getText()));
+        art.setType_article(1);
+        art.setLargeur(0);
+        art.setPuissance_moteur(0);
+        art.setCouleur_coffre(1);
+        art.setCouleur_coulisse(1);
+        art.setCouleur_tablier(1);
+        art.setCote_manoeuvre("0");
+        art.setType_coulisse(1);
+        art.setType_lame(1);
+        art.setType_manoeuvre(1);
+        art.setTelecommande(1);
+        art.setHors_cote(1);
+        art.setType_pose(1);
+        art.setType_moteur("0");
         dispose();
     }//GEN-LAST:event_btnAjoutMouseClicked
 
@@ -126,11 +141,11 @@ public class JDialogueTelecomande extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbbTelecomandeItemStateChanged
     public static Article_fabrication openForm(Component cpt, Vector<telecommande> v) {
-        laTel = null;
+        art = null;
         JDialogueTelecomande tel = new JDialogueTelecomande(null, true, v);
         tel.setLocationRelativeTo(cpt);
         tel.setVisible(true);
-        return laTel;
+        return art;
     }
 
     /**
