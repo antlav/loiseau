@@ -385,19 +385,19 @@ public class ExportExcel {
  * @throws Exception 
  */
     public static void exportDecote(HashMap<String, Double> deCote, Article_fabrication art,
-            HashMap<String, String> infosArticle, int ligne, Vector<String> option) throws Exception {
+            HashMap<String, String> infosArticle, int ligne, Vector<String> option, Commande uneCommande) throws Exception {
         Locale locale = Locale.getDefault();
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         Date aujourdhui = new Date();
         InputStream xlsRefStream;
         int cptOption = 0;
         if (ligne == 3) {
-            xlsRefStream = new FileInputStream("FileModel\\NouvelleDecote.xls");
+            xlsRefStream = new FileInputStream(mesParam.getParam("decoteModel")+"/NouvelleDecote.xls");
         } else {
-            xlsRefStream = new FileInputStream("Export\\Decote " + infosArticle.get("reference") + ".xls");
+            xlsRefStream = new FileInputStream(mesParam.getParam("folderCommandePath")+uneCommande.getRef_dossier() +"/Decote.xls");
         }
         Workbook refWorkbook = Workbook.getWorkbook(xlsRefStream);
-        File outFile = new File("Export\\Decote " + infosArticle.get("reference") + ".xls");
+        File outFile = new File(mesParam.getParam("folderCommandePath")+uneCommande.getRef_dossier() +"/Decote.xls");
         WritableWorkbook outWorkbook = Workbook.createWorkbook(outFile, refWorkbook);
         WritableSheet out = outWorkbook.getSheet(0);
 

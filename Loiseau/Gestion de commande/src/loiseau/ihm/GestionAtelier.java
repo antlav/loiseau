@@ -125,6 +125,8 @@ public class GestionAtelier extends javax.swing.JFrame {
         Reference = new javax.swing.JLabel();
         cbbTva = new javax.swing.JComboBox();
         jLabel10 = new javax.swing.JLabel();
+        txtEtat = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         itemEtatSuivant = new javax.swing.JMenuItem();
@@ -232,8 +234,13 @@ public class GestionAtelier extends javax.swing.JFrame {
 
         jLabel12.setText("Total HT");
 
+        txtTTC.setEditable(false);
+        txtTTC.setBackground(new java.awt.Color(204, 204, 204));
+
         jLabel13.setText("Total TTC");
 
+        txtHT.setEditable(false);
+        txtHT.setBackground(new java.awt.Color(204, 204, 204));
         txtHT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtHTActionPerformed(evt);
@@ -242,12 +249,22 @@ public class GestionAtelier extends javax.swing.JFrame {
 
         jLabel11.setText("Taux TVA");
 
+        txtRef.setEditable(false);
+        txtRef.setBackground(new java.awt.Color(204, 204, 204));
+
         Reference.setText("Reference");
 
         cbbTva.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "19.6", "20", "7", "10" }));
+        cbbTva.setEnabled(false);
+        cbbTva.setFocusable(false);
 
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Information commande");
+
+        txtEtat.setEditable(false);
+        txtEtat.setBackground(new java.awt.Color(204, 204, 204));
+
+        jLabel5.setText("Etat");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -256,21 +273,22 @@ public class GestionAtelier extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(Reference))
+                            .addComponent(Reference)
+                            .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtHT, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                .addComponent(txtTTC, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                .addComponent(cbbTva, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(txtRef, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtEtat, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtHT, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(txtTTC, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(cbbTva, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtRef, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -294,6 +312,10 @@ public class GestionAtelier extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13)
                     .addComponent(txtTTC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtEtat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addContainerGap())
         );
 
@@ -403,9 +425,9 @@ public class GestionAtelier extends javax.swing.JFrame {
                 unClient.setId_client(Integer.parseInt(rs.getString("id_client")));
                 lesClient.add(unClient);
             }
-               rs = DialogueBdd.select(GETCAISSONS);
+            rs = DialogueBdd.select(GETCAISSONS);
             while (rs.next()) {
-                unCaisson = new Caisson(rs.getInt("id_caisson"),rs.getString("type_volet"), Float.parseFloat(rs.getString("hauteur")),Integer.parseInt(rs.getString("caisson")), rs.getString("lame"));
+                unCaisson = new Caisson(rs.getInt("id_caisson"), rs.getString("type_volet"), Float.parseFloat(rs.getString("hauteur")), Integer.parseInt(rs.getString("caisson")), rs.getString("lame"));
                 lesCaissons.add(unCaisson);
             }
             rs = DialogueBdd.select(GETARTICLEFABRICATION);
@@ -506,8 +528,15 @@ public class GestionAtelier extends javax.swing.JFrame {
             dtm.removeRow(0);
         }
         int index = 0;
+        int indice = 0;
         for (Commande c : lesCommandes) {
-            if (c.getRef_dossier().compareTo(lstCommande.getSelectedValue().toString()) == 0) {
+            if (lstCommande.getSelectedValue().toString().compareTo(c.getRef_dossier()) == 0) {
+                indice = lesCommandes.indexOf(c);
+            }
+        }
+        completerCommande(indice);
+        for (Commande c : lesCommandes) {
+            if (c.getRef_dossier().compareTo(txtRef.getText()) == 0) {
                 index = c.getId_commande();
             }
         }
@@ -555,6 +584,7 @@ public class GestionAtelier extends javax.swing.JFrame {
             }
             for (Commande c : lesCommandes) {
                 if (a.getCommande() == c.getId_commande()) {
+                    uneCommande=c;
                     infosArticle.put("reference", c.getRef_dossier());
                     for (Client cl : lesClient) {
                         if (cl.getId_client() == c.getId_client()) {
@@ -591,59 +621,59 @@ public class GestionAtelier extends javax.swing.JFrame {
                     break;
                 default:
                     for (Lame l : lesLames) {
-                    if (l.getId_lame() == a.getType_lame()) {
-                        infosArticle.put("lame", l.getNom_lame());
-                    }
-                }
-                for (Coulisse c : lesCoulisses) {
-                    if (a.getType_coulisse() == c.getId_coulisse()) {
-                        infosArticle.put("coulisse", c.getNom_coulisse());
-                    }
-                }
-                for (Couleur c : lesCouleurs) {
-                    if (a.getCouleur_coffre() == c.getId_couleur()) {
-                        if (a.getNom().compareTo("Traditionnel") == 0) {
-                        } else {
-                            infosArticle.put("couleurcoffre", c.getNom_couleur());
+                        if (l.getId_lame() == a.getType_lame()) {
+                            infosArticle.put("lame", l.getNom_lame());
                         }
                     }
-                    if (a.getCouleur_coulisse() == c.getId_couleur()) {
-                        infosArticle.put("couleurcoulisse", c.getNom_couleur());
+                    for (Coulisse c : lesCoulisses) {
+                        if (a.getType_coulisse() == c.getId_coulisse()) {
+                            infosArticle.put("coulisse", c.getNom_coulisse());
+                        }
                     }
-                    if (a.getCouleur_tablier() == c.getId_couleur()) {
-                        infosArticle.put("couleurtablier", c.getNom_couleur());
+                    for (Couleur c : lesCouleurs) {
+                        if (a.getCouleur_coffre() == c.getId_couleur()) {
+                            if (a.getNom().compareTo("Traditionnel") == 0) {
+                            } else {
+                                infosArticle.put("couleurcoffre", c.getNom_couleur());
+                            }
+                        }
+                        if (a.getCouleur_coulisse() == c.getId_couleur()) {
+                            infosArticle.put("couleurcoulisse", c.getNom_couleur());
+                        }
+                        if (a.getCouleur_tablier() == c.getId_couleur()) {
+                            infosArticle.put("couleurtablier", c.getNom_couleur());
+                        }
                     }
-                }
-                for (Type_pose p : lesPoses) {
-                    if (p.getId_type_pose() == a.getType_pose()) {
-                        infosArticle.put("pose", p.getNom_type_pose());
+                    for (Type_pose p : lesPoses) {
+                        if (p.getId_type_pose() == a.getType_pose()) {
+                            infosArticle.put("pose", p.getNom_type_pose());
+                        }
                     }
-                }
-                for (Type_manoeuvre m : lesManoeuvres) {
-                    if (m.getId_type_manoeuvre() == a.getType_manoeuvre()) {
-                        infosArticle.put("typemanoeuvre", m.getNom_type_manoeuvre());
+                    for (Type_manoeuvre m : lesManoeuvres) {
+                        if (m.getId_type_manoeuvre() == a.getType_manoeuvre()) {
+                            infosArticle.put("typemanoeuvre", m.getNom_type_manoeuvre());
+                        }
                     }
-                }
-                if (a.getCote_manoeuvre().compareTo("Gauche") == 0) {
-                    infosArticle.put("cotemanoeuvre", "G");
-                }
-                if (a.getCote_manoeuvre().compareTo("") == 0) {
-                    infosArticle.put("cotemanoeuvre", "D");
-                }
-                if (a.getNom().compareTo("Mozart") == 0) {
-                    deCote = CalculeCote.calculeMozart(a, lesCaissons, lesLames, lesPoses, lesManoeuvres);
-                }
-                if (a.getNom().compareTo("Calypso") == 0) {
-                    deCote = CalculeCote.calculeCalypso(a, lesCaissons, lesLames, lesPoses, lesManoeuvres);
-                }
-                if (a.getNom().compareTo("Traditionnel") == 0) {
-                    deCote = CalculeCote.calculeTraditionnel(unArticle, lesLames, lesManoeuvres);
-                }
+                    if (a.getCote_manoeuvre().compareTo("Gauche") == 0) {
+                        infosArticle.put("cotemanoeuvre", "G");
+                    }
+                    if (a.getCote_manoeuvre().compareTo("") == 0) {
+                        infosArticle.put("cotemanoeuvre", "D");
+                    }
+                    if (a.getNom().compareTo("Mozart") == 0) {
+                        deCote = CalculeCote.calculeMozart(a, lesCaissons, lesLames, lesPoses, lesManoeuvres);
+                    }
+                    if (a.getNom().compareTo("Calypso") == 0) {
+                        deCote = CalculeCote.calculeCalypso(a, lesCaissons, lesLames, lesPoses, lesManoeuvres);
+                    }
+                    if (a.getNom().compareTo("Traditionnel") == 0) {
+                        deCote = CalculeCote.calculeTraditionnel(unArticle, lesLames, lesManoeuvres);
+                    }
                     break;
             }
-          
+
             try {
-                ExportExcel.exportDecote(deCote, a, infosArticle, ligneExcel, optionDecote);
+                ExportExcel.exportDecote(deCote, a, infosArticle, ligneExcel, optionDecote,uneCommande);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex);
             }
@@ -692,7 +722,18 @@ public class GestionAtelier extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_itemEtatSuivantActionPerformed
+    public void completerCommande(int index) {
+        txtHT.setText(String.valueOf(lesCommandes.get(index).getTaux_ht()));
+        txtTTC.setText(String.valueOf(lesCommandes.get(index).getPrix_ttc()));
+        cbbTva.setSelectedItem(String.valueOf(lesCommandes.get(index).getTaux_tva()));
+        txtRef.setText(lesCommandes.get(index).getRef_dossier());
+        for (Etat_commande e : lesEtats) {
+            if (lesCommandes.get(index).getEtat_commande() == e.getId_etat_commande()) {
+                txtEtat.setText(e.getNom_etet());
+            }
+        }
 
+    }
     private void txtHTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHTActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtHTActionPerformed
@@ -745,6 +786,7 @@ public class GestionAtelier extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -761,6 +803,7 @@ public class GestionAtelier extends javax.swing.JFrame {
     private javax.swing.JList lstClient;
     private javax.swing.JList lstCommande;
     private javax.swing.JTable tblArticle;
+    private javax.swing.JTextField txtEtat;
     private javax.swing.JTextField txtHT;
     private javax.swing.JTextField txtRef;
     private javax.swing.JTextField txtTTC;
