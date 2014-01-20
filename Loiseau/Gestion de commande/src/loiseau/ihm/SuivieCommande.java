@@ -300,10 +300,14 @@ public class SuivieCommande extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         txtNom.setEditable(false);
+        txtNom.setBackground(new java.awt.Color(204, 204, 204));
+        txtNom.setFocusable(false);
 
         jLabel6.setText("Téléphone");
 
         txtType.setEditable(false);
+        txtType.setBackground(new java.awt.Color(204, 204, 204));
+        txtType.setFocusable(false);
 
         jLabel5.setText("Nom");
 
@@ -312,8 +316,12 @@ public class SuivieCommande extends javax.swing.JFrame {
         jLabel7.setText("Email");
 
         txtTel.setEditable(false);
+        txtTel.setBackground(new java.awt.Color(204, 204, 204));
+        txtTel.setFocusable(false);
 
         txtMail.setEditable(false);
+        txtMail.setBackground(new java.awt.Color(204, 204, 204));
+        txtMail.setFocusable(false);
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Informations client");
@@ -508,6 +516,9 @@ public class SuivieCommande extends javax.swing.JFrame {
         jTabbedPane2.addTab("Reglement", txtReglement);
         jTabbedPane2.addTab("Delai max", txtDelai);
         jTabbedPane2.addTab("Date de pose", txtDatePose);
+
+        txtEtat.setEditable(false);
+        txtEtat.setBackground(new java.awt.Color(204, 204, 204));
         jTabbedPane2.addTab("Etat", txtEtat);
 
         jMenu1.setText("Fichier");

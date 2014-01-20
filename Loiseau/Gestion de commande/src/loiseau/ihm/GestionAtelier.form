@@ -293,9 +293,10 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jLabel10" alignment="1" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
@@ -304,18 +305,17 @@
                                   <Component id="jLabel11" alignment="0" min="-2" pref="54" max="-2" attributes="0"/>
                               </Group>
                               <Component id="Reference" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="txtHT" alignment="0" pref="122" max="32767" attributes="0"/>
-                                  <Component id="txtTTC" alignment="0" pref="122" max="32767" attributes="0"/>
-                                  <Component id="cbbTva" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="txtRef" alignment="1" min="-2" pref="122" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="txtEtat" alignment="1" max="32767" attributes="0"/>
+                              <Component id="txtHT" alignment="0" pref="122" max="32767" attributes="0"/>
+                              <Component id="txtTTC" alignment="0" pref="122" max="32767" attributes="0"/>
+                              <Component id="cbbTva" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtRef" alignment="1" pref="122" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="jLabel10" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -346,7 +346,12 @@
                       <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="txtTTC" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="txtEtat" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -358,6 +363,12 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtTTC">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="cc" green="cc" red="cc" type="rgb"/>
+            </Property>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel13">
           <Properties>
@@ -365,6 +376,12 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtHT">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="cc" green="cc" red="cc" type="rgb"/>
+            </Property>
+          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtHTActionPerformed"/>
           </Events>
@@ -375,6 +392,12 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtRef">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="cc" green="cc" red="cc" type="rgb"/>
+            </Property>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="Reference">
           <Properties>
@@ -391,12 +414,27 @@
                 <StringItem index="3" value="10"/>
               </StringArray>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Information commande"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtEtat">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="cc" green="cc" red="cc" type="rgb"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel5">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Etat"/>
           </Properties>
         </Component>
       </SubComponents>
