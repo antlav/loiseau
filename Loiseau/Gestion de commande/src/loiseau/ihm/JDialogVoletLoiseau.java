@@ -286,6 +286,11 @@ public class JDialogVoletLoiseau extends javax.swing.JDialog {
                 art.setType_lame(l.getId_lame());
             }
         }
+        for (Type_article t : lesTypeVolet) {
+            if(t.getNom_type().compareTo(cbbTypeVolet.getSelectedItem().toString())==0){
+                art.setType_article(t.getId_type_article());
+            }
+        }
         art.setLargeur(Double.parseDouble(txtLargeur.getText()));
         art.setHauteur(Double.parseDouble(txtHauteur.getText()));
         art.setQuantite(Integer.parseInt(txtQt.getText()));
@@ -306,17 +311,17 @@ public class JDialogVoletLoiseau extends javax.swing.JDialog {
             }
         }
         for (Type_manoeuvre m : lesManoeuvres) {
-            if(m.getNom_type_manoeuvre().compareTo(cbbManoeuvre.getSelectedItem().toString())==0){
+            if (m.getNom_type_manoeuvre().compareTo(cbbManoeuvre.getSelectedItem().toString()) == 0) {
                 art.setType_manoeuvre(m.getId_type_manoeuvre());
             }
         }
-        art.setType_article(0);
         if (rdbDroite.isSelected()) {
             art.setCote_manoeuvre("Droite");
         } else {
             art.setCote_manoeuvre("Gauche");
         }
-        art=ArticleLoiseau.choixCoulisse(art, lesCoulisses, lesPose);
+        art.setPuissance_moteur(0);
+        art = ArticleLoiseau.choixCoulisse(art, lesCoulisses, lesPose);
         dispose();
     }//GEN-LAST:event_btnAjoutMouseClicked
     public static Article_fabrication openForm(Component cpt, Vector<Type_article> v, Vector<Coulisse> c, Vector<Lame> l, Vector<Type_pose> p, Vector<Type_manoeuvre> m, Vector<Couleur> couleur) {

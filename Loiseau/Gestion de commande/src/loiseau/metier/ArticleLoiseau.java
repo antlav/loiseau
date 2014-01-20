@@ -25,7 +25,7 @@ public class ArticleLoiseau {
             }
         }
         for(Coulisse c:coul){
-            if(aile==c.getRabat()&&art.getType_lame()==c.getId_coulisse()){
+            if(aile==c.getRabat()&&art.getType_lame()==c.getLame()){
                 art.setType_coulisse(c.getId_coulisse());
             }
         }

@@ -13,13 +13,13 @@ public class Caisson {
     private int id_caisson;
     private String type_volet;
     private float hauteur;
-    private String caisson;
+    private int caisson;
     private String lame;
 
     public Caisson() {
     }
 
-    public Caisson(int id_caisson, String type_volet, float hauteur, String caisson, String lame) {
+    public Caisson(int id_caisson, String type_volet, float hauteur, int caisson, String lame) {
         this.id_caisson = id_caisson;
         this.type_volet = type_volet;
         this.hauteur = hauteur;
@@ -72,14 +72,14 @@ public class Caisson {
     /**
      * @return the caisson
      */
-    public String getCaisson() {
+    public int getCaisson() {
         return caisson;
     }
 
     /**
      * @param caisson the caisson to set
      */
-    public void setCaisson(String caisson) {
+    public void setCaisson(int caisson) {
         this.caisson = caisson;
     }
 
