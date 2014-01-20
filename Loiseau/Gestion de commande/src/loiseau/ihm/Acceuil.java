@@ -23,6 +23,7 @@ public class Acceuil extends javax.swing.JFrame {
     }
     GestionClient formClient;
     SuivieCommande formCommande;
+    GestionAtelier formAtelier;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -161,6 +162,9 @@ public class Acceuil extends javax.swing.JFrame {
 
     private void btnAtelierMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtelierMouseClicked
         // TODO add your handling code here:
+        formAtelier=new GestionAtelier();
+        formAtelier.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnAtelierMouseClicked
 
     /**

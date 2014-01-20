@@ -14,15 +14,17 @@ public class Coulisse {
     private String nom_coulisse;
     private double profondeur;
     private int rabat;
+    private int lame;
 
     public Coulisse() {
     }
 
-    public Coulisse(int id_coulisse, String nom_coulisse, double profondeur, int rabat) {
+    public Coulisse(int id_coulisse, String nom_coulisse, double profondeur, int rabat, int lame) {
         this.id_coulisse = id_coulisse;
         this.nom_coulisse = nom_coulisse;
         this.profondeur = profondeur;
         this.rabat = rabat;
+        this.lame=lame;
     }
 
     /**
@@ -80,4 +82,18 @@ public class Coulisse {
     public void setRabat(int rabat) {
         this.rabat = rabat;
     }   
+
+    /**
+     * @return the lame
+     */
+    public int getLame() {
+        return lame;
+    }
+
+    /**
+     * @param lame the lame to set
+     */
+    public void setLame(int lame) {
+        this.lame = lame;
+    }
 }

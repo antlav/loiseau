@@ -4,6 +4,33 @@
  */
 package loiseau.ihm;
 
+import java.sql.ResultSet;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import loiseau.metier.ArticleLoiseau;
+import loiseau.metier.CalculeCote;
+import loiseau.metier.ClientOperation;
+import loiseau.metier.DialogueBdd;
+import loiseau.metier.ExportExcel;
+import loiseau.stockage.Article_fabrication;
+import loiseau.stockage.Caisson;
+import loiseau.stockage.Client;
+import loiseau.stockage.Commande;
+import loiseau.stockage.Couleur;
+import loiseau.stockage.Coulisse;
+import loiseau.stockage.Etat_commande;
+import loiseau.stockage.Lame;
+import loiseau.stockage.Type_article;
+import loiseau.stockage.Type_manoeuvre;
+import loiseau.stockage.Type_pose;
+import loiseau.stockage.telecommande;
+
 /**
  *
  * @author guillaume
@@ -16,6 +43,55 @@ public class GestionAtelier extends javax.swing.JFrame {
     public GestionAtelier() {
         initComponents();
     }
+    ClientOperation tri = new ClientOperation();
+    Acceuil laForm;
+    DefaultListModel lst;
+    DefaultTableModel dtm;
+    ResultSet rs;
+    Client unClient;
+    Commande uneCommande;
+    Article_fabrication unArticle;
+    Caisson unCaisson;
+    Couleur uneCouleur;
+    Coulisse uneCoulisse;
+    Etat_commande unEtat;
+    Lame uneLame;
+    Type_manoeuvre uneManoeuvre;
+    Type_pose unePose;
+    Type_article unTypeArticle;
+    telecommande uneTelecomande;
+    String GETTELECOMANDE = "SELECT * FROM telecommande";
+    String GETTYPEARTICLE = "SELECT * FROM type_article";
+    String GETCLIENT = "SELECT * FROM client";
+    String GETCOMMANDE = "SELECT * FROM loiseaudb.commande Where etat_commande='3'";
+    String GETARTICLEFABRICATION = "SELECT * FROM article_fabrication";
+    String GETCAISSONS = "SELECT * FROM caisson";
+    String GETCOULEUR = "SELECT * FROM couleur";
+    String GETCOULISSE = "SELECT * FROM coulisse";
+    String GETETATCOMMANDE = "SELECT * FROM etat_commande";
+    String GETLAME = "SELECT * FROM lame";
+    String GETTYPEMANOEUVRE = "SELECT * FROM type_manoeuvre";
+    String GETTYPEPOSE = "SELECT * FROM type_pose";
+    String UPDATECOMMAND = "UPDATE `loiseaudb`.`commande` SET `ref_dossier`=?, `acompte`=?, `taux_tva`=?, `prix_ht`=?, `prix_ttc`=?, `type_reglement`=?, `temps_pose_metreur`=?, `temps_pose_commercial`=?, `temps_pose_vendu`=?, `delais_prevu`=?, `date_pose`=?, `id_client`=?, `etat_commande`=? WHERE `id_commande`=?";
+    Vector<Etat_commande> lesEtats = new Vector<>();
+    Vector<Client> lesClient = new Vector<>();
+    Vector<Commande> lesCommandes = new Vector<>();
+    Vector<Article_fabrication> lesOptions = new Vector<>();
+    Vector<Article_fabrication> lesArticleLoiseau = new Vector<>();
+    Vector<Couleur> lesCouleurs = new Vector<>();
+    Vector<String> prixEtMoteur;
+    Vector<Object> lesInfos;
+    Vector<Type_manoeuvre> lesManoeuvres = new Vector<>();
+    Vector<telecommande> lesTele = new Vector<>();
+    Vector<Coulisse> lesCoulisses = new Vector<>();
+    Vector<Lame> lesLames = new Vector<>();
+    Vector<Type_pose> lesPoses = new Vector<>();
+    Vector<Type_article> lesTypeArticle = new Vector<>();
+    Vector<Caisson> lesCaissons = new Vector<>();
+    Vector<Article_fabrication> lesArticlesDuMoment;
+    Vector<String> optionDecote;
+    HashMap<String, Double> deCote = new HashMap<>();
+    HashMap<String, String> infosArticle = new HashMap<>();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,6 +103,7 @@ public class GestionAtelier extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -38,13 +115,36 @@ public class GestionAtelier extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblArticle = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        txtTTC = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        txtHT = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtRef = new javax.swing.JTextField();
+        Reference = new javax.swing.JLabel();
+        cbbTva = new javax.swing.JComboBox();
+        jLabel10 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        itemEtatSuivant = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        itemExportDecote = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem10 = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        itemRetour = new javax.swing.JMenuItem();
 
         jLabel2.setText("jLabel2");
 
+        jMenuItem1.setText("jMenuItem1");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -69,17 +169,17 @@ public class GestionAtelier extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        lstClient.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        lstClient.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstClientMouseClicked(evt);
+            }
         });
         jScrollPane1.setViewportView(lstClient);
 
-        lstCommande.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        lstCommande.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstCommandeMouseClicked(evt);
+            }
         });
         jScrollPane3.setViewportView(lstCommande);
 
@@ -96,13 +196,13 @@ public class GestionAtelier extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(195, 195, 195))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,7 +213,7 @@ public class GestionAtelier extends javax.swing.JFrame {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -128,7 +228,94 @@ public class GestionAtelier extends javax.swing.JFrame {
         ));
         jScrollPane4.setViewportView(tblArticle);
 
+        jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        jLabel12.setText("Total HT");
+
+        jLabel13.setText("Total TTC");
+
+        txtHT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtHTActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("Taux TVA");
+
+        Reference.setText("Reference");
+
+        cbbTva.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "19.6", "20", "7", "10" }));
+
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("Information commande");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Reference))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtHT, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                .addComponent(txtTTC, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                .addComponent(cbbTva, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtRef, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtRef, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Reference))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(cbbTva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(txtHT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addComponent(txtTTC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
         jMenu1.setText("Fichier");
+
+        itemEtatSuivant.setText("Etat suivant");
+        itemEtatSuivant.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemEtatSuivantActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemEtatSuivant);
+        jMenu1.add(jSeparator2);
+
+        itemExportDecote.setText("Export décote");
+        itemExportDecote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemExportDecoteActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemExportDecote);
+        jMenu1.add(jSeparator1);
 
         jMenuItem10.setText("Paramètres");
         jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
@@ -137,6 +324,15 @@ public class GestionAtelier extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem10);
+        jMenu1.add(jSeparator3);
+
+        itemRetour.setText("Retour");
+        itemRetour.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemRetourActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemRetour);
 
         jMenuBar1.add(jMenu1);
 
@@ -151,9 +347,11 @@ public class GestionAtelier extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -165,7 +363,8 @@ public class GestionAtelier extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -177,6 +376,326 @@ public class GestionAtelier extends javax.swing.JFrame {
         Parametres formParam = new Parametres();
         formParam.setVisible(true);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        try {
+            rs = DialogueBdd.select(GETCLIENT);
+            while (rs.next()) {
+                unClient = new Client();
+                unClient.setPrenom(rs.getString("prenom"));
+                unClient.setNom(rs.getString("nom"));
+                unClient.setEmail(rs.getString("email"));
+                unClient.setTitre(rs.getString("titre"));
+                unClient.setVille(rs.getString("ville"));
+                unClient.setCode_postal(rs.getString("code_postal"));
+                unClient.setDivers(rs.getString("divers"));
+                unClient.setSite_web(rs.getString("site_web"));
+                unClient.setTel_fix(rs.getString("tel_fix"));
+                unClient.setFax(rs.getString("fax"));
+                unClient.setType(rs.getString("type"));
+                unClient.setNum_siret(rs.getString("num_siret"));
+                unClient.setRemise(rs.getString("remise"));
+                unClient.setVendeur(rs.getString("vendeur"));
+                unClient.setTel_port(rs.getString("tel_port"));
+                unClient.setRue(rs.getString("rue"));
+                unClient.setNb_commande(rs.getString("nb_commande"));
+                unClient.setId_client(Integer.parseInt(rs.getString("id_client")));
+                lesClient.add(unClient);
+            }
+               rs = DialogueBdd.select(GETCAISSONS);
+            while (rs.next()) {
+                unCaisson = new Caisson(rs.getInt("id_caisson"),rs.getString("type_volet"), Float.parseFloat(rs.getString("hauteur")),Integer.parseInt(rs.getString("caisson")), rs.getString("lame"));
+                lesCaissons.add(unCaisson);
+            }
+            rs = DialogueBdd.select(GETARTICLEFABRICATION);
+            while (rs.next()) {
+                unArticle = new Article_fabrication(rs.getInt("id_article_fabrication"), rs.getInt("type_article"), rs.getDouble("largeur"), rs.getDouble("hauteur"), rs.getString("ref_article"),
+                        rs.getInt("quantite"), rs.getDouble("prix"), rs.getInt("type_pose"), rs.getInt("id_couleur_tablier"), rs.getInt("id_couleur_coffre"), rs.getInt("id_couleur_coulisse"),
+                        rs.getInt("type_manoeuvre"), rs.getString("cote_manoeuvre"), rs.getString("type_moteur"), rs.getInt("puissance_moteur"), rs.getInt("hors_cote"), rs.getInt("type_coulisse"),
+                        rs.getInt("type_lame"), rs.getInt("telecommande"), rs.getInt("commande"), rs.getString("nom"));
+                if (unArticle.getType_article() == 1 || unArticle.getType_article() == 7) {
+                    if (unArticle.getType_article() == 7) {
+                        lesOptions.add(unArticle);
+                    }
+                } else {
+                    lesArticleLoiseau.add(unArticle);
+                }
+            }
+            rs = DialogueBdd.select(GETCOMMANDE);
+            while (rs.next()) {
+                uneCommande = new Commande(Integer.parseInt(rs.getString("id_client")), Integer.parseInt(rs.getString("id_commande")), rs.getString("ref_dossier"),
+                        rs.getString("acompte"), Double.parseDouble(rs.getString("taux_tva")), Double.parseDouble(rs.getString("prix_ht")), Double.parseDouble(rs.getString("prix_ttc")),
+                        rs.getString("type_reglement"), Integer.parseInt(rs.getString("etat_commande")), rs.getString("temps_pose_metreur"), rs.getString("temps_pose_commercial"),
+                        rs.getString("temps_pose_vendu"), rs.getString("delais_prevu"), rs.getString("date_pose"));
+                lesCommandes.add(uneCommande);
+            }
+            rs = DialogueBdd.select(GETETATCOMMANDE);
+            while (rs.next()) {
+                unEtat = new Etat_commande(rs.getInt("id_etat_commande"), rs.getString("nom_etat"));
+                lesEtats.add(unEtat);
+            }
+            rs = DialogueBdd.select(GETTELECOMANDE);
+            while (rs.next()) {
+                uneTelecomande = new telecommande(rs.getInt("id_telecommande"), rs.getString("nom_telecommande"), Double.parseDouble(rs.getString("prix_telecommande")), rs.getString("ref_telecommande"));
+                lesTele.add(uneTelecomande);
+            }
+            rs = DialogueBdd.select(GETLAME);
+            while (rs.next()) {
+                uneLame = new Lame(rs.getInt("id_lame"), rs.getString("nom_lame"), Double.parseDouble(rs.getString("prix")), rs.getString("pas"));
+                lesLames.add(uneLame);
+            }
+            rs = DialogueBdd.select(GETCOULISSE);
+            while (rs.next()) {
+                uneCoulisse = new Coulisse(rs.getInt("id_coulisse"), rs.getString("nom_coulisse"), Double.parseDouble(rs.getString("profondeur")), rs.getInt("rabat"), rs.getInt("lame"));
+                lesCoulisses.add(uneCoulisse);
+            }
+            rs = DialogueBdd.select(GETTYPEARTICLE);
+            while (rs.next()) {
+                unTypeArticle = new Type_article(rs.getInt("id_type_article"), rs.getString("nom_type"));
+                lesTypeArticle.add(unTypeArticle);
+            }
+            rs = DialogueBdd.select(GETTYPEPOSE);
+            while (rs.next()) {
+                unePose = new Type_pose(rs.getInt("id_type_pose"), rs.getString("nom_type_pose"), rs.getString("enroulement"), rs.getInt("rabat"));
+                lesPoses.add(unePose);
+            }
+
+            rs = DialogueBdd.select(GETCOULEUR);
+            while (rs.next()) {
+                uneCouleur = new Couleur(rs.getInt("id_couleur"), rs.getString("nom_couleur"));
+                lesCouleurs.add(uneCouleur);
+            }
+            rs = DialogueBdd.select(GETTYPEMANOEUVRE);
+            while (rs.next()) {
+                uneManoeuvre = new Type_manoeuvre(rs.getInt("id_type_manoeuvre"), rs.getString("nom_type_manoeuvre"), rs.getInt("moin_value"));
+                lesManoeuvres.add(uneManoeuvre);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex);
+        }
+        lst = new DefaultListModel();
+        lstClient.setModel(lst);
+        Collections.sort(lesClient, tri);
+        for (Client c : lesClient) {
+            lst.addElement(c.getNom() + " " + c.getPrenom());
+        }
+        lst = new DefaultListModel();
+        lstCommande.setModel(lst);
+        for (Commande c : lesCommandes) {
+            lst.addElement(c.getRef_dossier());
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void lstClientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstClientMouseClicked
+        // TODO add your handling code here:
+        lst = new DefaultListModel();
+        lstCommande.setModel(lst);
+        for (Commande c : lesCommandes) {
+            if (lesClient.get(lstClient.getSelectedIndex()).getId_client() == c.getId_client()) {
+                lst.addElement(c.getRef_dossier());
+            }
+        }
+    }//GEN-LAST:event_lstClientMouseClicked
+
+    private void lstCommandeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstCommandeMouseClicked
+        // TODO add your handling code here:
+        Vector v;
+        dtm = (DefaultTableModel) tblArticle.getModel();
+        while (dtm.getRowCount() != 0) {
+            dtm.removeRow(0);
+        }
+        int index = 0;
+        for (Commande c : lesCommandes) {
+            if (c.getRef_dossier().compareTo(lstCommande.getSelectedValue().toString()) == 0) {
+                index = c.getId_commande();
+            }
+        }
+        lesArticlesDuMoment = new Vector<>();
+        if (index != 0) {
+            for (Article_fabrication a : lesArticleLoiseau) {
+                if (a.getCommande() == index) {
+                    v = new Vector<>();
+                    v.add(a.getRef_article());
+                    v.add(a.getNom());
+                    v.add(a.getLargeur());
+                    v.add(a.getHauteur());
+                    v.add(a.getQuantite());
+                    dtm.addRow(v);
+                    lesArticlesDuMoment.add(a);
+                }
+            }
+        }
+    }//GEN-LAST:event_lstCommandeMouseClicked
+
+    private void itemRetourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRetourActionPerformed
+        // TODO add your handling code here:
+        laForm = new Acceuil();
+        laForm.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_itemRetourActionPerformed
+
+    private void itemExportDecoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemExportDecoteActionPerformed
+        // TODO add your handling code here:
+        String nomOption = "";
+        int ligneExcel = 3;
+        int indiceCommande = 0;
+        for (Article_fabrication a : lesArticlesDuMoment) {
+            indiceCommande = a.getCommande();
+            deCote = new HashMap<>();
+            infosArticle = new HashMap<>();
+            optionDecote = new Vector<>();
+            for (Article_fabrication o : lesOptions) {
+                if (o.getCommande() == indiceCommande) {
+                    if (o.getRef_article().compareTo("option") == 0) {
+                        nomOption = o.getNom().concat(Double.valueOf(o.getLargeur()) + "X" + Double.valueOf(o.getHauteur()));
+                        optionDecote.add(nomOption);
+                    }
+                }
+            }
+            for (Commande c : lesCommandes) {
+                if (a.getCommande() == c.getId_commande()) {
+                    infosArticle.put("reference", c.getRef_dossier());
+                    for (Client cl : lesClient) {
+                        if (cl.getId_client() == c.getId_client()) {
+                            infosArticle.put("nom", cl.getNom());
+                            infosArticle.put("prenom", cl.getPrenom());
+                            infosArticle.put("telephone", cl.getTel_fix());
+                            infosArticle.put("mail", cl.getEmail());
+                        }
+                    }
+                }
+            }
+
+            for (telecommande t : lesTele) {
+                if (t.getId_telecommande() == a.getTelecommande()) {
+                    infosArticle.put("telecomande", t.getNom_telecommande());
+                }
+            }
+            switch (a.getType_article()) {
+                case 6:
+                    for (Couleur c : lesCouleurs) {
+                        if (a.getCouleur_tablier() == c.getId_couleur()) {
+                            infosArticle.put("couleurtablier", c.getNom_couleur());
+                        }
+                    }
+                    deCote = CalculeCote.calculeTablier(unArticle, lesLames);
+                    break;
+                case 1:
+                    break;
+                case 5:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
+                default:
+                    for (Lame l : lesLames) {
+                    if (l.getId_lame() == a.getType_lame()) {
+                        infosArticle.put("lame", l.getNom_lame());
+                    }
+                }
+                for (Coulisse c : lesCoulisses) {
+                    if (a.getType_coulisse() == c.getId_coulisse()) {
+                        infosArticle.put("coulisse", c.getNom_coulisse());
+                    }
+                }
+                for (Couleur c : lesCouleurs) {
+                    if (a.getCouleur_coffre() == c.getId_couleur()) {
+                        if (a.getNom().compareTo("Traditionnel") == 0) {
+                        } else {
+                            infosArticle.put("couleurcoffre", c.getNom_couleur());
+                        }
+                    }
+                    if (a.getCouleur_coulisse() == c.getId_couleur()) {
+                        infosArticle.put("couleurcoulisse", c.getNom_couleur());
+                    }
+                    if (a.getCouleur_tablier() == c.getId_couleur()) {
+                        infosArticle.put("couleurtablier", c.getNom_couleur());
+                    }
+                }
+                for (Type_pose p : lesPoses) {
+                    if (p.getId_type_pose() == a.getType_pose()) {
+                        infosArticle.put("pose", p.getNom_type_pose());
+                    }
+                }
+                for (Type_manoeuvre m : lesManoeuvres) {
+                    if (m.getId_type_manoeuvre() == a.getType_manoeuvre()) {
+                        infosArticle.put("typemanoeuvre", m.getNom_type_manoeuvre());
+                    }
+                }
+                if (a.getCote_manoeuvre().compareTo("Gauche") == 0) {
+                    infosArticle.put("cotemanoeuvre", "G");
+                }
+                if (a.getCote_manoeuvre().compareTo("") == 0) {
+                    infosArticle.put("cotemanoeuvre", "D");
+                }
+                if (a.getNom().compareTo("Mozart") == 0) {
+                    deCote = CalculeCote.calculeMozart(a, lesCaissons, lesLames, lesPoses, lesManoeuvres);
+                }
+                if (a.getNom().compareTo("Calypso") == 0) {
+                    deCote = CalculeCote.calculeCalypso(a, lesCaissons, lesLames, lesPoses, lesManoeuvres);
+                }
+                if (a.getNom().compareTo("Traditionnel") == 0) {
+                    deCote = CalculeCote.calculeTraditionnel(unArticle, lesLames, lesManoeuvres);
+                }
+                    break;
+            }
+          
+            try {
+                ExportExcel.exportDecote(deCote, a, infosArticle, ligneExcel, optionDecote);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex);
+            }
+            ligneExcel++;
+        }
+
+
+    }//GEN-LAST:event_itemExportDecoteActionPerformed
+
+    private void itemEtatSuivantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemEtatSuivantActionPerformed
+        // TODO add your handling code here:
+        if (lstCommande.isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(this, "selectionner une commande");
+        } else {
+            uneCommande = new Commande();
+            for (Commande c : lesCommandes) {
+                if (c.getRef_dossier().compareToIgnoreCase(txtRef.getText()) == 0) {
+                    if (c.getEtat_commande() < 5) {
+                        c.setEtat_commande(c.getEtat_commande() + 1);
+                        uneCommande = c;
+                        lesInfos = new Vector<>();
+                        lesInfos.add(uneCommande.getRef_dossier());
+                        lesInfos.add(uneCommande.getAcompte());
+                        lesInfos.add(String.valueOf(uneCommande.getTaux_tva()));
+                        lesInfos.add(String.valueOf(uneCommande.getTaux_ht()));
+                        lesInfos.add(String.valueOf(uneCommande.getPrix_ttc()));
+                        lesInfos.add(uneCommande.getType_reglement());
+                        lesInfos.add(uneCommande.getTemps_pose_moeteur());
+                        lesInfos.add(uneCommande.getTemps_pose_commercial());
+                        lesInfos.add(uneCommande.getTemps_pose_vendu());
+                        lesInfos.add(uneCommande.getDelais_prevu());
+                        lesInfos.add(uneCommande.getDate_pose());
+                        lesInfos.add(String.valueOf(uneCommande.getId_client()));
+                        lesInfos.add(String.valueOf(uneCommande.getEtat_commande()));
+                        lesInfos.add(uneCommande.getId_commande());
+                        try {
+                            DialogueBdd.update(UPDATECOMMAND, lesInfos);
+                        } catch (Exception ex) {
+                            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "La commande est déja terminer");
+                    }
+                }
+            }
+
+        }
+    }//GEN-LAST:event_itemEtatSuivantActionPerformed
+
+    private void txtHTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHTActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHTActionPerformed
 
     /**
      * @param args the command line arguments
@@ -213,20 +732,37 @@ public class GestionAtelier extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Reference;
+    private javax.swing.JComboBox cbbTva;
+    private javax.swing.JMenuItem itemEtatSuivant;
+    private javax.swing.JMenuItem itemExportDecote;
+    private javax.swing.JMenuItem itemRetour;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JList lstClient;
     private javax.swing.JList lstCommande;
     private javax.swing.JTable tblArticle;
+    private javax.swing.JTextField txtHT;
+    private javax.swing.JTextField txtRef;
+    private javax.swing.JTextField txtTTC;
     // End of variables declaration//GEN-END:variables
 }

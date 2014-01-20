@@ -54,9 +54,9 @@ public class ExportExcel {
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         Date aujourdhui = new Date();
         int compteur = 22;
-        InputStream xlsRefStream = new FileInputStream("FileModel\\Facture.xls");
+        InputStream xlsRefStream = new FileInputStream(mesParam.getParam("factureModel")+"/Facture.xls");
         Workbook refWorkbook = Workbook.getWorkbook(xlsRefStream);
-        File outFile = new File("Export\\Facture " + uneCommade.getRef_dossier() + ".xls");
+        File outFile = new File(mesParam.getParam("folderCommandePath")+uneCommade.getRef_dossier() +"/Facture.xls");
         WritableWorkbook outWorkbook = Workbook.createWorkbook(outFile, refWorkbook);
         WritableSheet out = outWorkbook.getSheet(0);
 

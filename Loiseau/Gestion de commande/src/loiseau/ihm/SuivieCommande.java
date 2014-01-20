@@ -24,6 +24,7 @@ import loiseau.stockage.Client;
 import loiseau.stockage.Commande;
 import loiseau.stockage.Couleur;
 import loiseau.stockage.Coulisse;
+import loiseau.stockage.Etat_commande;
 import loiseau.stockage.Lame;
 import loiseau.stockage.Moteur;
 import loiseau.stockage.Option;
@@ -50,6 +51,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     DefaultListModel lst;
     DefaultTableModel dtm;
     ClientOperation tri = new ClientOperation();
+    Etat_commande unEtat;
     ResultSet rs;
     Client unClient;
     telecommande uneTelecomande;
@@ -91,13 +93,12 @@ public class SuivieCommande extends javax.swing.JFrame {
     String GETTYPEMANOEUVRE = "SELECT * FROM type_manoeuvre";
     String GETTYPEPOSE = "SELECT * FROM type_pose";
     String GETPIECE = "SELECT * FROM piece";
-
-    String ADDARTICLE = "INSERT INTO `loiseaudb`.`article_fabrication` (`largeur`, `hauteur`, `ref_article`, `quantite`, `prix`, `cote_manoeuvre`, `type_moteur`, `puissance_moteur`, `hors_cote`, `commande`, `id_couleur_coffre`, `id_couleur_coulisse`, `id_couleur_tablier`, `type_coulisse`, `type_lame`, `type_article`, `type_manoeuvre`, `type_pose`, `telecommande`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    String ADDCOMMAND= "INSERT INTO `loiseaudb`.`commande` (`ref_dossier`, `acompte`, `taux_tva`, `prix_ht`, `prix_ttc`, `type_reglement`, `temps_pose_metreur`, `temps_pose_commercial`, `temps_pose_vendu`, `delais_prevu`, `date_pose`, `id_client`, `etat_commande`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    String UPDATEARTICLE = "UPDATE `loiseaudb`.`article_fabrication` SET `largeur`=?, `hauteur`=?, `ref_article`=?, `quantite`=?, `prix`=?, `cote_manoeuvre`=?, `type_moteur`=?, `puissance_moteur`=?, `hors_cote`=?, `commande`=?, `id_couleur_coffre`=?, `id_couleur_coulisse`=?, `id_couleur_tablier`=?, `type_coulisse`=?, `type_lame`=?, `type_article`=?, `type_manoeuvre`=?, `type_pose`=?, `telecommande`=? WHERE `id_article_fabrication`=?";
-    String UPDATECOMMAND="UPDATE `loiseaudb`.`commande` SET `ref_dossier`=?, `acompte`=?, `taux_tva`=?, `prix_ht`=?, `prix_ttc`=?, `type_reglement`=?, `temps_pose_metreur`=?, `temps_pose_commercial`=?, `temps_pose_vendu`=?, `delais_prevu`=?, `date_pose`=?, `id_client`=?, `etat_commande`=? WHERE `id_commande`=?";
+    String ADDARTICLE = "INSERT INTO `loiseaudb`.`article_fabrication` (`largeur`, `hauteur`, `ref_article`, `quantite`, `prix`, `cote_manoeuvre`, `type_moteur`, `puissance_moteur`, `hors_cote`, `commande`, `id_couleur_coffre`, `id_couleur_coulisse`, `id_couleur_tablier`, `type_coulisse`, `type_lame`, `type_article`, `type_manoeuvre`, `type_pose`, `telecommande`, `nom`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String ADDCOMMAND = "INSERT INTO `loiseaudb`.`commande` (`ref_dossier`, `acompte`, `taux_tva`, `prix_ht`, `prix_ttc`, `type_reglement`, `temps_pose_metreur`, `temps_pose_commercial`, `temps_pose_vendu`, `delais_prevu`, `date_pose`, `id_client`, `etat_commande`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String UPDATEARTICLE = "UPDATE `loiseaudb`.`article_fabrication` SET `largeur`=?, `hauteur`=?, `ref_article`=?, `quantite`=?, `prix`=?, `cote_manoeuvre`=?, `type_moteur`=?, `puissance_moteur`=?, `hors_cote`=?, `commande`=?, `id_couleur_coffre`=?, `id_couleur_coulisse`=?, `id_couleur_tablier`=?, `type_coulisse`=?, `type_lame`=?, `type_article`=?, `type_manoeuvre`=?, `type_pose`=?, `telecommande`=?, `nom`=? WHERE `id_article_fabrication`=?";
+    String UPDATECOMMAND = "UPDATE `loiseaudb`.`commande` SET `ref_dossier`=?, `acompte`=?, `taux_tva`=?, `prix_ht`=?, `prix_ttc`=?, `type_reglement`=?, `temps_pose_metreur`=?, `temps_pose_commercial`=?, `temps_pose_vendu`=?, `delais_prevu`=?, `date_pose`=?, `id_client`=?, `etat_commande`=? WHERE `id_commande`=?";
     String DELETEARTICLE = "DELETE FROM `loiseaudb`.`article_fabrication` WHERE `id_article_fabrication`=?";
-
+    Vector<Etat_commande> lesEtats = new Vector<>();
     Vector<Client> lesClient = new Vector<>();
     Vector<Commande> lesCommandes = new Vector<>();
     Vector<Article_fabrication> article = new Vector<>();
@@ -128,6 +129,7 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         txtAcompte2 = new javax.swing.JTextField();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -170,11 +172,13 @@ public class SuivieCommande extends javax.swing.JFrame {
         txtReglement = new javax.swing.JTextField();
         txtDelai = new javax.swing.JTextField();
         txtDatePose = new javax.swing.JTextField();
+        txtEtat = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         itemNewCommande = new javax.swing.JMenuItem();
         ItemSuprCommande = new javax.swing.JMenuItem();
         ItemEtatSuivant = new javax.swing.JMenuItem();
+        itemEtatPrecedent = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenu3 = new javax.swing.JMenu();
         itemPriseMesur = new javax.swing.JMenuItem();
@@ -199,6 +203,8 @@ public class SuivieCommande extends javax.swing.JFrame {
         itemRetour = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         jMenuItem10 = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -471,6 +477,8 @@ public class SuivieCommande extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        txtCommercial.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+
         txtTmpCommercial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTmpCommercialActionPerformed(evt);
@@ -488,10 +496,19 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         jLabel9.setText("Temps de pose ");
 
+        jTabbedPane2.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+
+        txtAcompte.setText("0");
+        txtAcompte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAcompteActionPerformed(evt);
+            }
+        });
         jTabbedPane2.addTab("Acompte", txtAcompte);
         jTabbedPane2.addTab("Reglement", txtReglement);
         jTabbedPane2.addTab("Delai max", txtDelai);
         jTabbedPane2.addTab("Date de pose", txtDatePose);
+        jTabbedPane2.addTab("Etat", txtEtat);
 
         jMenu1.setText("Fichier");
         jMenu1.addActionListener(new java.awt.event.ActionListener() {
@@ -517,7 +534,20 @@ public class SuivieCommande extends javax.swing.JFrame {
         jMenu1.add(ItemSuprCommande);
 
         ItemEtatSuivant.setText("Etat suivant");
+        ItemEtatSuivant.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemEtatSuivantActionPerformed(evt);
+            }
+        });
         jMenu1.add(ItemEtatSuivant);
+
+        itemEtatPrecedent.setLabel("Etat précédent");
+        itemEtatPrecedent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemEtatPrecedentActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemEtatPrecedent);
         jMenu1.add(jSeparator3);
 
         jMenu3.setText("Export");
@@ -694,14 +724,16 @@ public class SuivieCommande extends javax.swing.JFrame {
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtCommercial)
-                                    .addComponent(jTabbedPane2)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                                            .addComponent(txtCommercial, javax.swing.GroupLayout.Alignment.TRAILING)))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGap(0, 63, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel9)
-                                        .addGap(55, 55, 55)))))))
+                                        .addGap(57, 57, 57)))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -713,17 +745,16 @@ public class SuivieCommande extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCommercial, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtCommercial, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(42, 42, 42)
                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -732,7 +763,6 @@ public class SuivieCommande extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
 
     private void ItemFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemFactureActionPerformed
         // TODO add your handling code here:  
@@ -778,12 +808,17 @@ public class SuivieCommande extends javax.swing.JFrame {
                 unClient.setId_client(Integer.parseInt(rs.getString("id_client")));
                 lesClient.add(unClient);
             }
-            rs=DialogueBdd.select(GETARTICLEFABRICATION);
-            while(rs.next()){
-                unArticle=new Article_fabrication(rs.getInt("id_article_fabrication"),rs.getInt("type_article"),rs.getDouble("largeur"),rs.getDouble("hauteur"),rs.getString("ref_article"),
-                rs.getInt("quantite"),rs.getDouble("prix"),rs.getInt("type_pose"),rs.getInt("id_couleur_tablier"),rs.getInt("id_couleur_coffre"),rs.getInt("id_couleur_coulisse"),
-                rs.getInt("type_manoeuvre"),rs.getString("cote_manoeuvre"),rs.getString("type_moteur"),rs.getInt("puissance_moteur"),rs.getInt("hors_cote"),rs.getInt("type_coulisse"),
-                rs.getInt("type_lame"),rs.getInt("telecommande"),rs.getInt("commande"),rs.getString("nom"));
+            rs = DialogueBdd.select(GETARTICLEFABRICATION);
+            while (rs.next()) {
+                unArticle = new Article_fabrication(rs.getInt("id_article_fabrication"), rs.getInt("type_article"), rs.getDouble("largeur"), rs.getDouble("hauteur"), rs.getString("ref_article"),
+                        rs.getInt("quantite"), rs.getDouble("prix"), rs.getInt("type_pose"), rs.getInt("id_couleur_tablier"), rs.getInt("id_couleur_coffre"), rs.getInt("id_couleur_coulisse"),
+                        rs.getInt("type_manoeuvre"), rs.getString("cote_manoeuvre"), rs.getString("type_moteur"), rs.getInt("puissance_moteur"), rs.getInt("hors_cote"), rs.getInt("type_coulisse"),
+                        rs.getInt("type_lame"), rs.getInt("telecommande"), rs.getInt("commande"), rs.getString("nom"));
+                if (unArticle.getType_article() == 1 || unArticle.getType_article() == 7) {
+                    lesArticle.add(unArticle);
+                } else {
+                    lesArticleLoiseau.add(unArticle);
+                }
             }
             rs = DialogueBdd.select(GETCOMMANDE);
             while (rs.next()) {
@@ -792,6 +827,11 @@ public class SuivieCommande extends javax.swing.JFrame {
                         rs.getString("type_reglement"), Integer.parseInt(rs.getString("etat_commande")), rs.getString("temps_pose_metreur"), rs.getString("temps_pose_commercial"),
                         rs.getString("temps_pose_vendu"), rs.getString("delais_prevu"), rs.getString("date_pose"));
                 lesCommandes.add(uneCommande);
+            }
+            rs = DialogueBdd.select(GETETATCOMMANDE);
+            while (rs.next()) {
+                unEtat = new Etat_commande(rs.getInt("id_etat_commande"), rs.getString("nom_etat"));
+                lesEtats.add(unEtat);
             }
             rs = DialogueBdd.select(GETOPTION);
             while (rs.next()) {
@@ -821,7 +861,7 @@ public class SuivieCommande extends javax.swing.JFrame {
             }
             rs = DialogueBdd.select(GETCOULISSE);
             while (rs.next()) {
-                uneCoulisse = new Coulisse(rs.getInt("id_coulisse"), rs.getString("nom_coulisse"), Double.parseDouble(rs.getString("profondeur")), rs.getInt("rabat"));
+                uneCoulisse = new Coulisse(rs.getInt("id_coulisse"), rs.getString("nom_coulisse"), Double.parseDouble(rs.getString("profondeur")), rs.getInt("rabat"), rs.getInt("lame"));
                 lesCoulisses.add(uneCoulisse);
             }
             rs = DialogueBdd.select(GETTYPEARTICLE);
@@ -943,7 +983,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         lstClient.setModel(lst);
         Collections.sort(lesClient, tri);
         for (Client c : lesClient) {
-            lst.addElement(c.getNom());
+            lst.addElement(c.getNom()+ " " +c.getPrenom());
         }
         lst = new DefaultListModel();
         lstCommande.setModel(lst);
@@ -1012,7 +1052,6 @@ public class SuivieCommande extends javax.swing.JFrame {
 
     private void itemAjoutVoletMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemAjoutVoletMouseClicked
         // TODO add your handling code here:
-
     }//GEN-LAST:event_itemAjoutVoletMouseClicked
 
     private void itemAjoutVoletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAjoutVoletActionPerformed
@@ -1148,6 +1187,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private void itemNewCommandeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNewCommandeActionPerformed
         // TODO add your handling code here:
         String path;
+       dtm = (DefaultTableModel) tblArticle.getModel();
         int idClient = 0;
         int idCommande = 0;
         int indice = 0;
@@ -1171,11 +1211,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                         if (txtRef.getText().isEmpty()) {
                             JOptionPane.showMessageDialog(this, "entrez une réference svp");
                         } else {
-                            for (Client c : lesClient) {
-                                if (c.getNom().compareTo(lstClient.getSelectedValue().toString()) == 0) {
-                                    idClient = c.getId_client();
-                                }
-                            }
+                            idClient=lesClient.get(lstClient.getSelectedIndex()).getId_client();
                             uneCommande = new Commande();
                             remplirCommande();
                             uneCommande.setEtat_commande(1);
@@ -1194,7 +1230,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                             lesInfos.add(uneCommande.getDelais_prevu());
                             lesInfos.add(uneCommande.getDate_pose());
                             lesInfos.add(String.valueOf(uneCommande.getId_client()));
-                            lesInfos.add(String.valueOf(uneCommande.getEtat_commande()));                                                  
+                            lesInfos.add(String.valueOf(uneCommande.getEtat_commande()));
                             try {
                                 rs = DialogueBdd.insert(ADDCOMMAND, lesInfos);
                                 while (rs.next()) {
@@ -1226,6 +1262,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                                     lesInfos.add(a.getType_manoeuvre());
                                     lesInfos.add(a.getType_pose());
                                     lesInfos.add(a.getTelecommande());
+                                    lesInfos.add(a.getNom());
                                     rs = DialogueBdd.insert(ADDARTICLE, lesInfos);
                                     while (rs.next()) {
                                         a.setId_article_fabrication(rs.getInt(1));
@@ -1254,6 +1291,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                                     lesInfos.add(a.getType_manoeuvre());
                                     lesInfos.add(a.getType_pose());
                                     lesInfos.add(a.getTelecommande());
+                                    lesInfos.add(a.getNom());
                                     rs = DialogueBdd.insert(ADDARTICLE, lesInfos);
                                     while (rs.next()) {
                                         a.setId_article_fabrication(rs.getInt(1));
@@ -1282,20 +1320,20 @@ public class SuivieCommande extends javax.swing.JFrame {
                 }
                 remplirCommande();
                 lesInfos = new Vector<>();
-                            lesInfos.add(uneCommande.getRef_dossier());
-                            lesInfos.add(uneCommande.getAcompte());
-                            lesInfos.add(String.valueOf(uneCommande.getTaux_tva()));
-                            lesInfos.add(String.valueOf(uneCommande.getTaux_ht()));
-                            lesInfos.add(String.valueOf(uneCommande.getPrix_ttc()));
-                            lesInfos.add(uneCommande.getType_reglement());
-                            lesInfos.add(uneCommande.getTemps_pose_moeteur());
-                            lesInfos.add(uneCommande.getTemps_pose_commercial());
-                            lesInfos.add(uneCommande.getTemps_pose_vendu());
-                            lesInfos.add(uneCommande.getDelais_prevu());
-                            lesInfos.add(uneCommande.getDate_pose());
-                            lesInfos.add(String.valueOf(uneCommande.getId_client()));
-                            lesInfos.add(String.valueOf(uneCommande.getEtat_commande())); 
-                            lesInfos.add(uneCommande.getId_commande());
+                lesInfos.add(uneCommande.getRef_dossier());
+                lesInfos.add(uneCommande.getAcompte());
+                lesInfos.add(String.valueOf(uneCommande.getTaux_tva()));
+                lesInfos.add(String.valueOf(uneCommande.getTaux_ht()));
+                lesInfos.add(String.valueOf(uneCommande.getPrix_ttc()));
+                lesInfos.add(uneCommande.getType_reglement());
+                lesInfos.add(uneCommande.getTemps_pose_moeteur());
+                lesInfos.add(uneCommande.getTemps_pose_commercial());
+                lesInfos.add(uneCommande.getTemps_pose_vendu());
+                lesInfos.add(uneCommande.getDelais_prevu());
+                lesInfos.add(uneCommande.getDate_pose());
+                lesInfos.add(String.valueOf(uneCommande.getId_client()));
+                lesInfos.add(String.valueOf(uneCommande.getEtat_commande()));
+                lesInfos.add(uneCommande.getId_commande());
                 try {
                     DialogueBdd.update(UPDATECOMMAND, lesInfos);
                     for (Article_fabrication a : article) {
@@ -1318,6 +1356,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                         lesInfos.add(a.getType_manoeuvre());
                         lesInfos.add(a.getType_pose());
                         lesInfos.add(a.getTelecommande());
+                        lesInfos.add(a.getNom());
                         if (a.getCommande() < 1) {
                             a.setCommande(uneCommande.getId_commande());
                             lesInfos.insertElementAt(a.getCommande(), 9);
@@ -1352,6 +1391,7 @@ public class SuivieCommande extends javax.swing.JFrame {
                         lesInfos.add(a.getType_manoeuvre());
                         lesInfos.add(a.getType_pose());
                         lesInfos.add(a.getTelecommande());
+                        lesInfos.add(a.getNom());
                         if (a.getCommande() < 1) {
                             a.setCommande(uneCommande.getId_commande());
                             lesInfos.insertElementAt(a.getCommande(), 9);
@@ -1536,11 +1576,11 @@ public class SuivieCommande extends javax.swing.JFrame {
             if (tblArticle.getSelectedRow() < article.size()) {
                 try {
                     for (Article_fabrication a : lesArticle) {
-                        if (a.getId_article_fabrication()== article.get(tblArticle.getSelectedRow()).getId_article_fabrication()) {
+                        if (a.getId_article_fabrication() == article.get(tblArticle.getSelectedRow()).getId_article_fabrication()) {
                             index = lesArticle.indexOf(a);
                         }
                     }
-                    if (article.get(tblArticle.getSelectedRow()).getId_article_fabrication()> 0) {
+                    if (article.get(tblArticle.getSelectedRow()).getId_article_fabrication() > 0) {
                         DialogueBdd.delete(DELETEARTICLE, article.get(tblArticle.getSelectedRow()).getId_article_fabrication());
                         lesArticle.remove(index);
                     }
@@ -1551,11 +1591,11 @@ public class SuivieCommande extends javax.swing.JFrame {
             } else {
                 try {
                     for (Article_fabrication a : lesArticleLoiseau) {
-                        if (a.getId_article_fabrication()== articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication()) {
+                        if (a.getId_article_fabrication() == articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication()) {
                             index = lesArticleLoiseau.indexOf(a);
                         }
                     }
-                    if (articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication()> 0) {
+                    if (articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication() > 0) {
                         DialogueBdd.delete(DELETEARTICLE, articleLoiseau.get(tblArticle.getSelectedRow() - article.size()).getId_article_fabrication());
                         lesArticleLoiseau.remove(index);
                     }
@@ -1569,6 +1609,90 @@ public class SuivieCommande extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "selectionner une ligne");
         }
     }//GEN-LAST:event_ItemSuprCommandeActionPerformed
+
+    private void txtAcompteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAcompteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAcompteActionPerformed
+
+    private void ItemEtatSuivantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemEtatSuivantActionPerformed
+        // TODO add your handling code here:
+        if (lstCommande.isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(this, "selectionner une commande");
+        } else {
+            uneCommande = new Commande();
+            for (Commande c : lesCommandes) {
+                if (c.getRef_dossier().compareToIgnoreCase(txtRef.getText()) == 0) {
+                    if (c.getEtat_commande() < 5) {
+                        c.setEtat_commande(c.getEtat_commande() + 1);
+                        uneCommande = c;
+                        lesInfos = new Vector<>();
+                        lesInfos.add(uneCommande.getRef_dossier());
+                        lesInfos.add(uneCommande.getAcompte());
+                        lesInfos.add(String.valueOf(uneCommande.getTaux_tva()));
+                        lesInfos.add(String.valueOf(uneCommande.getTaux_ht()));
+                        lesInfos.add(String.valueOf(uneCommande.getPrix_ttc()));
+                        lesInfos.add(uneCommande.getType_reglement());
+                        lesInfos.add(uneCommande.getTemps_pose_moeteur());
+                        lesInfos.add(uneCommande.getTemps_pose_commercial());
+                        lesInfos.add(uneCommande.getTemps_pose_vendu());
+                        lesInfos.add(uneCommande.getDelais_prevu());
+                        lesInfos.add(uneCommande.getDate_pose());
+                        lesInfos.add(String.valueOf(uneCommande.getId_client()));
+                        lesInfos.add(String.valueOf(uneCommande.getEtat_commande()));
+                        lesInfos.add(uneCommande.getId_commande());
+                        try {
+                            DialogueBdd.update(UPDATECOMMAND, lesInfos);
+                        } catch (Exception ex) {
+                            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "La commande est déja terminer");
+                    }
+                }
+            }
+
+        }
+    }//GEN-LAST:event_ItemEtatSuivantActionPerformed
+
+    private void itemEtatPrecedentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemEtatPrecedentActionPerformed
+        // TODO add your handling code here:
+        if (lstCommande.isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(this, "selectionner une commande");
+        } else {
+            uneCommande = new Commande();
+            for (Commande c : lesCommandes) {
+                if (c.getRef_dossier().compareToIgnoreCase(txtRef.getText()) == 0) {
+                    if (c.getEtat_commande() > 1) {
+                        c.setEtat_commande(c.getEtat_commande() - 1);
+                        uneCommande = c;
+                        lesInfos = new Vector<>();
+                        lesInfos.add(uneCommande.getRef_dossier());
+                        lesInfos.add(uneCommande.getAcompte());
+                        lesInfos.add(String.valueOf(uneCommande.getTaux_tva()));
+                        lesInfos.add(String.valueOf(uneCommande.getTaux_ht()));
+                        lesInfos.add(String.valueOf(uneCommande.getPrix_ttc()));
+                        lesInfos.add(uneCommande.getType_reglement());
+                        lesInfos.add(uneCommande.getTemps_pose_moeteur());
+                        lesInfos.add(uneCommande.getTemps_pose_commercial());
+                        lesInfos.add(uneCommande.getTemps_pose_vendu());
+                        lesInfos.add(uneCommande.getDelais_prevu());
+                        lesInfos.add(uneCommande.getDate_pose());
+                        lesInfos.add(String.valueOf(uneCommande.getId_client()));
+                        lesInfos.add(String.valueOf(uneCommande.getEtat_commande()));
+                        lesInfos.add(uneCommande.getId_commande());
+                        try {
+                            DialogueBdd.update(UPDATECOMMAND, lesInfos);
+                        } catch (Exception ex) {
+                            Logger.getLogger(SuivieCommande.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Vous ne pouvez pas revenir plus en arriére");
+                    }
+                }
+            }
+
+        }
+    }//GEN-LAST:event_itemEtatPrecedentActionPerformed
 
     public void completerClient(int index) {
         txtNom.setText(lesClient.get(index).getNom());
@@ -1590,6 +1714,11 @@ public class SuivieCommande extends javax.swing.JFrame {
         txtVendu.setText(lesCommandes.get(index).getTemps_pose_vendu());
         txtReglement.setText(lesCommandes.get(index).getType_reglement());
         txtRef.setText(lesCommandes.get(index).getRef_dossier());
+        for (Etat_commande e : lesEtats) {
+            if (lesCommandes.get(index).getEtat_commande() == e.getId_etat_commande()) {
+                txtEtat.setText(e.getNom_etet());
+            }
+        }
 
     }
 
@@ -1608,6 +1737,7 @@ public class SuivieCommande extends javax.swing.JFrame {
         uneCommande.setTemps_pose_vendu(txtVendu.getText());
         uneCommande.setDelais_prevu(txtDelai.getText());
         uneCommande.setDate_pose(txtDatePose.getText());
+
 
     }
 
@@ -1791,6 +1921,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenuItem itemAjoutTablier;
     private javax.swing.JMenuItem itemAjoutTelecomande;
     private javax.swing.JMenuItem itemAjoutVolet;
+    private javax.swing.JMenuItem itemEtatPrecedent;
     private javax.swing.JMenuItem itemMoteur;
     private javax.swing.JMenuItem itemNewCommande;
     private javax.swing.JMenuItem itemPriseMesur;
@@ -1813,6 +1944,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -1837,6 +1969,7 @@ public class SuivieCommande extends javax.swing.JFrame {
     private javax.swing.JTabbedPane txtCommercial;
     private javax.swing.JTextField txtDatePose;
     private javax.swing.JTextField txtDelai;
+    private javax.swing.JTextField txtEtat;
     private javax.swing.JTextField txtHT;
     private javax.swing.JTextField txtMail;
     private javax.swing.JTextField txtMetreur;
