@@ -13,12 +13,12 @@ import loiseau.metier.ConectionBdd;
  *
  * @author guillaume
  */
-public class Acceuil extends javax.swing.JFrame {
+public class Accueil extends javax.swing.JFrame {
 
     /**
      * Creates new form Acceuil
      */
-    public Acceuil() {
+    public Accueil() {
         initComponents();
     }
     GestionClient formClient;
@@ -131,7 +131,7 @@ public class Acceuil extends javax.swing.JFrame {
             // TODO add your handling code here:
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Acceuil.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Accueil.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             ConectionBdd.getInstance();
@@ -184,20 +184,20 @@ public class Acceuil extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Acceuil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Accueil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Acceuil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Accueil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Acceuil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Accueil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Acceuil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Accueil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Acceuil().setVisible(true);
+                new Accueil().setVisible(true);
             }
         });
     }

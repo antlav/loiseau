@@ -44,7 +44,7 @@ public class GestionAtelier extends javax.swing.JFrame {
         initComponents();
     }
     ClientOperation tri = new ClientOperation();
-    Acceuil laForm;
+    Accueil laForm;
     DefaultListModel lst;
     DefaultTableModel dtm;
     ResultSet rs;
@@ -63,7 +63,7 @@ public class GestionAtelier extends javax.swing.JFrame {
     String GETTELECOMANDE = "SELECT * FROM telecommande";
     String GETTYPEARTICLE = "SELECT * FROM type_article";
     String GETCLIENT = "SELECT * FROM client";
-    String GETCOMMANDE = "SELECT * FROM loiseaudb.commande Where etat_commande='3'";
+    String GETCOMMANDE = "SELECT * FROM loiseaudb.commande Where etat_commande='2'";
     String GETARTICLEFABRICATION = "SELECT * FROM article_fabrication";
     String GETCAISSONS = "SELECT * FROM caisson";
     String GETCOULEUR = "SELECT * FROM couleur";
@@ -559,7 +559,7 @@ public class GestionAtelier extends javax.swing.JFrame {
 
     private void itemRetourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRetourActionPerformed
         // TODO add your handling code here:
-        laForm = new Acceuil();
+        laForm = new Accueil();
         laForm.setVisible(true);
         dispose();
     }//GEN-LAST:event_itemRetourActionPerformed
@@ -609,15 +609,18 @@ public class GestionAtelier extends javax.swing.JFrame {
                             infosArticle.put("couleurtablier", c.getNom_couleur());
                         }
                     }
-                    deCote = CalculeCote.calculeTablier(unArticle, lesLames);
-                    break;
+                    deCote = CalculeCote.calculeTablier(a, lesLames);
+                    break;                   
                 case 1:
+                    deCote=CalculeCote.calculeAutres(a, lesCaissons);
                     break;
                 case 5:
+                    deCote=CalculeCote.calculeAutres(a, lesCaissons);
                     break;
                 case 7:
                     break;
                 case 8:
+                    deCote=CalculeCote.calculeAxe(unArticle);
                     break;
                 default:
                     for (Lame l : lesLames) {
@@ -625,6 +628,7 @@ public class GestionAtelier extends javax.swing.JFrame {
                             infosArticle.put("lame", l.getNom_lame());
                         }
                     }
+                    infosArticle.put("puissance", String.valueOf(a.getPuissance_moteur()));
                     for (Coulisse c : lesCoulisses) {
                         if (a.getType_coulisse() == c.getId_coulisse()) {
                             infosArticle.put("coulisse", c.getNom_coulisse());
@@ -679,8 +683,6 @@ public class GestionAtelier extends javax.swing.JFrame {
             }
             ligneExcel++;
         }
-
-
     }//GEN-LAST:event_itemExportDecoteActionPerformed
 
     private void itemEtatSuivantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemEtatSuivantActionPerformed

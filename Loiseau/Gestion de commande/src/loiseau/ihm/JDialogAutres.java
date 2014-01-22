@@ -54,8 +54,11 @@ public class JDialogAutres extends javax.swing.JDialog {
 
         jLabel2.setText("Référence");
 
+        txtRef.setText("ref");
+
         jLabel3.setText("Prix");
 
+        txtPrix.setText("0");
         txtPrix.setToolTipText("");
 
         btnAjout.setText("Ajouter");
@@ -67,7 +70,13 @@ public class JDialogAutres extends javax.swing.JDialog {
 
         jLabel4.setText("quantité");
 
+        txtQuantite.setText("1");
+
+        txtLargeur.setText("0");
+
         jLabel6.setText("Largeur");
+
+        txtHauteur.setText("0");
 
         jLabel7.setText("Hauteur");
 
@@ -141,18 +150,18 @@ public class JDialogAutres extends javax.swing.JDialog {
         unAutre.setQuantite(Integer.parseInt(txtQuantite.getText()));
         unAutre.setHauteur(Double.parseDouble(txtHauteur.getText()));
         unAutre.setLargeur(Double.parseDouble(txtLargeur.getText()));
-        unAutre.setType_article(0);
+        unAutre.setType_article(1);
         unAutre.setPuissance_moteur(0);
-        unAutre.setCouleur_coffre(0);
-        unAutre.setCouleur_coulisse(0);
+        unAutre.setCouleur_coffre(1);
+        unAutre.setCouleur_coulisse(1);
         unAutre.setCote_manoeuvre("0");
-        unAutre.setType_coulisse(0);
-        unAutre.setType_manoeuvre(0);
-        unAutre.setCouleur_tablier(0);
-        unAutre.setType_lame(0);
-        unAutre.setTelecommande(0);
+        unAutre.setType_coulisse(1);
+        unAutre.setType_manoeuvre(1);
+        unAutre.setCouleur_tablier(1);
+        unAutre.setType_lame(1);
+        unAutre.setTelecommande(1);
         unAutre.setHors_cote(0);
-        unAutre.setType_pose(0);
+        unAutre.setType_pose(1);
         unAutre.setType_moteur("0");
         dispose();
     }//GEN-LAST:event_btnAjoutMouseClicked

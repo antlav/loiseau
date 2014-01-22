@@ -8,9 +8,10 @@ and open the template in the editor.
   <param name="bddUser" pathName="root" />
   <param name="bddPass" pathName="password" />
   <param name="factureModel" pathName="C:\Users\guillaume\Documents\NetBeansProjects\loiseau\Loiseau\Gestion de commande\src\files" />
-  <param name="devisModel" pathName="/Users/laveauantoine/Desktop" />
-  <param name="mesureModel" pathName="/Users/laveauantoine/Documents" />
+  <param name="devisModel" pathName="C:\Users\guillaume\Documents\NetBeansProjects\loiseau\Loiseau\Gestion de commande\src\files" />
+  <param name="mesureModel" pathName="C:\Users\guillaume\Documents\NetBeansProjects\loiseau\Loiseau\Gestion de commande\src\files" />
   <param name="decoteModel" pathName="C:\Users\guillaume\Documents\NetBeansProjects\loiseau\Loiseau\Gestion de commande\src\files" />
-  <param name="folderCommandePath" pathName="C:/Loiseau/" />
+  <param name="poseModel" pathName="C:\Users\guillaume\Documents\NetBeansProjects\loiseau\Loiseau\Gestion de commande\src\files" />
+  <param name="folderCommandePath" pathName="C:/Loiseau" />
 </root>
 

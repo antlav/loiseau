@@ -149,18 +149,18 @@ public class JDialogOptions extends javax.swing.JDialog {
         art.setQuantite(1);
         art.setRef_article("option");
         art.setPrix(lesOption.get(cbbOption.getSelectedIndex()).getPrix_option());
-        art.setType_article(5);
+        art.setType_article(7);
         art.setPuissance_moteur(0);
-        art.setCouleur_coffre(0);
-        art.setCouleur_coulisse(0);
+        art.setCouleur_coffre(1);
+        art.setCouleur_coulisse(1);
         art.setCote_manoeuvre("0");
-        art.setType_coulisse(0);
-        art.setType_manoeuvre(0);
-        art.setCouleur_tablier(0);
-        art.setType_lame(0);
-        art.setTelecommande(0);
+        art.setType_coulisse(1);
+        art.setType_manoeuvre(1);
+        art.setCouleur_tablier(1);
+        art.setType_lame(1);
+        art.setTelecommande(1);
         art.setHors_cote(0);
-        art.setType_pose(0);
+        art.setType_pose(1);
         art.setType_moteur("0");
         dispose();
     }//GEN-LAST:event_btnAjoutMouseClicked

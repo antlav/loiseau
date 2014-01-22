@@ -13,7 +13,6 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -112,6 +111,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtRef">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="ref"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -120,6 +122,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtPrix">
       <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
     </Component>
@@ -137,8 +140,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtQuantite">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="1"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtLargeur">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
@@ -146,6 +155,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtHauteur">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
