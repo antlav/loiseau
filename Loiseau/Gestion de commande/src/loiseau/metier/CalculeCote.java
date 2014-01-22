@@ -4,7 +4,6 @@
  */
 package loiseau.metier;
 
-
 import java.util.HashMap;
 import java.util.Vector;
 import loiseau.stockage.Article_fabrication;
@@ -14,22 +13,25 @@ import loiseau.stockage.Type_manoeuvre;
 import loiseau.stockage.Type_pose;
 
 /**
- *classe de gestion de la decote des article Loiseau
+ * classe de gestion de la decote des article Loiseau
+ *
  * @author guillaume Pacquet
  */
 public class CalculeCote {
 
     public CalculeCote() {
     }
-/**
- * Methode pour calculer les cote Mozart
- * @param art le volet à decoter
- * @param caissons un vector de Caisson
- * @param lame un vector de Lame
- * @param pose un vector de TypePose
- * @param manoeuvre un vector deTypeManoeuvre
- * @return une hashmap avec les décote de l'article
- */
+
+    /**
+     * Methode pour calculer les cote Mozart
+     *
+     * @param art le volet à decoter
+     * @param caissons un vector de Caisson
+     * @param lame un vector de Lame
+     * @param pose un vector de TypePose
+     * @param manoeuvre un vector deTypeManoeuvre
+     * @return une hashmap avec les décote de l'article
+     */
     public static HashMap<String, Double> calculeMozart(Article_fabrication art, Vector<Caisson> caissons, Vector<Lame> lame, Vector<Type_pose> pose,
             Vector<Type_manoeuvre> manoeuvre) {
         HashMap<String, Double> cote = new HashMap<>();
@@ -183,15 +185,17 @@ public class CalculeCote {
             }
         }
     }
-/**
- * Methode pour calculer les cotes Calypso
- * @param art le volet à decoter
- * @param caissons un vector de Caisson
- * @param lame un vector de Lame
- * @param pose un vector de TypePose
- * @param manoeuvre un vector deTypeManoeuvre
- * @return une hashmap avec les décote de l'article
- */
+
+    /**
+     * Methode pour calculer les cotes Calypso
+     *
+     * @param art le volet à decoter
+     * @param caissons un vector de Caisson
+     * @param lame un vector de Lame
+     * @param pose un vector de TypePose
+     * @param manoeuvre un vector deTypeManoeuvre
+     * @return une hashmap avec les décote de l'article
+     */
     public static HashMap<String, Double> calculeCalypso(Article_fabrication art,
             Vector<Caisson> caissons, Vector<Lame> lame, Vector<Type_pose> pose,
             Vector<Type_manoeuvre> manoeuvre) {
@@ -319,13 +323,15 @@ public class CalculeCote {
             }
         }
     }
-/**
- * Methode pour calculer les cotes Traditionnel
- * @param art le volet à decoter
- * @param lame un vector de Lame
- * @param manoeuvre un vector deTypeManoeuvre
- * @return une hashmap avec les décote de l'article
- */
+
+    /**
+     * Methode pour calculer les cotes Traditionnel
+     *
+     * @param art le volet à decoter
+     * @param lame un vector de Lame
+     * @param manoeuvre un vector deTypeManoeuvre
+     * @return une hashmap avec les décote de l'article
+     */
     public static HashMap<String, Double> calculeTraditionnel(Article_fabrication art,
             Vector<Lame> lame, Vector<Type_manoeuvre> manoeuvre) {
         HashMap<String, Double> cote = new HashMap<>();
@@ -391,19 +397,27 @@ public class CalculeCote {
     public static HashMap<String, Double> calculeAutres(Article_fabrication art,
             Vector<Caisson> caissons) {
         HashMap<String, Double> cote = new HashMap<>();
+        cote.put("hauteur", art.getHauteur());
+        cote.put("largeur", art.getLargeur());
+        cote.put("quantite", (double) art.getQuantite());
         return cote;
     }
 
     public static HashMap<String, Double> calculeAxe(Article_fabrication art) {
         HashMap<String, Double> cote = new HashMap<>();
+        cote.put("hauteur", art.getHauteur());
+        cote.put("largeur", art.getLargeur());
+        cote.put("quantite", (double) art.getQuantite());
         return cote;
     }
-/**
- * Methode pour calculer les cotes des tablier
- * @param art le tablier à decoter
- * @param lesLames un vector de Lame
- * @return  une hashmap des valeur décoté
- */
+
+    /**
+     * Methode pour calculer les cotes des tablier
+     *
+     * @param art le tablier à decoter
+     * @param lesLames un vector de Lame
+     * @return une hashmap des valeur décoté
+     */
     public static HashMap<String, Double> calculeTablier(Article_fabrication art,
             Vector<Lame> lesLames) {
         HashMap<String, Double> cote = new HashMap<>();

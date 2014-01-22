@@ -4,7 +4,6 @@
  */
 package loiseau.metier;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,15 +37,17 @@ public class ExportExcel {
 
     private static Number number;
     private static Label label;
-    private static Param mesParam=new Param();
-/**
- * Methode pour exporter la facture d'une commande
- * @param unClient
- * @param uneCommade
- * @param desArticle
- * @param desArticleLoiseau
- * @throws Exception 
- */
+    private static Param mesParam = new Param();
+
+    /**
+     * Methode pour exporter la facture d'une commande
+     *
+     * @param unClient
+     * @param uneCommade
+     * @param desArticle
+     * @param desArticleLoiseau
+     * @throws Exception
+     */
     public static void exportFacture(Client unClient, Commande uneCommade,
             Vector<Article_fabrication> desArticle,
             Vector<Article_fabrication> desArticleLoiseau) throws Exception {
@@ -54,9 +55,9 @@ public class ExportExcel {
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         Date aujourdhui = new Date();
         int compteur = 22;
-        InputStream xlsRefStream = new FileInputStream(mesParam.getParam("factureModel")+"/Facture.xls");
+        InputStream xlsRefStream = new FileInputStream(mesParam.getParam("factureModel") + "/Facture.xls");
         Workbook refWorkbook = Workbook.getWorkbook(xlsRefStream);
-        File outFile = new File(mesParam.getParam("folderCommandePath")+uneCommade.getRef_dossier() +"/Facture.xls");
+        File outFile = new File(mesParam.getParam("folderCommandePath") + "/" + uneCommade.getRef_dossier() + "/Facture.xls");
         WritableWorkbook outWorkbook = Workbook.createWorkbook(outFile, refWorkbook);
         WritableSheet out = outWorkbook.getSheet(0);
 
@@ -128,15 +129,16 @@ public class ExportExcel {
         outWorkbook.write();
         outWorkbook.close();
     }
-/**
- * Methode pour exporter la prise de mesure d'une commande
- * @param unClient
- * @param uneCommade
- * @param lesArticles
- * @throws Exception 
- */
-    public static void exportPriseMesure(Client unClient, Commande uneCommade,
-            Vector<Article_fabrication> lesArticles) throws Exception {
+
+    /**
+     * Methode pour exporter la prise de mesure d'une commande
+     *
+     * @param unClient
+     * @param uneCommade
+     * @param lesArticles
+     * @throws Exception
+     */
+    public static void exportPriseMesure(Client unClient, Commande uneCommade) throws Exception {
         String adresse;
         String reference = uneCommade.getRef_dossier();
         String article = "";
@@ -145,9 +147,9 @@ public class ExportExcel {
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         Date aujourdhui = new Date();
 
-        InputStream xlsRefStream = new FileInputStream("FileModel\\Prestation prise de mesure.xls");
+        InputStream xlsRefStream = new FileInputStream(mesParam.getParam("mesureModel") + "/prestation prise de mesure.xls");
         Workbook refWorkbook = Workbook.getWorkbook(xlsRefStream);
-        File outFile = new File("Export\\Prise Mesure " + reference + ".xls");
+        File outFile = new File(mesParam.getParam("folderCommandePath") + "/" + uneCommade.getRef_dossier() + "/prestation de prise de mesures.xls");
         WritableWorkbook outWorkbook = Workbook.createWorkbook(outFile, refWorkbook);
         WritableSheet out = outWorkbook.getSheet(0);
         label = new Label(1, 15, dateFormat.format(aujourdhui));
@@ -162,29 +164,23 @@ public class ExportExcel {
         label = new Label(1, 21, unClient.getTel_fix());
         out.addCell(label);
 
-        for (Article_fabrication a : lesArticles) {
-            article = a.getNom();
-            article = article.concat(" " + String.valueOf(a.getLargeur()) + "X"
-                    + String.valueOf(a.getHauteur()));
-            label = new Label(1, cpt, article);
-            out.addCell(label);
-            cpt++;
-        }
         outWorkbook.write();
         outWorkbook.close();
     }
-/**
- * Methode pour exporter les prix d'une commande
- * @param unClient
- * @param uneCommade
- * @param desArticle
- * @param desArticleLoiseau
- * @param desTele
- * @param lesCouleurs
- * @param lesposes
- * @param lesManoeuvres
- * @throws Exception 
- */
+
+    /**
+     * Methode pour exporter les prix d'une commande
+     *
+     * @param unClient
+     * @param uneCommade
+     * @param desArticle
+     * @param desArticleLoiseau
+     * @param desTele
+     * @param lesCouleurs
+     * @param lesposes
+     * @param lesManoeuvres
+     * @throws Exception
+     */
     public static void exportPrix(Client unClient, Commande uneCommade,
             Vector<Article_fabrication> desArticle, Vector<Article_fabrication> desArticleLoiseau,
             Vector<telecommande> desTele, Vector<Couleur> lesCouleurs, Vector<Type_pose> lesposes,
@@ -194,10 +190,10 @@ public class ExportExcel {
         Locale locale = Locale.getDefault();
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         Date aujourdhui = new Date();
-        WritableImage image = new WritableImage(0, 3, 6, 6, new File("FileModel\\logoRDP.png"));
-        InputStream xlsRefStream = new FileInputStream("FileModel\\Remise de prix.xls");
+        WritableImage image = new WritableImage(0, 3, 6, 6, new File(mesParam.getParam("devisModel") + "/logoRDP.png"));
+        InputStream xlsRefStream = new FileInputStream(mesParam.getParam("devisModel") + "/Remise de prix.xls");
         Workbook refWorkbook = Workbook.getWorkbook(xlsRefStream);
-        File outFile = new File("Export\\Remise de prix  " + uneCommade.getRef_dossier() + ".xls");
+        File outFile = new File(mesParam.getParam("folderCommandePath") + "/" + uneCommade.getRef_dossier() + "/Remise de prix.xls");
         WritableWorkbook outWorkbook = Workbook.createWorkbook(outFile, refWorkbook);
         WritableSheet out = outWorkbook.getSheet(0);
         out.addImage(image);
@@ -323,13 +319,15 @@ public class ExportExcel {
         outWorkbook.write();
         outWorkbook.close();
     }
-/**
- * Methode pour exporter la prestation de psoe d'une commande
- * @param unClient
- * @param uneCommade
- * @param lesArticles
- * @throws Exception 
- */
+
+    /**
+     * Methode pour exporter la prestation de psoe d'une commande
+     *
+     * @param unClient
+     * @param uneCommade
+     * @param lesArticles
+     * @throws Exception
+     */
     public static void exportPrestationPose(Client unClient, Commande uneCommade,
             Vector<Article_fabrication> lesArticles) throws Exception {
         String reference = uneCommade.getRef_dossier();
@@ -340,9 +338,9 @@ public class ExportExcel {
         Locale locale = Locale.getDefault();
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         Date aujourdhui = new Date();
-        InputStream xlsRefStream = new FileInputStream("FileModel\\Prestation pose.xls");
+        InputStream xlsRefStream = new FileInputStream(mesParam.getParam("poseModel") + "/Prestation pose.xls");
         Workbook refWorkbook = Workbook.getWorkbook(xlsRefStream);
-        File outFile = new File("Export\\prestation de pose  " + reference + ".xls");
+        File outFile = new File(mesParam.getParam("folderCommandePath") + "/" + uneCommade.getRef_dossier() + "/Prestation de pose.xls");
         WritableWorkbook outWorkbook = Workbook.createWorkbook(outFile, refWorkbook);
         WritableSheet out = outWorkbook.getSheet(0);
 
@@ -375,15 +373,17 @@ public class ExportExcel {
         outWorkbook.close();
 
     }
-/**
- * Methode pour exporter la décote d'une commande
- * @param deCote
- * @param art
- * @param infosArticle
- * @param ligne
- * @param option
- * @throws Exception 
- */
+
+    /**
+     * Methode pour exporter la décote d'une commande
+     *
+     * @param deCote
+     * @param art
+     * @param infosArticle
+     * @param ligne
+     * @param option
+     * @throws Exception
+     */
     public static void exportDecote(HashMap<String, Double> deCote, Article_fabrication art,
             HashMap<String, String> infosArticle, int ligne, Vector<String> option, Commande uneCommande) throws Exception {
         Locale locale = Locale.getDefault();
@@ -392,12 +392,12 @@ public class ExportExcel {
         InputStream xlsRefStream;
         int cptOption = 0;
         if (ligne == 3) {
-            xlsRefStream = new FileInputStream(mesParam.getParam("decoteModel")+"/NouvelleDecote.xls");
+            xlsRefStream = new FileInputStream(mesParam.getParam("decoteModel") + "/NouvelleDecote.xls");
         } else {
-            xlsRefStream = new FileInputStream(mesParam.getParam("folderCommandePath")+uneCommande.getRef_dossier() +"/Decote.xls");
+            xlsRefStream = new FileInputStream(mesParam.getParam("folderCommandePath") + "/" + uneCommande.getRef_dossier() + "/Decote.xls");
         }
         Workbook refWorkbook = Workbook.getWorkbook(xlsRefStream);
-        File outFile = new File(mesParam.getParam("folderCommandePath")+uneCommande.getRef_dossier() +"/Decote.xls");
+        File outFile = new File(mesParam.getParam("folderCommandePath") + "/" + uneCommande.getRef_dossier() + "/Decote.xls");
         WritableWorkbook outWorkbook = Workbook.createWorkbook(outFile, refWorkbook);
         WritableSheet out = outWorkbook.getSheet(0);
 
@@ -532,6 +532,11 @@ public class ExportExcel {
         if (infosArticle.containsKey("cotemanoeuvre")) {
             label = new Label(19, ligne, infosArticle.get("cotemanoeuvre"));
             label.setCellFormat(out.getCell(19, ligne).getCellFormat());
+            out.addCell(label);
+        }
+        if (infosArticle.containsKey("puissance")) {
+            label = new Label(20, ligne, infosArticle.get("puissance"));
+            label.setCellFormat(out.getCell(20, ligne).getCellFormat());
             out.addCell(label);
         }
         if (infosArticle.containsKey("telecomande")) {

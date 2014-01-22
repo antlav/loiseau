@@ -29,7 +29,7 @@ public class GestionClient extends javax.swing.JFrame {
         initComponents();
     }
     DefaultListModel lst;
-    Acceuil laForm;
+    Accueil laForm;
     ResultSet rs;
     Vector<Object> lesInfos;
     Client unClient = new Client();
@@ -540,14 +540,8 @@ public class GestionClient extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void lstClientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstClientMouseClicked
-        // TODO add your handling code here:
-        int indice = 0;
-        for (Client c : lesClient) {
-            if (lstClient.getSelectedValue().toString().compareTo(c.getNom()) == 0 ) {
-                indice = lesClient.indexOf(c);
-            }
-        }
-        completerChamp(indice);
+        // TODO add your handling code here:       
+        completerChamp(lstClient.getSelectedIndex());
     }//GEN-LAST:event_lstClientMouseClicked
 
     private void txtNomKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomKeyReleased
@@ -563,7 +557,7 @@ public class GestionClient extends javax.swing.JFrame {
 
     private void btnRetourMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRetourMouseClicked
         // TODO add your handling code here:
-        laForm = new Acceuil();
+        laForm = new Accueil();
         laForm.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnRetourMouseClicked
@@ -657,6 +651,14 @@ public class GestionClient extends javax.swing.JFrame {
 
     private void btnSuprMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSuprMouseClicked
         // TODO add your handling code here:
+        int id=0;
+        id=lesClient.get(lstClient.getSelectedIndex()).getId_client();
+        lesClient.remove(lstClient.getSelectedIndex());
+        try {
+            DialogueBdd.delete("DELETE FROM `loiseaudb`.`client` WHERE `id_client`=?", id);
+        } catch (Exception ex) {
+            Logger.getLogger(GestionClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }//GEN-LAST:event_btnSuprMouseClicked
     private void completerChamp(int index) {
